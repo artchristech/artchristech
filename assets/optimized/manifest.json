@@ -1,0 +1,766 @@
+{
+  "merch/alt": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/56606": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bandwidth": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/abyss": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beanm": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beauty2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bandwidth2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beauty": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beautymash": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beautymash2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beautystar1": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/beautymash3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh2": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/bh3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh5": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/biro": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh6": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh7": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/bh8": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/birthday2": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/birthday3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/birthday4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/birthday": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/butterfly": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/charm": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/cagegrid": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/brazila": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/check": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/charm2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/crossover2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/chip": {
+    "w": 1000,
+    "h": 1000
+  },
+  "merch/crossover4": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/cyber2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/cyber": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/crossover3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/delicase": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/desertflow": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/deluxe2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/deluxe": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/diatri2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/diatri": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/disco": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/diatri3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/e-chain": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/e-chain2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/dualgrid": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/drift": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/electra": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/elevate": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/ellawheel": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/emera": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/expando": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/fallspring": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/expoer": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/expoer2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/far-in3": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/far-in4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/fallspring2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/far-in2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/firecool2": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/filo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/firecool": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/farout": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/flake": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/firecool3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/flower-dragon": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/flamepin": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/galatic2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/gardengate": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/flowyo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/frogger": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/grove": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/grill": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/gungho": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/gungho2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/halogo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/haloone": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/haloone2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/halodive": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/j-chain": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/halowin": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/halowirl": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/halowirl2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/justright1": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/j-chain2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lane-light": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/j-chain3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lighthouse": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/leaf": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/library": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/link": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lock2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lost": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lucent": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/lock": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/madewithpages": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/magipop": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/magipop2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/madewithpages1": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/mellowmarsh": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/magipop3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/melody": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/merit": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/mg": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/millenia": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/merit2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/multi": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/n-ght2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/natave": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/nacho": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/n-ight3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/native2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/native": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/naviway": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/navigo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/naviway4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/naviway5": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/naviway2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/naviway3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partscramble3": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/naviwoah": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/nestor": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/nite": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partscramble4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar10": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar11": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partyscramble2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar7": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar5": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/piano": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pianeapple2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar8": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/partystar9": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pick": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pin-wraith": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/piano2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pillar": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pineapple3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/pineapple": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/precise2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/rite": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/rite2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/river2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/river": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/roughscale1": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/runway": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/santafe": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/roughscale2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/smoothscale": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/spigo": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/speer": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/spring": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/sooky": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/springfall3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/springfall2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/springfall": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/stain": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/steam4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/steam2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/steam3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/steam": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/tilelook": {
+    "w": 400,
+    "h": 400
+  },
+  "merch/surge": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/summer2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/summer": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/tumm": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/valkyrie": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/transform": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/transform2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/valkyrie2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/vibo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/wavywhat2": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/wavywhat": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/xpo": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/wavywhat4": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/wrole": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/wavywhat3": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/zoom": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/zimzap": {
+    "w": 1200,
+    "h": 1200
+  },
+  "merch/zam": {
+    "w": 1200,
+    "h": 1200
+  },
+  "art/backpack_collection": {
+    "w": 1200,
+    "h": 1810
+  },
+  "art/buckethat_collection": {
+    "w": 1200,
+    "h": 1810
+  },
+  "art/pattern_gold": {
+    "w": 1200,
+    "h": 1176
+  },
+  "art/jolly": {
+    "w": 1200,
+    "h": 1572
+  },
+  "art/boy_withadream": {
+    "w": 1200,
+    "h": 1470
+  },
+  "art/pattern_teal": {
+    "w": 600,
+    "h": 600
+  },
+  "art/pattern_raw1": {
+    "w": 1200,
+    "h": 3962
+  },
+  "art/pattern_raw2": {
+    "w": 1200,
+    "h": 2394
+  }
+}

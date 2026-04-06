@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — artchristech</title>
+    <meta property="og:title" content="Contact — artchristech">
+    <meta property="og:description" content="Get in touch with Christopher Harris.">
+    <meta property="og:image" content="https://artchristech.com/assets/gittimes-screenshot.png">
+    <meta property="og:url" content="https://artchristech.com/contact.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contact — artchristech">
+    <meta name="twitter:description" content="Get in touch with Christopher Harris.">
+    <meta name="twitter:image" content="https://artchristech.com/assets/gittimes-screenshot.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .contact-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-dark);
+            padding: 6rem 2rem 4rem;
+        }
+
+        .contact-container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .contact-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-back:hover {
+            color: var(--accent);
+        }
+
+        .contact-container h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-weight: 600;
+            color: var(--text-white);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-container .subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--text-white);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius);
+            padding: 0.85rem 1rem;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .form-submit {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: 1px solid var(--accent);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .form-submit:hover {
+            background: transparent;
+            color: var(--accent);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .form-success h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 0.75rem;
+        }
+
+        .form-success p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 680px) {
+            .contact-page {
+                padding: 5rem 1.25rem 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav scrolled" id="nav">
+        <a href="index.html" class="nav-brand">artchristech</a>
+        <div class="nav-links">
+            <a href="index.html#showcase">Tech</a>
+            <a href="index.html#gallery">Gallery</a>
+            <a href="index.html#about">About</a>
+        </div>
+    </nav>
+
+    <section class="contact-page">
+        <div class="contact-container">
+            <a href="index.html" class="contact-back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+            </a>
+
+            <h1>Get in touch</h1>
+            <p class="subtitle">Feedback, ideas, collaborations — send it.</p>
+
+            <!-- TODO: Replace YOUR_FORM_ID with actual Formspree form ID from https://formspree.io/forms -->
+            <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+                </div>
+
+                <button type="submit" class="form-submit">Send Message</button>
+            </form>
+
+            <div class="form-success" id="form-success">
+                <h2>Message sent</h2>
+                <p>Thanks for reaching out. I'll get back to you soon.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const success = document.getElementById('form-success');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+
+            try {
+                await fetch(form.action, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' },
+                });
+                form.style.display = 'none';
+                success.style.display = 'block';
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+</html>

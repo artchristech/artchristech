@@ -1,0 +1,1323 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>artchristech — Art. Code. Design.</title>
+    <meta name="description" content="Christopher Harris — Artist, engineer, designer. Original pattern designs, autonomous systems, and editorial AI.">
+    <meta property="og:title" content="artchristech — Art. Code. Design.">
+    <meta property="og:description" content="Christopher Harris — Artist, engineer, designer. Original pattern designs, autonomous systems, and editorial AI.">
+    <meta property="og:image" content="https://artchristech.com/assets/gittimes-screenshot.png">
+    <meta property="og:url" content="https://artchristech.com/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="artchristech — Art. Code. Design.">
+    <meta name="twitter:description" content="Christopher Harris — Artist, engineer, designer. Original pattern designs, autonomous systems, and editorial AI.">
+    <meta name="twitter:image" content="https://artchristech.com/assets/gittimes-screenshot.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-brand">artchristech</a>
+        <div class="nav-links">
+            <a href="#showcase">Ventures</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#about">About</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#showcase">Ventures</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+    </div>
+
+    <!-- Showcase -->
+    <section class="showcase" id="showcase">
+        <!-- Brand header -->
+        <div class="showcase-header">
+            <h1 class="showcase-title">
+                <span class="word-art">art</span><span class="word-chris">chris</span><span class="word-tech">tech</span>
+            </h1>
+            <p class="showcase-subtitle">The CPH Conglomerate</p>
+        </div>
+
+        <!-- Main display -->
+        <div class="showcase-display">
+            <div class="showcase-main" id="showcase-main">
+                <!-- Active item rendered here -->
+                <div class="showcase-browser" id="showcase-browser">
+                    <div class="browser-chrome">
+                        <div class="browser-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="browser-url">gittimes.com</div>
+                    </div>
+                    <div class="browser-viewport">
+                        <img src="assets/gittimes-screenshot.png" alt="gittimes.com — AI-generated daily newspaper from GitHub">
+                    </div>
+                </div>
+                <img class="showcase-product-img" id="showcase-product-img" src="" alt="" style="display: none;">
+            </div>
+
+            <!-- Item info -->
+            <div class="showcase-info" id="showcase-info">
+                <span class="showcase-item-label" id="showcase-item-label">Media</span>
+                <h2 class="showcase-item-name" id="showcase-item-name">The Git Times</h2>
+                <p class="showcase-item-desc" id="showcase-item-desc">AI-powered daily newspaper covering open source. Autonomous editorial pipeline turns GitHub activity into seven-section broadsheets for developers.</p>
+                <a class="showcase-item-link" id="showcase-item-link" href="https://gittimes.com" target="_blank" rel="noopener">Visit gittimes.com →</a>
+            </div>
+        </div>
+
+        <!-- Thumbnail strip — Ventures -->
+        <div class="showcase-strip-wrap">
+            <div class="showcase-strip" id="showcase-strip">
+                <button class="showcase-thumb active" data-index="0" data-type="browser" data-src="assets/gittimes-screenshot.png" data-url="gittimes.com" data-label="Media" data-name="The Git Times" data-desc="AI-powered daily newspaper covering open source. Autonomous editorial pipeline turns GitHub activity into seven-section broadsheets for developers." data-link="https://gittimes.com" data-link-text="Visit gittimes.com →">
+                    <img src="assets/gittimes-screenshot.png" alt="gittimes">
+                </button>
+                <button class="showcase-thumb" data-index="1" data-type="browser" data-src="assets/blink-screenshot.png" data-url="blink" data-label="Finance" data-name="Blink" data-desc="Quantitative trading infrastructure for prediction markets. Neural network portfolio optimization, real-time market data, and autonomous risk-managed execution on Kalshi." data-link="" data-link-text="">
+                    <img src="assets/blink-screenshot.png" alt="Blink">
+                </button>
+                <button class="showcase-thumb" data-index="2" data-type="browser" data-src="assets/passfit-screenshot.png" data-url="passfit" data-label="Health" data-name="PassFit" data-desc="Your body is the controller. On-device pose estimation turns any iPhone into a personal trainer — real-time rep counting, form correction, and adaptive workout programming." data-link="" data-link-text="">
+                    <img src="assets/passfit-screenshot.png" alt="PassFit">
+                </button>
+                <button class="showcase-thumb" data-index="3" data-type="placeholder" data-src="" data-label="Capital" data-name="The Bank" data-desc="Agent-orchestrated quantitative trading firm. Rough volatility modeling, deep hedging, vol surface construction, and LLM-driven market intelligence." data-tech="Python / Gatheral / Deep Hedging">
+                    <div class="thumb-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    </div>
+                </button>
+                <button class="showcase-thumb" data-index="4" data-type="browser" data-src="assets/glyph-screenshot.png" data-url="glyphapi.dev" data-label="Infrastructure" data-name="GLYPH" data-desc="Reasoning-preserving compression for AI agents. Same conclusions, 70% fewer tokens. Open-source eval framework and pay-per-digest API serving agent infrastructure at scale." data-link="https://glyphapi.dev" data-link-text="Visit glyphapi.dev →">
+                    <img src="assets/glyph-screenshot.png" alt="GLYPH">
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seed of Life ASCII -->
+    <section class="seed-section" id="seed">
+        <canvas id="seed-canvas"></canvas>
+        <div class="seed-label">SEED OF LIFE</div>
+    </section>
+
+    <!-- Art Gallery -->
+    <section class="art-gallery" id="gallery">
+        <div class="section-header fade-in">
+            <span class="section-label">Collection</span>
+            <h2>The Work</h2>
+            <p>Original patterns, surface design, and applied art</p>
+        </div>
+
+        <!-- Patterns Row -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Patterns</h3>
+                <span class="art-row-count">Original tessellations</span>
+            </div>
+            <div class="art-row-scroll splide" role="group" aria-label="Patterns"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Boy With a Dream" data-type="Pattern" data-full-src="assets/optimized/art/boy_withadream-1200w.webp" data-pswp-width="1200" data-pswp-height="1470">
+                    <img src="assets/optimized/art/boy_withadream-600w.webp" alt="Boy With a Dream" loading="lazy" srcset="assets/optimized/art/boy_withadream-300w.webp 300w, assets/optimized/art/boy_withadream-600w.webp 600w, assets/optimized/art/boy_withadream-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Boy With a Dream</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Gold Medallion" data-type="Pattern" data-full-src="assets/optimized/art/pattern_gold-1200w.webp" data-pswp-width="1200" data-pswp-height="1176">
+                    <img src="assets/optimized/art/pattern_gold-600w.webp" alt="Gold Medallion" loading="lazy" srcset="assets/optimized/art/pattern_gold-300w.webp 300w, assets/optimized/art/pattern_gold-600w.webp 600w, assets/optimized/art/pattern_gold-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Gold Medallion</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Teal Diamonds" data-type="Pattern" data-full-src="assets/optimized/art/pattern_teal-1200w.webp" data-pswp-width="600" data-pswp-height="600">
+                    <img src="assets/optimized/art/pattern_teal-600w.webp" alt="Teal Diamonds" loading="lazy" srcset="assets/optimized/art/pattern_teal-300w.webp 300w, assets/optimized/art/pattern_teal-600w.webp 600w, assets/optimized/art/pattern_teal-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Teal Diamonds</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Magenta Gradient" data-type="Pattern" data-full-src="assets/optimized/art/pattern_raw1-1200w.webp" data-pswp-width="1200" data-pswp-height="3962">
+                    <img src="assets/optimized/art/pattern_raw1-600w.webp" alt="Magenta Gradient" loading="lazy" srcset="assets/optimized/art/pattern_raw1-300w.webp 300w, assets/optimized/art/pattern_raw1-600w.webp 600w, assets/optimized/art/pattern_raw1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Magenta Gradient</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Jolly" data-type="Pattern" data-full-src="assets/optimized/art/jolly-1200w.webp" data-pswp-width="1200" data-pswp-height="1572">
+                    <img src="assets/optimized/art/jolly-600w.webp" alt="Jolly" loading="lazy" srcset="assets/optimized/art/jolly-300w.webp 300w, assets/optimized/art/jolly-600w.webp 600w, assets/optimized/art/jolly-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Jolly</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Emerald Weave" data-type="Pattern" data-full-src="assets/optimized/art/pattern_raw2-1200w.webp" data-pswp-width="1200" data-pswp-height="2394">
+                    <img src="assets/optimized/art/pattern_raw2-600w.webp" alt="Emerald Weave" loading="lazy" srcset="assets/optimized/art/pattern_raw2-300w.webp 300w, assets/optimized/art/pattern_raw2-600w.webp 600w, assets/optimized/art/pattern_raw2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Emerald Weave</span>
+                    </div>
+                </div></div></div></div></div>
+        </div>
+
+        <!-- Apparel Row -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Wearables</h3>
+                <span class="art-row-count">Pattern on body</span>
+            </div>
+            <div class="art-row-scroll splide" role="group" aria-label="Wearables"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Beanm" data-type="T-Shirt" data-full-src="assets/optimized/merch/beanm-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beanm-600w.webp" alt="Beanm — T-Shirt" loading="lazy" srcset="assets/optimized/merch/beanm-300w.webp 300w, assets/optimized/merch/beanm-600w.webp 600w, assets/optimized/merch/beanm-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beanm</span>
+                        <span class="art-card-type">T-Shirt</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Birthday" data-type="Button-Up" data-full-src="assets/optimized/merch/birthday-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/birthday-600w.webp" alt="Birthday — Button-Up" loading="lazy" srcset="assets/optimized/merch/birthday-300w.webp 300w, assets/optimized/merch/birthday-600w.webp 600w, assets/optimized/merch/birthday-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Birthday</span>
+                        <span class="art-card-type">Button-Up</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Birthday2" data-type="Button-Up" data-full-src="assets/optimized/merch/birthday2-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/birthday2-600w.webp" alt="Birthday2 — Button-Up" loading="lazy" srcset="assets/optimized/merch/birthday2-300w.webp 300w, assets/optimized/merch/birthday2-600w.webp 600w, assets/optimized/merch/birthday2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Birthday2</span>
+                        <span class="art-card-type">Button-Up</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Birthday3" data-type="Button-Up" data-full-src="assets/optimized/merch/birthday3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/birthday3-600w.webp" alt="Birthday3 — Button-Up" loading="lazy" srcset="assets/optimized/merch/birthday3-300w.webp 300w, assets/optimized/merch/birthday3-600w.webp 600w, assets/optimized/merch/birthday3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Birthday3</span>
+                        <span class="art-card-type">Button-Up</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Birthday4" data-type="Button-Up" data-full-src="assets/optimized/merch/birthday4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/birthday4-600w.webp" alt="Birthday4 — Button-Up" loading="lazy" srcset="assets/optimized/merch/birthday4-300w.webp 300w, assets/optimized/merch/birthday4-600w.webp 600w, assets/optimized/merch/birthday4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Birthday4</span>
+                        <span class="art-card-type">Button-Up</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Elevate" data-type="T-Shirt" data-full-src="assets/optimized/merch/elevate-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/elevate-600w.webp" alt="Elevate — T-Shirt" loading="lazy" srcset="assets/optimized/merch/elevate-300w.webp 300w, assets/optimized/merch/elevate-600w.webp 600w, assets/optimized/merch/elevate-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Elevate</span>
+                        <span class="art-card-type">T-Shirt</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Haloone" data-type="Dad Hat" data-full-src="assets/optimized/merch/haloone-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/haloone-600w.webp" alt="Haloone — Dad Hat" loading="lazy" srcset="assets/optimized/merch/haloone-300w.webp 300w, assets/optimized/merch/haloone-600w.webp 600w, assets/optimized/merch/haloone-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Haloone</span>
+                        <span class="art-card-type">Dad Hat</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Haloone2" data-type="Dad Hat" data-full-src="assets/optimized/merch/haloone2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/haloone2-600w.webp" alt="Haloone2 — Dad Hat" loading="lazy" srcset="assets/optimized/merch/haloone2-300w.webp 300w, assets/optimized/merch/haloone2-600w.webp 600w, assets/optimized/merch/haloone2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Haloone2</span>
+                        <span class="art-card-type">Dad Hat</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Nacho" data-type="Button-Up" data-full-src="assets/optimized/merch/nacho-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/nacho-600w.webp" alt="Nacho — Button-Up" loading="lazy" srcset="assets/optimized/merch/nacho-300w.webp 300w, assets/optimized/merch/nacho-600w.webp 600w, assets/optimized/merch/nacho-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Nacho</span>
+                        <span class="art-card-type">Button-Up</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Smoothscale" data-type="Dad Hat" data-full-src="assets/optimized/merch/smoothscale-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/smoothscale-600w.webp" alt="Smoothscale — Dad Hat" loading="lazy" srcset="assets/optimized/merch/smoothscale-300w.webp 300w, assets/optimized/merch/smoothscale-600w.webp 600w, assets/optimized/merch/smoothscale-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Smoothscale</span>
+                        <span class="art-card-type">Dad Hat</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Surge" data-type="T-Shirt" data-full-src="assets/optimized/merch/surge-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/surge-600w.webp" alt="Surge — T-Shirt" loading="lazy" srcset="assets/optimized/merch/surge-300w.webp 300w, assets/optimized/merch/surge-600w.webp 600w, assets/optimized/merch/surge-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Surge</span>
+                        <span class="art-card-type">T-Shirt</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Valkyrie" data-type="Bomber Jacket" data-full-src="assets/optimized/merch/valkyrie-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/valkyrie-600w.webp" alt="Valkyrie — Bomber Jacket" loading="lazy" srcset="assets/optimized/merch/valkyrie-300w.webp 300w, assets/optimized/merch/valkyrie-600w.webp 600w, assets/optimized/merch/valkyrie-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Valkyrie</span>
+                        <span class="art-card-type">Bomber Jacket</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Valkyrie2" data-type="Bomber Jacket" data-full-src="assets/optimized/merch/valkyrie2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/valkyrie2-600w.webp" alt="Valkyrie2 — Bomber Jacket" loading="lazy" srcset="assets/optimized/merch/valkyrie2-300w.webp 300w, assets/optimized/merch/valkyrie2-600w.webp 600w, assets/optimized/merch/valkyrie2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Valkyrie2</span>
+                        <span class="art-card-type">Bomber Jacket</span>
+                    </div>
+                </div></div></div></div></div>
+        </div>
+
+        <!-- Bags Row -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Carry</h3>
+                <span class="art-row-count">Surface on form</span>
+            </div>
+            <div class="art-row-scroll splide" role="group" aria-label="Carry"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="56606" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/56606-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/56606-600w.webp" alt="56606 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/56606-300w.webp 300w, assets/optimized/merch/56606-600w.webp 600w, assets/optimized/merch/56606-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">56606</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh2" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh2-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/bh2-600w.webp" alt="Bh2 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh2-300w.webp 300w, assets/optimized/merch/bh2-600w.webp 600w, assets/optimized/merch/bh2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh2</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh3" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh3-600w.webp" alt="Bh3 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh3-300w.webp 300w, assets/optimized/merch/bh3-600w.webp 600w, assets/optimized/merch/bh3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh3</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh4" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh4-600w.webp" alt="Bh4 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh4-300w.webp 300w, assets/optimized/merch/bh4-600w.webp 600w, assets/optimized/merch/bh4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh4</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh5" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh5-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh5-600w.webp" alt="Bh5 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh5-300w.webp 300w, assets/optimized/merch/bh5-600w.webp 600w, assets/optimized/merch/bh5-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh5</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh6" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh6-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh6-600w.webp" alt="Bh6 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh6-300w.webp 300w, assets/optimized/merch/bh6-600w.webp 600w, assets/optimized/merch/bh6-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh6</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh7" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh7-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh7-600w.webp" alt="Bh7 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh7-300w.webp 300w, assets/optimized/merch/bh7-600w.webp 600w, assets/optimized/merch/bh7-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh7</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bh8" data-type="Tote Bag" data-full-src="assets/optimized/merch/bh8-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bh8-600w.webp" alt="Bh8 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/bh8-300w.webp 300w, assets/optimized/merch/bh8-600w.webp 600w, assets/optimized/merch/bh8-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bh8</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Charm" data-type="Backpack" data-full-src="assets/optimized/merch/charm-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/charm-600w.webp" alt="Charm — Backpack" loading="lazy" srcset="assets/optimized/merch/charm-300w.webp 300w, assets/optimized/merch/charm-600w.webp 600w, assets/optimized/merch/charm-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Charm</span>
+                        <span class="art-card-type">Backpack</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Charm2" data-type="Backpack" data-full-src="assets/optimized/merch/charm2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/charm2-600w.webp" alt="Charm2 — Backpack" loading="lazy" srcset="assets/optimized/merch/charm2-300w.webp 300w, assets/optimized/merch/charm2-600w.webp 600w, assets/optimized/merch/charm2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Charm2</span>
+                        <span class="art-card-type">Backpack</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Diatri" data-type="Backpack" data-full-src="assets/optimized/merch/diatri-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/diatri-600w.webp" alt="Diatri — Backpack" loading="lazy" srcset="assets/optimized/merch/diatri-300w.webp 300w, assets/optimized/merch/diatri-600w.webp 600w, assets/optimized/merch/diatri-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Diatri</span>
+                        <span class="art-card-type">Backpack</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Diatri2" data-type="Backpack" data-full-src="assets/optimized/merch/diatri2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/diatri2-600w.webp" alt="Diatri2 — Backpack" loading="lazy" srcset="assets/optimized/merch/diatri2-300w.webp 300w, assets/optimized/merch/diatri2-600w.webp 600w, assets/optimized/merch/diatri2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Diatri2</span>
+                        <span class="art-card-type">Backpack</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Diatri3" data-type="Backpack" data-full-src="assets/optimized/merch/diatri3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/diatri3-600w.webp" alt="Diatri3 — Backpack" loading="lazy" srcset="assets/optimized/merch/diatri3-300w.webp 300w, assets/optimized/merch/diatri3-600w.webp 600w, assets/optimized/merch/diatri3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Diatri3</span>
+                        <span class="art-card-type">Backpack</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Expoer" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/expoer-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/expoer-600w.webp" alt="Expoer — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/expoer-300w.webp 300w, assets/optimized/merch/expoer-600w.webp 600w, assets/optimized/merch/expoer-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Expoer</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Expoer2" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/expoer2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/expoer2-600w.webp" alt="Expoer2 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/expoer2-300w.webp 300w, assets/optimized/merch/expoer2-600w.webp 600w, assets/optimized/merch/expoer2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Expoer2</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Flamepin" data-type="Crossbody Bag" data-full-src="assets/optimized/merch/flamepin-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/flamepin-600w.webp" alt="Flamepin — Crossbody Bag" loading="lazy" srcset="assets/optimized/merch/flamepin-300w.webp 300w, assets/optimized/merch/flamepin-600w.webp 600w, assets/optimized/merch/flamepin-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Flamepin</span>
+                        <span class="art-card-type">Crossbody Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Gardengate" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/gardengate-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/gardengate-600w.webp" alt="Gardengate — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/gardengate-300w.webp 300w, assets/optimized/merch/gardengate-600w.webp 600w, assets/optimized/merch/gardengate-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Gardengate</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Grove" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/grove-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/grove-600w.webp" alt="Grove — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/grove-300w.webp 300w, assets/optimized/merch/grove-600w.webp 600w, assets/optimized/merch/grove-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Grove</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Magipop" data-type="Duffel Bag" data-full-src="assets/optimized/merch/magipop-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/magipop-600w.webp" alt="Magipop — Duffel Bag" loading="lazy" srcset="assets/optimized/merch/magipop-300w.webp 300w, assets/optimized/merch/magipop-600w.webp 600w, assets/optimized/merch/magipop-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Magipop</span>
+                        <span class="art-card-type">Duffel Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Magipop2" data-type="Duffel Bag" data-full-src="assets/optimized/merch/magipop2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/magipop2-600w.webp" alt="Magipop2 — Duffel Bag" loading="lazy" srcset="assets/optimized/merch/magipop2-300w.webp 300w, assets/optimized/merch/magipop2-600w.webp 600w, assets/optimized/merch/magipop2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Magipop2</span>
+                        <span class="art-card-type">Duffel Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Magipop3" data-type="Duffel Bag" data-full-src="assets/optimized/merch/magipop3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/magipop3-600w.webp" alt="Magipop3 — Duffel Bag" loading="lazy" srcset="assets/optimized/merch/magipop3-300w.webp 300w, assets/optimized/merch/magipop3-600w.webp 600w, assets/optimized/merch/magipop3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Magipop3</span>
+                        <span class="art-card-type">Duffel Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="N!Ght2" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/n-ght2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/n-ght2-600w.webp" alt="N!Ght2 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/n-ght2-300w.webp 300w, assets/optimized/merch/n-ght2-600w.webp 600w, assets/optimized/merch/n-ght2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">N!Ght2</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="N!Ight3" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/n-ight3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/n-ight3-600w.webp" alt="N!Ight3 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/n-ight3-300w.webp 300w, assets/optimized/merch/n-ight3-600w.webp 600w, assets/optimized/merch/n-ight3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">N!Ight3</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Native" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/native-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/native-600w.webp" alt="Native — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/native-300w.webp 300w, assets/optimized/merch/native-600w.webp 600w, assets/optimized/merch/native-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Native</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Native2" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/native2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/native2-600w.webp" alt="Native2 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/native2-300w.webp 300w, assets/optimized/merch/native2-600w.webp 600w, assets/optimized/merch/native2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Native2</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Nite" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/nite-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/nite-600w.webp" alt="Nite — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/nite-300w.webp 300w, assets/optimized/merch/nite-600w.webp 600w, assets/optimized/merch/nite-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Nite</span>
+                        <span class="art-card-type">Drawstring Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Piano" data-type="Tote Bag" data-full-src="assets/optimized/merch/piano-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/piano-600w.webp" alt="Piano — Tote Bag" loading="lazy" srcset="assets/optimized/merch/piano-300w.webp 300w, assets/optimized/merch/piano-600w.webp 600w, assets/optimized/merch/piano-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Piano</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Piano2" data-type="Tote Bag" data-full-src="assets/optimized/merch/piano2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/piano2-600w.webp" alt="Piano2 — Tote Bag" loading="lazy" srcset="assets/optimized/merch/piano2-300w.webp 300w, assets/optimized/merch/piano2-600w.webp 600w, assets/optimized/merch/piano2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Piano2</span>
+                        <span class="art-card-type">Tote Bag</span>
+                    </div>
+                </div></div></div></div></div>
+        </div>
+
+        <!-- Pouches & Clutches Row -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Small Format</h3>
+                <span class="art-row-count">Studies in scale</span>
+            </div>
+            <div class="art-row-scroll splide" role="group" aria-label="Small Format"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Abyss" data-type="Pouch" data-full-src="assets/optimized/merch/abyss-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/abyss-600w.webp" alt="Abyss — Pouch" loading="lazy" srcset="assets/optimized/merch/abyss-300w.webp 300w, assets/optimized/merch/abyss-600w.webp 600w, assets/optimized/merch/abyss-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Abyss</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Alt" data-type="Pouch" data-full-src="assets/optimized/merch/alt-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/alt-600w.webp" alt="Alt — Pouch" loading="lazy" srcset="assets/optimized/merch/alt-300w.webp 300w, assets/optimized/merch/alt-600w.webp 600w, assets/optimized/merch/alt-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Alt</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beauty2" data-type="Clutch" data-full-src="assets/optimized/merch/beauty2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beauty2-600w.webp" alt="Beauty2 — Clutch" loading="lazy" srcset="assets/optimized/merch/beauty2-300w.webp 300w, assets/optimized/merch/beauty2-600w.webp 600w, assets/optimized/merch/beauty2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beauty2</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beautymash" data-type="Clutch" data-full-src="assets/optimized/merch/beautymash-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beautymash-600w.webp" alt="Beautymash — Clutch" loading="lazy" srcset="assets/optimized/merch/beautymash-300w.webp 300w, assets/optimized/merch/beautymash-600w.webp 600w, assets/optimized/merch/beautymash-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beautymash</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beautymash2" data-type="Clutch" data-full-src="assets/optimized/merch/beautymash2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beautymash2-600w.webp" alt="Beautymash2 — Clutch" loading="lazy" srcset="assets/optimized/merch/beautymash2-300w.webp 300w, assets/optimized/merch/beautymash2-600w.webp 600w, assets/optimized/merch/beautymash2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beautymash2</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beautymash3" data-type="Clutch" data-full-src="assets/optimized/merch/beautymash3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beautymash3-600w.webp" alt="Beautymash3 — Clutch" loading="lazy" srcset="assets/optimized/merch/beautymash3-300w.webp 300w, assets/optimized/merch/beautymash3-600w.webp 600w, assets/optimized/merch/beautymash3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beautymash3</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beautystar1" data-type="Clutch" data-full-src="assets/optimized/merch/beautystar1-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beautystar1-600w.webp" alt="Beautystar1 — Clutch" loading="lazy" srcset="assets/optimized/merch/beautystar1-300w.webp 300w, assets/optimized/merch/beautystar1-600w.webp 600w, assets/optimized/merch/beautystar1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beautystar1</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Beauty" data-type="Clutch" data-full-src="assets/optimized/merch/beauty-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/beauty-600w.webp" alt="Beauty — Clutch" loading="lazy" srcset="assets/optimized/merch/beauty-300w.webp 300w, assets/optimized/merch/beauty-600w.webp 600w, assets/optimized/merch/beauty-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Beauty</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Brazila" data-type="Pouch" data-full-src="assets/optimized/merch/brazila-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/brazila-600w.webp" alt="Brazila — Pouch" loading="lazy" srcset="assets/optimized/merch/brazila-300w.webp 300w, assets/optimized/merch/brazila-600w.webp 600w, assets/optimized/merch/brazila-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Brazila</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Butterfly" data-type="Pouch" data-full-src="assets/optimized/merch/butterfly-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/butterfly-600w.webp" alt="Butterfly — Pouch" loading="lazy" srcset="assets/optimized/merch/butterfly-300w.webp 300w, assets/optimized/merch/butterfly-600w.webp 600w, assets/optimized/merch/butterfly-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Butterfly</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Cagegrid" data-type="Pouch" data-full-src="assets/optimized/merch/cagegrid-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/cagegrid-600w.webp" alt="Cagegrid — Pouch" loading="lazy" srcset="assets/optimized/merch/cagegrid-300w.webp 300w, assets/optimized/merch/cagegrid-600w.webp 600w, assets/optimized/merch/cagegrid-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Cagegrid</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Crossover2" data-type="Pouch" data-full-src="assets/optimized/merch/crossover2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/crossover2-600w.webp" alt="Crossover2 — Pouch" loading="lazy" srcset="assets/optimized/merch/crossover2-300w.webp 300w, assets/optimized/merch/crossover2-600w.webp 600w, assets/optimized/merch/crossover2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Crossover2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Crossover3" data-type="Pouch" data-full-src="assets/optimized/merch/crossover3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/crossover3-600w.webp" alt="Crossover3 — Pouch" loading="lazy" srcset="assets/optimized/merch/crossover3-300w.webp 300w, assets/optimized/merch/crossover3-600w.webp 600w, assets/optimized/merch/crossover3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Crossover3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Crossover4" data-type="Pouch" data-full-src="assets/optimized/merch/crossover4-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/crossover4-600w.webp" alt="Crossover4 — Pouch" loading="lazy" srcset="assets/optimized/merch/crossover4-300w.webp 300w, assets/optimized/merch/crossover4-600w.webp 600w, assets/optimized/merch/crossover4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Crossover4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Cyber" data-type="Pouch" data-full-src="assets/optimized/merch/cyber-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/cyber-600w.webp" alt="Cyber — Pouch" loading="lazy" srcset="assets/optimized/merch/cyber-300w.webp 300w, assets/optimized/merch/cyber-600w.webp 600w, assets/optimized/merch/cyber-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Cyber</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Cyber2" data-type="Pouch" data-full-src="assets/optimized/merch/cyber2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/cyber2-600w.webp" alt="Cyber2 — Pouch" loading="lazy" srcset="assets/optimized/merch/cyber2-300w.webp 300w, assets/optimized/merch/cyber2-600w.webp 600w, assets/optimized/merch/cyber2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Cyber2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Delicase" data-type="Pouch" data-full-src="assets/optimized/merch/delicase-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/delicase-600w.webp" alt="Delicase — Pouch" loading="lazy" srcset="assets/optimized/merch/delicase-300w.webp 300w, assets/optimized/merch/delicase-600w.webp 600w, assets/optimized/merch/delicase-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Delicase</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Deluxe" data-type="Pouch" data-full-src="assets/optimized/merch/deluxe-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/deluxe-600w.webp" alt="Deluxe — Pouch" loading="lazy" srcset="assets/optimized/merch/deluxe-300w.webp 300w, assets/optimized/merch/deluxe-600w.webp 600w, assets/optimized/merch/deluxe-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Deluxe</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Deluxe2" data-type="Pouch" data-full-src="assets/optimized/merch/deluxe2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/deluxe2-600w.webp" alt="Deluxe2 — Pouch" loading="lazy" srcset="assets/optimized/merch/deluxe2-300w.webp 300w, assets/optimized/merch/deluxe2-600w.webp 600w, assets/optimized/merch/deluxe2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Deluxe2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Desertflow" data-type="Pouch" data-full-src="assets/optimized/merch/desertflow-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/desertflow-600w.webp" alt="Desertflow — Pouch" loading="lazy" srcset="assets/optimized/merch/desertflow-300w.webp 300w, assets/optimized/merch/desertflow-600w.webp 600w, assets/optimized/merch/desertflow-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Desertflow</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Drift" data-type="Pouch" data-full-src="assets/optimized/merch/drift-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/drift-600w.webp" alt="Drift — Pouch" loading="lazy" srcset="assets/optimized/merch/drift-300w.webp 300w, assets/optimized/merch/drift-600w.webp 600w, assets/optimized/merch/drift-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Drift</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Dualgrid" data-type="Pouch" data-full-src="assets/optimized/merch/dualgrid-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/dualgrid-600w.webp" alt="Dualgrid — Pouch" loading="lazy" srcset="assets/optimized/merch/dualgrid-300w.webp 300w, assets/optimized/merch/dualgrid-600w.webp 600w, assets/optimized/merch/dualgrid-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Dualgrid</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="E Chain" data-type="Pouch" data-full-src="assets/optimized/merch/e-chain-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/e-chain-600w.webp" alt="E Chain — Pouch" loading="lazy" srcset="assets/optimized/merch/e-chain-300w.webp 300w, assets/optimized/merch/e-chain-600w.webp 600w, assets/optimized/merch/e-chain-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">E Chain</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="E Chain2" data-type="Pouch" data-full-src="assets/optimized/merch/e-chain2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/e-chain2-600w.webp" alt="E Chain2 — Pouch" loading="lazy" srcset="assets/optimized/merch/e-chain2-300w.webp 300w, assets/optimized/merch/e-chain2-600w.webp 600w, assets/optimized/merch/e-chain2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">E Chain2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Ellawheel" data-type="Pouch" data-full-src="assets/optimized/merch/ellawheel-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/ellawheel-600w.webp" alt="Ellawheel — Pouch" loading="lazy" srcset="assets/optimized/merch/ellawheel-300w.webp 300w, assets/optimized/merch/ellawheel-600w.webp 600w, assets/optimized/merch/ellawheel-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Ellawheel</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Emera" data-type="Pouch" data-full-src="assets/optimized/merch/emera-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/emera-600w.webp" alt="Emera — Pouch" loading="lazy" srcset="assets/optimized/merch/emera-300w.webp 300w, assets/optimized/merch/emera-600w.webp 600w, assets/optimized/merch/emera-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Emera</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Expando" data-type="Pouch" data-full-src="assets/optimized/merch/expando-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/expando-600w.webp" alt="Expando — Pouch" loading="lazy" srcset="assets/optimized/merch/expando-300w.webp 300w, assets/optimized/merch/expando-600w.webp 600w, assets/optimized/merch/expando-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Expando</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Fallspring" data-type="Pouch" data-full-src="assets/optimized/merch/fallspring-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/fallspring-600w.webp" alt="Fallspring — Pouch" loading="lazy" srcset="assets/optimized/merch/fallspring-300w.webp 300w, assets/optimized/merch/fallspring-600w.webp 600w, assets/optimized/merch/fallspring-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Fallspring</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Fallspring2" data-type="Pouch" data-full-src="assets/optimized/merch/fallspring2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/fallspring2-600w.webp" alt="Fallspring2 — Pouch" loading="lazy" srcset="assets/optimized/merch/fallspring2-300w.webp 300w, assets/optimized/merch/fallspring2-600w.webp 600w, assets/optimized/merch/fallspring2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Fallspring2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Far In2" data-type="Pouch" data-full-src="assets/optimized/merch/far-in2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/far-in2-600w.webp" alt="Far In2 — Pouch" loading="lazy" srcset="assets/optimized/merch/far-in2-300w.webp 300w, assets/optimized/merch/far-in2-600w.webp 600w, assets/optimized/merch/far-in2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Far In2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Far In3" data-type="Pouch" data-full-src="assets/optimized/merch/far-in3-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/far-in3-600w.webp" alt="Far In3 — Pouch" loading="lazy" srcset="assets/optimized/merch/far-in3-300w.webp 300w, assets/optimized/merch/far-in3-600w.webp 600w, assets/optimized/merch/far-in3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Far In3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Far In4" data-type="Pouch" data-full-src="assets/optimized/merch/far-in4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/far-in4-600w.webp" alt="Far In4 — Pouch" loading="lazy" srcset="assets/optimized/merch/far-in4-300w.webp 300w, assets/optimized/merch/far-in4-600w.webp 600w, assets/optimized/merch/far-in4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Far In4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Firecool" data-type="Pouch" data-full-src="assets/optimized/merch/firecool-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/firecool-600w.webp" alt="Firecool — Pouch" loading="lazy" srcset="assets/optimized/merch/firecool-300w.webp 300w, assets/optimized/merch/firecool-600w.webp 600w, assets/optimized/merch/firecool-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Firecool</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Firecool2" data-type="Pouch" data-full-src="assets/optimized/merch/firecool2-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/firecool2-600w.webp" alt="Firecool2 — Pouch" loading="lazy" srcset="assets/optimized/merch/firecool2-300w.webp 300w, assets/optimized/merch/firecool2-600w.webp 600w, assets/optimized/merch/firecool2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Firecool2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Firecool3" data-type="Pouch" data-full-src="assets/optimized/merch/firecool3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/firecool3-600w.webp" alt="Firecool3 — Pouch" loading="lazy" srcset="assets/optimized/merch/firecool3-300w.webp 300w, assets/optimized/merch/firecool3-600w.webp 600w, assets/optimized/merch/firecool3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Firecool3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Flake" data-type="Pouch" data-full-src="assets/optimized/merch/flake-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/flake-600w.webp" alt="Flake — Pouch" loading="lazy" srcset="assets/optimized/merch/flake-300w.webp 300w, assets/optimized/merch/flake-600w.webp 600w, assets/optimized/merch/flake-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Flake</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Flower Dragon" data-type="Pouch" data-full-src="assets/optimized/merch/flower-dragon-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/flower-dragon-600w.webp" alt="Flower Dragon — Pouch" loading="lazy" srcset="assets/optimized/merch/flower-dragon-300w.webp 300w, assets/optimized/merch/flower-dragon-600w.webp 600w, assets/optimized/merch/flower-dragon-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Flower Dragon</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Flowyo" data-type="Pouch" data-full-src="assets/optimized/merch/flowyo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/flowyo-600w.webp" alt="Flowyo — Pouch" loading="lazy" srcset="assets/optimized/merch/flowyo-300w.webp 300w, assets/optimized/merch/flowyo-600w.webp 600w, assets/optimized/merch/flowyo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Flowyo</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Frogger" data-type="Pouch" data-full-src="assets/optimized/merch/frogger-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/frogger-600w.webp" alt="Frogger — Pouch" loading="lazy" srcset="assets/optimized/merch/frogger-300w.webp 300w, assets/optimized/merch/frogger-600w.webp 600w, assets/optimized/merch/frogger-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Frogger</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Galatic2" data-type="Pouch" data-full-src="assets/optimized/merch/galatic2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/galatic2-600w.webp" alt="Galatic2 — Pouch" loading="lazy" srcset="assets/optimized/merch/galatic2-300w.webp 300w, assets/optimized/merch/galatic2-600w.webp 600w, assets/optimized/merch/galatic2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Galatic2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Grill" data-type="Pouch" data-full-src="assets/optimized/merch/grill-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/grill-600w.webp" alt="Grill — Pouch" loading="lazy" srcset="assets/optimized/merch/grill-300w.webp 300w, assets/optimized/merch/grill-600w.webp 600w, assets/optimized/merch/grill-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Grill</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Gungho" data-type="Pouch" data-full-src="assets/optimized/merch/gungho-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/gungho-600w.webp" alt="Gungho — Pouch" loading="lazy" srcset="assets/optimized/merch/gungho-300w.webp 300w, assets/optimized/merch/gungho-600w.webp 600w, assets/optimized/merch/gungho-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Gungho</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Gungho2" data-type="Pouch" data-full-src="assets/optimized/merch/gungho2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/gungho2-600w.webp" alt="Gungho2 — Pouch" loading="lazy" srcset="assets/optimized/merch/gungho2-300w.webp 300w, assets/optimized/merch/gungho2-600w.webp 600w, assets/optimized/merch/gungho2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Gungho2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Halodive" data-type="Pouch" data-full-src="assets/optimized/merch/halodive-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/halodive-600w.webp" alt="Halodive — Pouch" loading="lazy" srcset="assets/optimized/merch/halodive-300w.webp 300w, assets/optimized/merch/halodive-600w.webp 600w, assets/optimized/merch/halodive-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Halodive</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Halogo" data-type="Pouch" data-full-src="assets/optimized/merch/halogo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/halogo-600w.webp" alt="Halogo — Pouch" loading="lazy" srcset="assets/optimized/merch/halogo-300w.webp 300w, assets/optimized/merch/halogo-600w.webp 600w, assets/optimized/merch/halogo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Halogo</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Halowin" data-type="Pouch" data-full-src="assets/optimized/merch/halowin-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/halowin-600w.webp" alt="Halowin — Pouch" loading="lazy" srcset="assets/optimized/merch/halowin-300w.webp 300w, assets/optimized/merch/halowin-600w.webp 600w, assets/optimized/merch/halowin-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Halowin</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Halowirl" data-type="Pouch" data-full-src="assets/optimized/merch/halowirl-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/halowirl-600w.webp" alt="Halowirl — Pouch" loading="lazy" srcset="assets/optimized/merch/halowirl-300w.webp 300w, assets/optimized/merch/halowirl-600w.webp 600w, assets/optimized/merch/halowirl-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Halowirl</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Halowirl2" data-type="Pouch" data-full-src="assets/optimized/merch/halowirl2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/halowirl2-600w.webp" alt="Halowirl2 — Pouch" loading="lazy" srcset="assets/optimized/merch/halowirl2-300w.webp 300w, assets/optimized/merch/halowirl2-600w.webp 600w, assets/optimized/merch/halowirl2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Halowirl2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="J Chain" data-type="Pouch" data-full-src="assets/optimized/merch/j-chain-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/j-chain-600w.webp" alt="J Chain — Pouch" loading="lazy" srcset="assets/optimized/merch/j-chain-300w.webp 300w, assets/optimized/merch/j-chain-600w.webp 600w, assets/optimized/merch/j-chain-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">J Chain</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="J Chain2" data-type="Pouch" data-full-src="assets/optimized/merch/j-chain2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/j-chain2-600w.webp" alt="J Chain2 — Pouch" loading="lazy" srcset="assets/optimized/merch/j-chain2-300w.webp 300w, assets/optimized/merch/j-chain2-600w.webp 600w, assets/optimized/merch/j-chain2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">J Chain2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="J Chain3" data-type="Pouch" data-full-src="assets/optimized/merch/j-chain3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/j-chain3-600w.webp" alt="J Chain3 — Pouch" loading="lazy" srcset="assets/optimized/merch/j-chain3-300w.webp 300w, assets/optimized/merch/j-chain3-600w.webp 600w, assets/optimized/merch/j-chain3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">J Chain3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Justright1" data-type="Pouch" data-full-src="assets/optimized/merch/justright1-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/justright1-600w.webp" alt="Justright1 — Pouch" loading="lazy" srcset="assets/optimized/merch/justright1-300w.webp 300w, assets/optimized/merch/justright1-600w.webp 600w, assets/optimized/merch/justright1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Justright1</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lane Light" data-type="Pouch" data-full-src="assets/optimized/merch/lane-light-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lane-light-600w.webp" alt="Lane Light — Pouch" loading="lazy" srcset="assets/optimized/merch/lane-light-300w.webp 300w, assets/optimized/merch/lane-light-600w.webp 600w, assets/optimized/merch/lane-light-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lane Light</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Leaf" data-type="Pouch" data-full-src="assets/optimized/merch/leaf-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/leaf-600w.webp" alt="Leaf — Pouch" loading="lazy" srcset="assets/optimized/merch/leaf-300w.webp 300w, assets/optimized/merch/leaf-600w.webp 600w, assets/optimized/merch/leaf-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Leaf</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Library" data-type="Pouch" data-full-src="assets/optimized/merch/library-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/library-600w.webp" alt="Library — Pouch" loading="lazy" srcset="assets/optimized/merch/library-300w.webp 300w, assets/optimized/merch/library-600w.webp 600w, assets/optimized/merch/library-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Library</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lighthouse" data-type="Pouch" data-full-src="assets/optimized/merch/lighthouse-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lighthouse-600w.webp" alt="Lighthouse — Pouch" loading="lazy" srcset="assets/optimized/merch/lighthouse-300w.webp 300w, assets/optimized/merch/lighthouse-600w.webp 600w, assets/optimized/merch/lighthouse-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lighthouse</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Link" data-type="Pouch" data-full-src="assets/optimized/merch/link-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/link-600w.webp" alt="Link — Pouch" loading="lazy" srcset="assets/optimized/merch/link-300w.webp 300w, assets/optimized/merch/link-600w.webp 600w, assets/optimized/merch/link-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Link</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lock" data-type="Clutch" data-full-src="assets/optimized/merch/lock-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lock-600w.webp" alt="Lock — Clutch" loading="lazy" srcset="assets/optimized/merch/lock-300w.webp 300w, assets/optimized/merch/lock-600w.webp 600w, assets/optimized/merch/lock-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lock</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lock2" data-type="Clutch" data-full-src="assets/optimized/merch/lock2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lock2-600w.webp" alt="Lock2 — Clutch" loading="lazy" srcset="assets/optimized/merch/lock2-300w.webp 300w, assets/optimized/merch/lock2-600w.webp 600w, assets/optimized/merch/lock2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lock2</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lost" data-type="Pouch" data-full-src="assets/optimized/merch/lost-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lost-600w.webp" alt="Lost — Pouch" loading="lazy" srcset="assets/optimized/merch/lost-300w.webp 300w, assets/optimized/merch/lost-600w.webp 600w, assets/optimized/merch/lost-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lost</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Lucent" data-type="Pouch" data-full-src="assets/optimized/merch/lucent-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/lucent-600w.webp" alt="Lucent — Pouch" loading="lazy" srcset="assets/optimized/merch/lucent-300w.webp 300w, assets/optimized/merch/lucent-600w.webp 600w, assets/optimized/merch/lucent-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Lucent</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Madewithpages" data-type="Pouch" data-full-src="assets/optimized/merch/madewithpages-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/madewithpages-600w.webp" alt="Madewithpages — Pouch" loading="lazy" srcset="assets/optimized/merch/madewithpages-300w.webp 300w, assets/optimized/merch/madewithpages-600w.webp 600w, assets/optimized/merch/madewithpages-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Madewithpages</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Madewithpages1" data-type="Pouch" data-full-src="assets/optimized/merch/madewithpages1-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/madewithpages1-600w.webp" alt="Madewithpages1 — Pouch" loading="lazy" srcset="assets/optimized/merch/madewithpages1-300w.webp 300w, assets/optimized/merch/madewithpages1-600w.webp 600w, assets/optimized/merch/madewithpages1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Madewithpages1</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Mellowmarsh" data-type="Pouch" data-full-src="assets/optimized/merch/mellowmarsh-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/mellowmarsh-600w.webp" alt="Mellowmarsh — Pouch" loading="lazy" srcset="assets/optimized/merch/mellowmarsh-300w.webp 300w, assets/optimized/merch/mellowmarsh-600w.webp 600w, assets/optimized/merch/mellowmarsh-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Mellowmarsh</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Melody" data-type="Pouch" data-full-src="assets/optimized/merch/melody-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/melody-600w.webp" alt="Melody — Pouch" loading="lazy" srcset="assets/optimized/merch/melody-300w.webp 300w, assets/optimized/merch/melody-600w.webp 600w, assets/optimized/merch/melody-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Melody</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Merit" data-type="Clutch" data-full-src="assets/optimized/merch/merit-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/merit-600w.webp" alt="Merit — Clutch" loading="lazy" srcset="assets/optimized/merch/merit-300w.webp 300w, assets/optimized/merch/merit-600w.webp 600w, assets/optimized/merch/merit-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Merit</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Merit2" data-type="Clutch" data-full-src="assets/optimized/merch/merit2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/merit2-600w.webp" alt="Merit2 — Clutch" loading="lazy" srcset="assets/optimized/merch/merit2-300w.webp 300w, assets/optimized/merch/merit2-600w.webp 600w, assets/optimized/merch/merit2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Merit2</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Mg" data-type="Pouch" data-full-src="assets/optimized/merch/mg-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/mg-600w.webp" alt="Mg — Pouch" loading="lazy" srcset="assets/optimized/merch/mg-300w.webp 300w, assets/optimized/merch/mg-600w.webp 600w, assets/optimized/merch/mg-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Mg</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Millenia" data-type="Pouch" data-full-src="assets/optimized/merch/millenia-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/millenia-600w.webp" alt="Millenia — Pouch" loading="lazy" srcset="assets/optimized/merch/millenia-300w.webp 300w, assets/optimized/merch/millenia-600w.webp 600w, assets/optimized/merch/millenia-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Millenia</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Multi" data-type="Pouch" data-full-src="assets/optimized/merch/multi-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/multi-600w.webp" alt="Multi — Pouch" loading="lazy" srcset="assets/optimized/merch/multi-300w.webp 300w, assets/optimized/merch/multi-600w.webp 600w, assets/optimized/merch/multi-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Multi</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviway" data-type="Pouch" data-full-src="assets/optimized/merch/naviway-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/naviway-600w.webp" alt="Naviway — Pouch" loading="lazy" srcset="assets/optimized/merch/naviway-300w.webp 300w, assets/optimized/merch/naviway-600w.webp 600w, assets/optimized/merch/naviway-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviway</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviway2" data-type="Pouch" data-full-src="assets/optimized/merch/naviway2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/naviway2-600w.webp" alt="Naviway2 — Pouch" loading="lazy" srcset="assets/optimized/merch/naviway2-300w.webp 300w, assets/optimized/merch/naviway2-600w.webp 600w, assets/optimized/merch/naviway2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviway2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviway3" data-type="Pouch" data-full-src="assets/optimized/merch/naviway3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/naviway3-600w.webp" alt="Naviway3 — Pouch" loading="lazy" srcset="assets/optimized/merch/naviway3-300w.webp 300w, assets/optimized/merch/naviway3-600w.webp 600w, assets/optimized/merch/naviway3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviway3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviway4" data-type="Pouch" data-full-src="assets/optimized/merch/naviway4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/naviway4-600w.webp" alt="Naviway4 — Pouch" loading="lazy" srcset="assets/optimized/merch/naviway4-300w.webp 300w, assets/optimized/merch/naviway4-600w.webp 600w, assets/optimized/merch/naviway4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviway4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviway5" data-type="Pouch" data-full-src="assets/optimized/merch/naviway5-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/naviway5-600w.webp" alt="Naviway5 — Pouch" loading="lazy" srcset="assets/optimized/merch/naviway5-300w.webp 300w, assets/optimized/merch/naviway5-600w.webp 600w, assets/optimized/merch/naviway5-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviway5</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Naviwoah" data-type="Pouch" data-full-src="assets/optimized/merch/naviwoah-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/naviwoah-600w.webp" alt="Naviwoah — Pouch" loading="lazy" srcset="assets/optimized/merch/naviwoah-300w.webp 300w, assets/optimized/merch/naviwoah-600w.webp 600w, assets/optimized/merch/naviwoah-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Naviwoah</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Nestor" data-type="Pouch" data-full-src="assets/optimized/merch/nestor-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/nestor-600w.webp" alt="Nestor — Pouch" loading="lazy" srcset="assets/optimized/merch/nestor-300w.webp 300w, assets/optimized/merch/nestor-600w.webp 600w, assets/optimized/merch/nestor-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Nestor</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partscramble3" data-type="Pouch" data-full-src="assets/optimized/merch/partscramble3-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/partscramble3-600w.webp" alt="Partscramble3 — Pouch" loading="lazy" srcset="assets/optimized/merch/partscramble3-300w.webp 300w, assets/optimized/merch/partscramble3-600w.webp 600w, assets/optimized/merch/partscramble3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partscramble3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partscramble4" data-type="Pouch" data-full-src="assets/optimized/merch/partscramble4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partscramble4-600w.webp" alt="Partscramble4 — Pouch" loading="lazy" srcset="assets/optimized/merch/partscramble4-300w.webp 300w, assets/optimized/merch/partscramble4-600w.webp 600w, assets/optimized/merch/partscramble4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partscramble4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partyscramble2" data-type="Pouch" data-full-src="assets/optimized/merch/partyscramble2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partyscramble2-600w.webp" alt="Partyscramble2 — Pouch" loading="lazy" srcset="assets/optimized/merch/partyscramble2-300w.webp 300w, assets/optimized/merch/partyscramble2-600w.webp 600w, assets/optimized/merch/partyscramble2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partyscramble2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar10" data-type="Pouch" data-full-src="assets/optimized/merch/partystar10-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar10-600w.webp" alt="Partystar10 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar10-300w.webp 300w, assets/optimized/merch/partystar10-600w.webp 600w, assets/optimized/merch/partystar10-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar10</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar11" data-type="Pouch" data-full-src="assets/optimized/merch/partystar11-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar11-600w.webp" alt="Partystar11 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar11-300w.webp 300w, assets/optimized/merch/partystar11-600w.webp 600w, assets/optimized/merch/partystar11-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar11</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar2" data-type="Pouch" data-full-src="assets/optimized/merch/partystar2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar2-600w.webp" alt="Partystar2 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar2-300w.webp 300w, assets/optimized/merch/partystar2-600w.webp 600w, assets/optimized/merch/partystar2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar4" data-type="Pouch" data-full-src="assets/optimized/merch/partystar4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar4-600w.webp" alt="Partystar4 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar4-300w.webp 300w, assets/optimized/merch/partystar4-600w.webp 600w, assets/optimized/merch/partystar4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar5" data-type="Pouch" data-full-src="assets/optimized/merch/partystar5-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar5-600w.webp" alt="Partystar5 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar5-300w.webp 300w, assets/optimized/merch/partystar5-600w.webp 600w, assets/optimized/merch/partystar5-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar5</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar7" data-type="Pouch" data-full-src="assets/optimized/merch/partystar7-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar7-600w.webp" alt="Partystar7 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar7-300w.webp 300w, assets/optimized/merch/partystar7-600w.webp 600w, assets/optimized/merch/partystar7-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar7</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar8" data-type="Pouch" data-full-src="assets/optimized/merch/partystar8-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar8-600w.webp" alt="Partystar8 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar8-300w.webp 300w, assets/optimized/merch/partystar8-600w.webp 600w, assets/optimized/merch/partystar8-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar8</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Partystar9" data-type="Pouch" data-full-src="assets/optimized/merch/partystar9-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/partystar9-600w.webp" alt="Partystar9 — Pouch" loading="lazy" srcset="assets/optimized/merch/partystar9-300w.webp 300w, assets/optimized/merch/partystar9-600w.webp 600w, assets/optimized/merch/partystar9-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Partystar9</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pianeapple2" data-type="Pouch" data-full-src="assets/optimized/merch/pianeapple2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pianeapple2-600w.webp" alt="Pianeapple2 — Pouch" loading="lazy" srcset="assets/optimized/merch/pianeapple2-300w.webp 300w, assets/optimized/merch/pianeapple2-600w.webp 600w, assets/optimized/merch/pianeapple2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pianeapple2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pick" data-type="Pouch" data-full-src="assets/optimized/merch/pick-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pick-600w.webp" alt="Pick — Pouch" loading="lazy" srcset="assets/optimized/merch/pick-300w.webp 300w, assets/optimized/merch/pick-600w.webp 600w, assets/optimized/merch/pick-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pick</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pin Wraith" data-type="Pouch" data-full-src="assets/optimized/merch/pin-wraith-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pin-wraith-600w.webp" alt="Pin Wraith — Pouch" loading="lazy" srcset="assets/optimized/merch/pin-wraith-300w.webp 300w, assets/optimized/merch/pin-wraith-600w.webp 600w, assets/optimized/merch/pin-wraith-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pin Wraith</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pineapple" data-type="Pouch" data-full-src="assets/optimized/merch/pineapple-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pineapple-600w.webp" alt="Pineapple — Pouch" loading="lazy" srcset="assets/optimized/merch/pineapple-300w.webp 300w, assets/optimized/merch/pineapple-600w.webp 600w, assets/optimized/merch/pineapple-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pineapple</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pineapple3" data-type="Pouch" data-full-src="assets/optimized/merch/pineapple3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pineapple3-600w.webp" alt="Pineapple3 — Pouch" loading="lazy" srcset="assets/optimized/merch/pineapple3-300w.webp 300w, assets/optimized/merch/pineapple3-600w.webp 600w, assets/optimized/merch/pineapple3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pineapple3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Precise2" data-type="Pouch" data-full-src="assets/optimized/merch/precise2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/precise2-600w.webp" alt="Precise2 — Pouch" loading="lazy" srcset="assets/optimized/merch/precise2-300w.webp 300w, assets/optimized/merch/precise2-600w.webp 600w, assets/optimized/merch/precise2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Precise2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Rite" data-type="Pouch" data-full-src="assets/optimized/merch/rite-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/rite-600w.webp" alt="Rite — Pouch" loading="lazy" srcset="assets/optimized/merch/rite-300w.webp 300w, assets/optimized/merch/rite-600w.webp 600w, assets/optimized/merch/rite-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Rite</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Rite2" data-type="Pouch" data-full-src="assets/optimized/merch/rite2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/rite2-600w.webp" alt="Rite2 — Pouch" loading="lazy" srcset="assets/optimized/merch/rite2-300w.webp 300w, assets/optimized/merch/rite2-600w.webp 600w, assets/optimized/merch/rite2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Rite2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="River" data-type="Pouch" data-full-src="assets/optimized/merch/river-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/river-600w.webp" alt="River — Pouch" loading="lazy" srcset="assets/optimized/merch/river-300w.webp 300w, assets/optimized/merch/river-600w.webp 600w, assets/optimized/merch/river-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">River</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="River2" data-type="Pouch" data-full-src="assets/optimized/merch/river2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/river2-600w.webp" alt="River2 — Pouch" loading="lazy" srcset="assets/optimized/merch/river2-300w.webp 300w, assets/optimized/merch/river2-600w.webp 600w, assets/optimized/merch/river2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">River2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Roughscale1" data-type="Pouch" data-full-src="assets/optimized/merch/roughscale1-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/roughscale1-600w.webp" alt="Roughscale1 — Pouch" loading="lazy" srcset="assets/optimized/merch/roughscale1-300w.webp 300w, assets/optimized/merch/roughscale1-600w.webp 600w, assets/optimized/merch/roughscale1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Roughscale1</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Roughscale2" data-type="Pouch" data-full-src="assets/optimized/merch/roughscale2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/roughscale2-600w.webp" alt="Roughscale2 — Pouch" loading="lazy" srcset="assets/optimized/merch/roughscale2-300w.webp 300w, assets/optimized/merch/roughscale2-600w.webp 600w, assets/optimized/merch/roughscale2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Roughscale2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Sooky" data-type="Pouch" data-full-src="assets/optimized/merch/sooky-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/sooky-600w.webp" alt="Sooky — Pouch" loading="lazy" srcset="assets/optimized/merch/sooky-300w.webp 300w, assets/optimized/merch/sooky-600w.webp 600w, assets/optimized/merch/sooky-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Sooky</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Speer" data-type="Pouch" data-full-src="assets/optimized/merch/speer-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/speer-600w.webp" alt="Speer — Pouch" loading="lazy" srcset="assets/optimized/merch/speer-300w.webp 300w, assets/optimized/merch/speer-600w.webp 600w, assets/optimized/merch/speer-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Speer</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Spigo" data-type="Pouch" data-full-src="assets/optimized/merch/spigo-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/spigo-600w.webp" alt="Spigo — Pouch" loading="lazy" srcset="assets/optimized/merch/spigo-300w.webp 300w, assets/optimized/merch/spigo-600w.webp 600w, assets/optimized/merch/spigo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Spigo</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Springfall" data-type="Pouch" data-full-src="assets/optimized/merch/springfall-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/springfall-600w.webp" alt="Springfall — Pouch" loading="lazy" srcset="assets/optimized/merch/springfall-300w.webp 300w, assets/optimized/merch/springfall-600w.webp 600w, assets/optimized/merch/springfall-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Springfall</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Springfall2" data-type="Pouch" data-full-src="assets/optimized/merch/springfall2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/springfall2-600w.webp" alt="Springfall2 — Pouch" loading="lazy" srcset="assets/optimized/merch/springfall2-300w.webp 300w, assets/optimized/merch/springfall2-600w.webp 600w, assets/optimized/merch/springfall2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Springfall2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Springfall3" data-type="Pouch" data-full-src="assets/optimized/merch/springfall3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/springfall3-600w.webp" alt="Springfall3 — Pouch" loading="lazy" srcset="assets/optimized/merch/springfall3-300w.webp 300w, assets/optimized/merch/springfall3-600w.webp 600w, assets/optimized/merch/springfall3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Springfall3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Stain" data-type="Clutch" data-full-src="assets/optimized/merch/stain-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/stain-600w.webp" alt="Stain — Clutch" loading="lazy" srcset="assets/optimized/merch/stain-300w.webp 300w, assets/optimized/merch/stain-600w.webp 600w, assets/optimized/merch/stain-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Stain</span>
+                        <span class="art-card-type">Clutch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Steam" data-type="Pouch" data-full-src="assets/optimized/merch/steam-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/steam-600w.webp" alt="Steam — Pouch" loading="lazy" srcset="assets/optimized/merch/steam-300w.webp 300w, assets/optimized/merch/steam-600w.webp 600w, assets/optimized/merch/steam-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Steam</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Steam2" data-type="Pouch" data-full-src="assets/optimized/merch/steam2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/steam2-600w.webp" alt="Steam2 — Pouch" loading="lazy" srcset="assets/optimized/merch/steam2-300w.webp 300w, assets/optimized/merch/steam2-600w.webp 600w, assets/optimized/merch/steam2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Steam2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Steam3" data-type="Pouch" data-full-src="assets/optimized/merch/steam3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/steam3-600w.webp" alt="Steam3 — Pouch" loading="lazy" srcset="assets/optimized/merch/steam3-300w.webp 300w, assets/optimized/merch/steam3-600w.webp 600w, assets/optimized/merch/steam3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Steam3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Steam4" data-type="Pouch" data-full-src="assets/optimized/merch/steam4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/steam4-600w.webp" alt="Steam4 — Pouch" loading="lazy" srcset="assets/optimized/merch/steam4-300w.webp 300w, assets/optimized/merch/steam4-600w.webp 600w, assets/optimized/merch/steam4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Steam4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Summer" data-type="Pouch" data-full-src="assets/optimized/merch/summer-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/summer-600w.webp" alt="Summer — Pouch" loading="lazy" srcset="assets/optimized/merch/summer-300w.webp 300w, assets/optimized/merch/summer-600w.webp 600w, assets/optimized/merch/summer-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Summer</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Summer2" data-type="Pouch" data-full-src="assets/optimized/merch/summer2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/summer2-600w.webp" alt="Summer2 — Pouch" loading="lazy" srcset="assets/optimized/merch/summer2-300w.webp 300w, assets/optimized/merch/summer2-600w.webp 600w, assets/optimized/merch/summer2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Summer2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Tilelook" data-type="Pouch" data-full-src="assets/optimized/merch/tilelook-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/tilelook-600w.webp" alt="Tilelook — Pouch" loading="lazy" srcset="assets/optimized/merch/tilelook-300w.webp 300w, assets/optimized/merch/tilelook-600w.webp 600w, assets/optimized/merch/tilelook-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Tilelook</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Transform" data-type="Pouch" data-full-src="assets/optimized/merch/transform-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/transform-600w.webp" alt="Transform — Pouch" loading="lazy" srcset="assets/optimized/merch/transform-300w.webp 300w, assets/optimized/merch/transform-600w.webp 600w, assets/optimized/merch/transform-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Transform</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Transform2" data-type="Pouch" data-full-src="assets/optimized/merch/transform2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/transform2-600w.webp" alt="Transform2 — Pouch" loading="lazy" srcset="assets/optimized/merch/transform2-300w.webp 300w, assets/optimized/merch/transform2-600w.webp 600w, assets/optimized/merch/transform2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Transform2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Tumm" data-type="Pouch" data-full-src="assets/optimized/merch/tumm-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/tumm-600w.webp" alt="Tumm — Pouch" loading="lazy" srcset="assets/optimized/merch/tumm-300w.webp 300w, assets/optimized/merch/tumm-600w.webp 600w, assets/optimized/merch/tumm-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Tumm</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Vibo" data-type="Pouch" data-full-src="assets/optimized/merch/vibo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/vibo-600w.webp" alt="Vibo — Pouch" loading="lazy" srcset="assets/optimized/merch/vibo-300w.webp 300w, assets/optimized/merch/vibo-600w.webp 600w, assets/optimized/merch/vibo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Vibo</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Wavywhat" data-type="Pouch" data-full-src="assets/optimized/merch/wavywhat-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/wavywhat-600w.webp" alt="Wavywhat — Pouch" loading="lazy" srcset="assets/optimized/merch/wavywhat-300w.webp 300w, assets/optimized/merch/wavywhat-600w.webp 600w, assets/optimized/merch/wavywhat-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Wavywhat</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Wavywhat2" data-type="Pouch" data-full-src="assets/optimized/merch/wavywhat2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/wavywhat2-600w.webp" alt="Wavywhat2 — Pouch" loading="lazy" srcset="assets/optimized/merch/wavywhat2-300w.webp 300w, assets/optimized/merch/wavywhat2-600w.webp 600w, assets/optimized/merch/wavywhat2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Wavywhat2</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Wavywhat3" data-type="Pouch" data-full-src="assets/optimized/merch/wavywhat3-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/wavywhat3-600w.webp" alt="Wavywhat3 — Pouch" loading="lazy" srcset="assets/optimized/merch/wavywhat3-300w.webp 300w, assets/optimized/merch/wavywhat3-600w.webp 600w, assets/optimized/merch/wavywhat3-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Wavywhat3</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Wavywhat4" data-type="Pouch" data-full-src="assets/optimized/merch/wavywhat4-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/wavywhat4-600w.webp" alt="Wavywhat4 — Pouch" loading="lazy" srcset="assets/optimized/merch/wavywhat4-300w.webp 300w, assets/optimized/merch/wavywhat4-600w.webp 600w, assets/optimized/merch/wavywhat4-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Wavywhat4</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Wrole" data-type="Pouch" data-full-src="assets/optimized/merch/wrole-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/wrole-600w.webp" alt="Wrole — Pouch" loading="lazy" srcset="assets/optimized/merch/wrole-300w.webp 300w, assets/optimized/merch/wrole-600w.webp 600w, assets/optimized/merch/wrole-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Wrole</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Xpo" data-type="Pouch" data-full-src="assets/optimized/merch/xpo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/xpo-600w.webp" alt="Xpo — Pouch" loading="lazy" srcset="assets/optimized/merch/xpo-300w.webp 300w, assets/optimized/merch/xpo-600w.webp 600w, assets/optimized/merch/xpo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Xpo</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Zam" data-type="Pouch" data-full-src="assets/optimized/merch/zam-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/zam-600w.webp" alt="Zam — Pouch" loading="lazy" srcset="assets/optimized/merch/zam-300w.webp 300w, assets/optimized/merch/zam-600w.webp 600w, assets/optimized/merch/zam-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Zam</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Zimzap" data-type="Pouch" data-full-src="assets/optimized/merch/zimzap-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/zimzap-600w.webp" alt="Zimzap — Pouch" loading="lazy" srcset="assets/optimized/merch/zimzap-300w.webp 300w, assets/optimized/merch/zimzap-600w.webp 600w, assets/optimized/merch/zimzap-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Zimzap</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Zoom" data-type="Pouch" data-full-src="assets/optimized/merch/zoom-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/zoom-600w.webp" alt="Zoom — Pouch" loading="lazy" srcset="assets/optimized/merch/zoom-300w.webp 300w, assets/optimized/merch/zoom-600w.webp 600w, assets/optimized/merch/zoom-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Zoom</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Chip" data-type="Pouch" data-full-src="assets/optimized/merch/chip-1200w.webp" data-pswp-width="1000" data-pswp-height="1000">
+                    <img src="assets/optimized/merch/chip-600w.webp" alt="Chip — Pouch" loading="lazy" srcset="assets/optimized/merch/chip-300w.webp 300w, assets/optimized/merch/chip-600w.webp 600w, assets/optimized/merch/chip-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Chip</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Natave" data-type="Pouch" data-full-src="assets/optimized/merch/natave-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/natave-600w.webp" alt="Natave — Pouch" loading="lazy" srcset="assets/optimized/merch/natave-300w.webp 300w, assets/optimized/merch/natave-600w.webp 600w, assets/optimized/merch/natave-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Natave</span>
+                        <span class="art-card-type">Pouch</span>
+                    </div>
+                </div></div></div></div></div>
+        </div>
+
+        <!-- Home & Tech Row -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Objects</h3>
+                <span class="art-row-count">Pattern in space</span>
+            </div>
+            <div class="art-row-scroll splide" role="group" aria-label="Objects"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Bandwidth" data-type="Speaker" data-full-src="assets/optimized/merch/bandwidth-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bandwidth-600w.webp" alt="Bandwidth — Speaker" loading="lazy" srcset="assets/optimized/merch/bandwidth-300w.webp 300w, assets/optimized/merch/bandwidth-600w.webp 600w, assets/optimized/merch/bandwidth-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bandwidth</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Bandwidth2" data-type="Speaker" data-full-src="assets/optimized/merch/bandwidth2-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/bandwidth2-600w.webp" alt="Bandwidth2 — Speaker" loading="lazy" srcset="assets/optimized/merch/bandwidth2-300w.webp 300w, assets/optimized/merch/bandwidth2-600w.webp 600w, assets/optimized/merch/bandwidth2-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Bandwidth2</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Biro" data-type="Shower Curtain" data-full-src="assets/optimized/merch/biro-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/biro-600w.webp" alt="Biro — Shower Curtain" loading="lazy" srcset="assets/optimized/merch/biro-300w.webp 300w, assets/optimized/merch/biro-600w.webp 600w, assets/optimized/merch/biro-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Biro</span>
+                        <span class="art-card-type">Shower Curtain</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Check" data-type="Mousepad" data-full-src="assets/optimized/merch/check-1200w.webp" data-pswp-width="400" data-pswp-height="400">
+                    <img src="assets/optimized/merch/check-600w.webp" alt="Check — Mousepad" loading="lazy" srcset="assets/optimized/merch/check-300w.webp 300w, assets/optimized/merch/check-600w.webp 600w, assets/optimized/merch/check-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Check</span>
+                        <span class="art-card-type">Mousepad</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Disco" data-type="Mousepad" data-full-src="assets/optimized/merch/disco-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/disco-600w.webp" alt="Disco — Mousepad" loading="lazy" srcset="assets/optimized/merch/disco-300w.webp 300w, assets/optimized/merch/disco-600w.webp 600w, assets/optimized/merch/disco-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Disco</span>
+                        <span class="art-card-type">Mousepad</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Electra" data-type="Watch Band" data-full-src="assets/optimized/merch/electra-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/electra-600w.webp" alt="Electra — Watch Band" loading="lazy" srcset="assets/optimized/merch/electra-300w.webp 300w, assets/optimized/merch/electra-600w.webp 600w, assets/optimized/merch/electra-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Electra</span>
+                        <span class="art-card-type">Watch Band</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Farout" data-type="Mousepad" data-full-src="assets/optimized/merch/farout-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/farout-600w.webp" alt="Farout — Mousepad" loading="lazy" srcset="assets/optimized/merch/farout-300w.webp 300w, assets/optimized/merch/farout-600w.webp 600w, assets/optimized/merch/farout-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Farout</span>
+                        <span class="art-card-type">Mousepad</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Filo" data-type="Mug" data-full-src="assets/optimized/merch/filo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/filo-600w.webp" alt="Filo — Mug" loading="lazy" srcset="assets/optimized/merch/filo-300w.webp 300w, assets/optimized/merch/filo-600w.webp 600w, assets/optimized/merch/filo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Filo</span>
+                        <span class="art-card-type">Mug</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Navigo" data-type="Mousepad" data-full-src="assets/optimized/merch/navigo-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/navigo-600w.webp" alt="Navigo — Mousepad" loading="lazy" srcset="assets/optimized/merch/navigo-300w.webp 300w, assets/optimized/merch/navigo-600w.webp 600w, assets/optimized/merch/navigo-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Navigo</span>
+                        <span class="art-card-type">Mousepad</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Pillar" data-type="Speaker" data-full-src="assets/optimized/merch/pillar-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/pillar-600w.webp" alt="Pillar — Speaker" loading="lazy" srcset="assets/optimized/merch/pillar-300w.webp 300w, assets/optimized/merch/pillar-600w.webp 600w, assets/optimized/merch/pillar-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Pillar</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Runway" data-type="Speaker" data-full-src="assets/optimized/merch/runway-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/runway-600w.webp" alt="Runway — Speaker" loading="lazy" srcset="assets/optimized/merch/runway-300w.webp 300w, assets/optimized/merch/runway-600w.webp 600w, assets/optimized/merch/runway-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Runway</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Santafe" data-type="Speaker" data-full-src="assets/optimized/merch/santafe-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/santafe-600w.webp" alt="Santafe — Speaker" loading="lazy" srcset="assets/optimized/merch/santafe-300w.webp 300w, assets/optimized/merch/santafe-600w.webp 600w, assets/optimized/merch/santafe-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Santafe</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Spring" data-type="Speaker" data-full-src="assets/optimized/merch/spring-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
+                    <img src="assets/optimized/merch/spring-600w.webp" alt="Spring — Speaker" loading="lazy" srcset="assets/optimized/merch/spring-300w.webp 300w, assets/optimized/merch/spring-600w.webp 600w, assets/optimized/merch/spring-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Spring</span>
+                        <span class="art-card-type">Speaker</span>
+                    </div>
+                </div></div></div></div></div>
+        </div>
+
+    </section>
+    <!-- About -->
+    <section class="about" id="about">
+        <div class="about-content fade-in">
+            <span class="section-label">About</span>
+            <h2>Christopher Harris</h2>
+            <p>I make patterns, products, autonomous systems, and apps. Open to feedback and ideas.</p>
+            <div class="about-links">
+                <a href="https://github.com/artchristech" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://gittimes.com" target="_blank" rel="noopener">gittimes</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-brand">artchristech</span>
+            <span class="footer-copy">© 2026 Christopher Harris</span>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="script.js" type="module"></script>
+
+
+</body></html>

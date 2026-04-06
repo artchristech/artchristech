@@ -1,0 +1,17 @@
+{
+  "name": "artchristech",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "optimize": "node scripts/optimize-images.js",
+    "build-html": "node scripts/update-html.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "cheerio": "^1.2.0",
+    "sharp": "^0.34.5"
+  }
+}
