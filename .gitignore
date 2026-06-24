@@ -1,1 +1,9 @@
 node_modules/
+.gstack/
+.DS_Store
+**/.DS_Store
+
+# dev scratch — kept locally, not part of the published site
+prototypes/
+PROMPT.md
+CONTEXT.md

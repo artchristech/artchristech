@@ -8,164 +8,18 @@ import PhotoSwipe from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photo
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Seed of Life ASCII Animation ---
-    (() => {
-        const canvas = document.getElementById('seed-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const label = document.querySelector('.seed-label');
-
-        const CHAR_W = 7;
-        const CHAR_H = 14;
-        const COLS = Math.min(120, Math.floor(window.innerWidth / CHAR_W));
-        const ROWS = Math.floor(Math.min(window.innerHeight, 800) / CHAR_H);
-        canvas.width = COLS * CHAR_W;
-        canvas.height = ROWS * CHAR_H;
-
-        const cx = COLS / 2;
-        const cy = ROWS / 2;
-        const aspect = CHAR_H / CHAR_W;
-        const R = Math.min(COLS * aspect, ROWS) * 0.17;
-
-        // 7 circles: center + 6 surrounding at 60° intervals
-        // Seed of Life: surrounding centers are exactly 1 radius away
-        const circles = [{ x: cx, y: cy }];
-        for (let i = 0; i < 6; i++) {
-            const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
-            circles.push({
-                x: cx + R * Math.cos(a) / aspect,
-                y: cy + R * Math.sin(a)
-            });
+    // --- Marble hero (domain-warped FBM, scroll-revealed) ---
+    // Wrapped so it can never halt the rest of the page (nav/Splide/PhotoSwipe).
+    (async () => {
+        try {
+            const canvas = document.getElementById('seed-canvas');
+            if (!canvas) return;
+            const label = document.querySelector('.seed-label');
+            const { initMarbleHero } = await import('./marble.js?v=8');
+            initMarbleHero(canvas, label);
+        } catch (err) {
+            console.warn('[hero] marble hero init failed:', err && err.message);
         }
-
-        // Character palette from dim to bright
-        const PALETTE = ['.', ':', '-', '~', '=', '+', '*', '#', '@'];
-        const THICKNESS = 1.4;
-
-        // Build the grid for a given set of active circles
-        function buildGrid(activeCount) {
-            const grid = [];
-            for (let row = 0; row < ROWS; row++) {
-                grid[row] = [];
-                for (let col = 0; col < COLS; col++) {
-                    let intensity = 0;
-                    for (let ci = 0; ci < activeCount; ci++) {
-                        const c = circles[ci];
-                        const dx = (col - c.x) * aspect;
-                        const dy = row - c.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        const diff = Math.abs(dist - R);
-                        if (diff < THICKNESS) {
-                            intensity = Math.max(intensity, 1.0 - diff / THICKNESS);
-                        }
-                        // Intersection glow — brighter where circles cross
-                        if (diff < THICKNESS * 0.5 && activeCount > 1) {
-                            for (let cj = ci + 1; cj < activeCount; cj++) {
-                                const c2 = circles[cj];
-                                const dx2 = (col - c2.x) * aspect;
-                                const dy2 = row - c2.y;
-                                const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-                                const diff2 = Math.abs(dist2 - R);
-                                if (diff2 < THICKNESS) {
-                                    intensity = Math.min(1.0, intensity + 0.5);
-                                }
-                            }
-                        }
-                    }
-                    grid[row][col] = intensity;
-                }
-            }
-            return grid;
-        }
-
-        function render(grid, progress) {
-            ctx.fillStyle = '#050505';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = `${CHAR_H}px monospace`;
-            ctx.textBaseline = 'top';
-
-            for (let row = 0; row < ROWS; row++) {
-                for (let col = 0; col < COLS; col++) {
-                    const v = grid[row][col];
-                    if (v <= 0.01) continue;
-                    const idx = Math.min(PALETTE.length - 1, Math.floor(v * (PALETTE.length - 1)));
-                    const ch = PALETTE[idx];
-                    // Gold-to-cyan color based on intensity
-                    const r = Math.floor(140 + v * 56);
-                    const g = Math.floor(120 + v * 80);
-                    const b = Math.floor(60 + v * 160);
-                    const alpha = Math.min(1, v * 1.2) * progress;
-                    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-                    ctx.fillText(ch, col * CHAR_W, row * CHAR_H);
-                }
-            }
-        }
-
-        let started = false;
-        let startTime = 0;
-        const CIRCLE_DURATION = 600;   // ms per circle reveal
-        const CIRCLE_OVERLAP = 300;    // overlap between reveals
-        const TOTAL_CIRCLES = 7;
-
-        function animate(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-
-            // How many circles are fully revealed
-            const activeFloat = Math.min(TOTAL_CIRCLES, 1 + elapsed / (CIRCLE_DURATION - CIRCLE_OVERLAP));
-            const activeCount = Math.min(TOTAL_CIRCLES, Math.ceil(activeFloat));
-
-            // Progress of the current circle fading in (0-1)
-            const currentProgress = activeFloat - Math.floor(activeFloat - 0.001);
-
-            const grid = buildGrid(activeCount);
-
-            // Fade in the latest circle's contribution
-            if (activeCount > 1 && activeFloat < TOTAL_CIRCLES) {
-                const prevGrid = buildGrid(activeCount - 1);
-                for (let row = 0; row < ROWS; row++) {
-                    for (let col = 0; col < COLS; col++) {
-                        const newVal = grid[row][col];
-                        const oldVal = prevGrid[row][col];
-                        grid[row][col] = oldVal + (newVal - oldVal) * Math.min(1, currentProgress);
-                    }
-                }
-            }
-
-            const globalFade = Math.min(1, elapsed / 800);
-            render(grid, globalFade);
-
-            if (activeFloat < TOTAL_CIRCLES) {
-                requestAnimationFrame(animate);
-            } else {
-                // Final render at full, then start idle pulse
-                render(grid, 1);
-                if (label) label.classList.add('visible');
-                idlePulse(grid);
-            }
-        }
-
-        function idlePulse(baseGrid) {
-            function tick(timestamp) {
-                const t = timestamp * 0.001;
-                const pulse = 0.85 + 0.15 * Math.sin(t * 0.8);
-                render(baseGrid, pulse);
-                requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
-        }
-
-        // Trigger on scroll into view
-        const seedObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !started) {
-                    started = true;
-                    requestAnimationFrame(animate);
-                    seedObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-        seedObserver.observe(canvas);
     })();
 
     // --- Navigation scroll behavior ---
