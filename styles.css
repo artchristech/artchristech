@@ -607,9 +607,65 @@ a {
     letter-spacing: 0.05em;
 }
 
-/* Splide handles layout — just set padding on track */
+/* === Runway lookbook — auto-scrolling editorial bands =====================
+   Splide markup reused, NOT mounted. Each row is a runway: an infinite
+   horizontal scroll (the track is duplicated in JS for a seamless loop),
+   masked to fade at both edges, paused on hover. Pure CSS animation — no
+   carousel JS. The Patterns band runs at hero scale (it's the surface art). */
 .art-row-scroll {
-    padding: 0.5rem 0 1rem;
+    padding: 0.75rem 0 1.4rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+/* Splide hides itself until mounted; we never mount, so force it visible.
+   Two-class selector beats Splide's later-loaded rule. */
+.art-row-scroll.splide {
+    visibility: visible;
+}
+.art-row-scroll .splide__track {
+    overflow: visible;
+}
+.art-row-scroll .splide__list {
+    display: flex !important;
+    width: max-content;
+    gap: 1rem;
+    animation: runway var(--runway-dur, 80s) linear infinite;
+    will-change: transform;
+}
+.art-row-scroll[data-dir="rtl"] .splide__list {
+    animation-direction: reverse;
+}
+/* Pause the whole band on hover or keyboard focus */
+.art-row:hover .splide__list,
+.art-row-scroll:focus-within .splide__list {
+    animation-play-state: paused;
+}
+.art-row-scroll .splide__slide {
+    flex: 0 0 auto;
+    width: 250px;
+    margin: 0 !important;
+}
+.art-row-scroll[data-hero] .splide__slide {
+    width: 380px;
+}
+
+@keyframes runway {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* Respect reduced-motion: drop the animation, allow manual horizontal scroll */
+@media (prefers-reduced-motion: reduce) {
+    .art-row-scroll {
+        overflow-x: auto;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+    .art-row-scroll .splide__list {
+        animation: none;
+        width: auto;
+    }
 }
 
 /* Splide arrow overrides */
@@ -638,110 +694,112 @@ a {
     fill: rgba(255,255,255,0.7);
 }
 
-/* --- Art Cards — Gallery Style --- */
+/* --- Originals — featured fine-art works, uncropped gallery wall --- */
+.art-featured {
+    padding: 0.5rem 2.5rem 1rem;
+    columns: 2;
+    column-gap: 1.4rem;
+}
+.art-featured .art-card {
+    display: block;
+    break-inside: avoid;
+    margin: 0 0 1.4rem;
+}
+/* Show the whole piece — no lookbook crop here */
+.art-featured .art-card img {
+    aspect-ratio: auto;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* --- Art Cards — editorial lookbook frames --- */
 .art-card {
     position: relative;
-    border-radius: 4px;
+    border-radius: 2px;
     overflow: hidden;
     cursor: pointer;
-    background: transparent;
+    background: rgba(255,255,255,0.02);
     box-shadow: none;
-    border: 1px solid rgba(255,255,255,0.06);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: border-color 0.45s ease, box-shadow 0.45s ease,
+                transform 0.55s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .art-card:hover {
-    box-shadow: 0 0 40px rgba(196, 162, 101, 0.12), 0 0 80px rgba(100, 180, 255, 0.06);
-    border-color: rgba(196, 162, 101, 0.3);
-    transform: translateY(-2px);
-}
-
-.art-card.wide {
-    width: 420px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(196,162,101,0.15);
+    border-color: rgba(196, 162, 101, 0.45);
+    transform: translateY(-8px);
 }
 
 .art-card img {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;          /* portrait, lookbook crop */
     object-fit: cover;
     display: block;
-    opacity: 0.1;
-    filter: saturate(0) brightness(0.2);
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s ease, opacity 0.6s ease;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
 }
 
-.art-card.wide img {
-    aspect-ratio: 3 / 2;
+.art-row-scroll[data-hero] .art-card img {
+    aspect-ratio: 1 / 1;          /* patterns are the art — show them square */
 }
 
 .art-card:hover img {
-    transform: scale(1.06);
+    transform: scale(1.05);
 }
 
-/* --- Scan Line Reveal Animation --- */
-
-.art-card.scan-reveal img {
-    opacity: 1;
-    filter: saturate(1) brightness(1);
-    transition-delay: calc(var(--reveal-delay, 0) * 1s);
-}
-
-/* The scan line beam */
-.art-card::after {
-    content: '';
+/* Editorial index number, top-left; difference blend keeps it legible on
+   both the white product shots and the dark patterns. */
+.art-card-num {
     position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), rgba(120, 200, 255, 0.9), var(--accent), transparent);
-    box-shadow: 0 0 15px rgba(196, 162, 101, 0.6), 0 0 40px rgba(120, 200, 255, 0.3), 0 -8px 20px rgba(120, 200, 255, 0.1), 0 8px 20px rgba(120, 200, 255, 0.1);
-    top: -2px;
-    opacity: 0;
-    z-index: 3;
+    top: 0.6rem;
+    left: 0.7rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: #fff;
+    mix-blend-mode: difference;
+    z-index: 2;
     pointer-events: none;
 }
 
-.art-card.scan-reveal::after {
-    animation: scanLine 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: calc(var(--reveal-delay, 0) * 1s);
-}
-
-@keyframes scanLine {
-    0% { top: -2px; opacity: 1; }
-    85% { opacity: 0.8; }
-    100% { top: 100%; opacity: 0; }
-}
-
-/* Info — hover overlay instead of below-card text */
+/* Caption — slides up on hover */
 .art-card-info {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 2.5rem 0.75rem 0.6rem;
-    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    padding: 2.4rem 0.9rem 0.75rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.82));
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.12rem;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
     z-index: 2;
 }
 
 .art-card:hover .art-card-info {
     opacity: 1;
+    transform: translateY(0);
 }
 
 .art-card-name {
     font-family: var(--font-display);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 400;
-    color: rgba(255,255,255,0.9);
+    color: #fff;
     letter-spacing: 0.03em;
 }
 
 .art-card-type {
-    display: none;
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
 }
 
 /* --- Projects (removed, now in showcase) --- */
@@ -1082,6 +1140,17 @@ a {
 
     .art-row-header {
         padding: 0 1rem;
+    }
+
+    .art-row-scroll .splide__slide {
+        width: 175px;
+    }
+    .art-row-scroll[data-hero] .splide__slide {
+        width: 250px;
+    }
+    .art-featured {
+        columns: 1;
+        padding: 0.5rem 1rem 1rem;
     }
 
     .art-card-info {

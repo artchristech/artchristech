@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=14">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
 </head>
@@ -84,8 +84,8 @@
                 <button class="showcase-thumb active" data-index="0" data-type="browser" data-src="assets/gittimes-screenshot.png" data-url="gittimes.com" data-label="Media" data-name="The Git Times" data-desc="AI-powered daily newspaper covering open source. Autonomous editorial pipeline turns GitHub activity into seven-section broadsheets for developers." data-link="https://gittimes.com" data-link-text="Visit gittimes.com →">
                     <img src="assets/gittimes-screenshot.png" alt="The Git Times">
                 </button>
-                <button class="showcase-thumb" data-index="1" data-type="browser" data-src="assets/glyph-screenshot.png" data-url="glyphapi.dev" data-label="Infrastructure" data-name="GLYPH" data-desc="Image API for AI agents. One prompt returns sixteen independent tiles in a single call, so an agent can generate a grid and pick the best in &quot;auto&quot; mode. Pay-per-call on Base." data-link="https://glyphapi.dev" data-link-text="Visit glyphapi.dev →">
-                    <img src="assets/glyph-screenshot.png" alt="GLYPH">
+                <button class="showcase-thumb" data-index="1" data-type="browser" data-src="assets/glyph-screenshot.png?v=2" data-url="glyphapi.dev" data-label="Infrastructure" data-name="GLYPH" data-desc="Image API for AI agents. One prompt returns sixteen independent tiles in a single call, so an agent can generate a grid and pick the best in &quot;auto&quot; mode. Pay-per-call on Base." data-link="https://glyphapi.dev" data-link-text="Visit glyphapi.dev →">
+                    <img src="assets/glyph-screenshot.png?v=2" alt="GLYPH">
                 </button>
                 <button class="showcase-thumb" data-index="2" data-type="browser" data-src="assets/passfit-screenshot.png?v=2" data-url="passfit.win" data-label="Health" data-name="PassFit" data-desc="Gamify your gains. On-device pose estimation turns any iPhone into a rep counter for pushups and squats — no calibration, and not a single camera frame leaves the device. Streaks and a social layer keep you counting." data-link="https://passfit.win" data-link-text="Visit passfit.win →">
                     <img src="assets/passfit-screenshot.png?v=2" alt="PassFit">
@@ -111,11 +111,47 @@
             <p>Original patterns, surface design, and applied art</p>
         </div>
 
+        <!-- Originals — one-off fine-art works, shown uncropped -->
+        <div class="art-row">
+            <div class="art-row-header fade-in">
+                <h3>Originals</h3>
+            </div>
+            <div class="art-featured" id="originals">
+                <div class="art-card" data-name="Undertow" data-type="Layered wood" data-full-src="assets/optimized/originals/current-full.webp" data-pswp-width="1600" data-pswp-height="1403">
+                    <img src="assets/optimized/originals/current-900.webp" alt="Undertow — layered wood sculpture" loading="lazy">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Undertow</span>
+                        <span class="art-card-type">Layered wood</span>
+                    </div>
+                </div>
+                <div class="art-card" data-name="Aperture" data-type="Mixed media on panel" data-full-src="assets/optimized/originals/torus-full.webp" data-pswp-width="1600" data-pswp-height="1564">
+                    <img src="assets/optimized/originals/torus-900.webp" alt="Aperture — op-art torus on gradient panel" loading="lazy">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Aperture</span>
+                        <span class="art-card-type">Mixed media on panel</span>
+                    </div>
+                </div>
+                <div class="art-card" data-name="Interlocution" data-type="Acrylic on panel" data-full-src="assets/optimized/originals/figures-full.webp" data-pswp-width="1235" data-pswp-height="1600">
+                    <img src="assets/optimized/originals/figures-900.webp" alt="Interlocution — biomorphic abstraction" loading="lazy">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Interlocution</span>
+                        <span class="art-card-type">Acrylic on panel</span>
+                    </div>
+                </div>
+                <div class="art-card" data-name="Rhetoric" data-type="Acrylic on canvas" data-full-src="assets/optimized/originals/question-full.webp" data-pswp-width="1345" data-pswp-height="1600">
+                    <img src="assets/optimized/originals/question-900.webp" alt="Rhetoric — question mark over color-field landscape" loading="lazy">
+                    <div class="art-card-info">
+                        <span class="art-card-name">Rhetoric</span>
+                        <span class="art-card-type">Acrylic on canvas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Patterns Row -->
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Patterns</h3>
-                <span class="art-row-count">Original tessellations</span>
             </div>
             <div class="art-row-scroll splide" role="group" aria-label="Patterns"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Boy With a Dream" data-type="Pattern" data-full-src="assets/optimized/art/boy_withadream-1200w.webp" data-pswp-width="1200" data-pswp-height="1470">
                     <img src="assets/optimized/art/boy_withadream-600w.webp" alt="Boy With a Dream" loading="lazy" srcset="assets/optimized/art/boy_withadream-300w.webp 300w, assets/optimized/art/boy_withadream-600w.webp 600w, assets/optimized/art/boy_withadream-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -131,11 +167,6 @@
                     <img src="assets/optimized/art/pattern_teal-600w.webp" alt="Teal Diamonds" loading="lazy" srcset="assets/optimized/art/pattern_teal-300w.webp 300w, assets/optimized/art/pattern_teal-600w.webp 600w, assets/optimized/art/pattern_teal-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
                     <div class="art-card-info">
                         <span class="art-card-name">Teal Diamonds</span>
-                    </div>
-                </div></div><div class="splide__slide"><div class="art-card" data-name="Magenta Gradient" data-type="Pattern" data-full-src="assets/optimized/art/pattern_raw1-1200w.webp" data-pswp-width="1200" data-pswp-height="3962">
-                    <img src="assets/optimized/art/pattern_raw1-600w.webp" alt="Magenta Gradient" loading="lazy" srcset="assets/optimized/art/pattern_raw1-300w.webp 300w, assets/optimized/art/pattern_raw1-600w.webp 600w, assets/optimized/art/pattern_raw1-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
-                    <div class="art-card-info">
-                        <span class="art-card-name">Magenta Gradient</span>
                     </div>
                 </div></div><div class="splide__slide"><div class="art-card" data-name="Jolly" data-type="Pattern" data-full-src="assets/optimized/art/jolly-1200w.webp" data-pswp-width="1200" data-pswp-height="1572">
                     <img src="assets/optimized/art/jolly-600w.webp" alt="Jolly" loading="lazy" srcset="assets/optimized/art/jolly-300w.webp 300w, assets/optimized/art/jolly-600w.webp 600w, assets/optimized/art/jolly-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -154,7 +185,6 @@
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Wearables</h3>
-                <span class="art-row-count">Pattern on body</span>
             </div>
             <div class="art-row-scroll splide" role="group" aria-label="Wearables"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Beanm" data-type="T-Shirt" data-full-src="assets/optimized/merch/beanm-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
                     <img src="assets/optimized/merch/beanm-600w.webp" alt="Beanm — T-Shirt" loading="lazy" srcset="assets/optimized/merch/beanm-300w.webp 300w, assets/optimized/merch/beanm-600w.webp 600w, assets/optimized/merch/beanm-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -241,7 +271,6 @@
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Carry</h3>
-                <span class="art-row-count">Surface on form</span>
             </div>
             <div class="art-row-scroll splide" role="group" aria-label="Carry"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="56606" data-type="Drawstring Bag" data-full-src="assets/optimized/merch/56606-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
                     <img src="assets/optimized/merch/56606-600w.webp" alt="56606 — Drawstring Bag" loading="lazy" srcset="assets/optimized/merch/56606-300w.webp 300w, assets/optimized/merch/56606-600w.webp 600w, assets/optimized/merch/56606-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -418,7 +447,6 @@
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Small Format</h3>
-                <span class="art-row-count">Studies in scale</span>
             </div>
             <div class="art-row-scroll splide" role="group" aria-label="Small Format"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Abyss" data-type="Pouch" data-full-src="assets/optimized/merch/abyss-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
                     <img src="assets/optimized/merch/abyss-600w.webp" alt="Abyss — Pouch" loading="lazy" srcset="assets/optimized/merch/abyss-300w.webp 300w, assets/optimized/merch/abyss-600w.webp 600w, assets/optimized/merch/abyss-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -1201,7 +1229,6 @@
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Objects</h3>
-                <span class="art-row-count">Pattern in space</span>
             </div>
             <div class="art-row-scroll splide" role="group" aria-label="Objects"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Bandwidth" data-type="Speaker" data-full-src="assets/optimized/merch/bandwidth-1200w.webp" data-pswp-width="1200" data-pswp-height="1200">
                     <img src="assets/optimized/merch/bandwidth-600w.webp" alt="Bandwidth — Speaker" loading="lazy" srcset="assets/optimized/merch/bandwidth-300w.webp 300w, assets/optimized/merch/bandwidth-600w.webp 600w, assets/optimized/merch/bandwidth-1200w.webp 1200w" sizes="(max-width: 680px) 220px, 280px">
@@ -1290,10 +1317,7 @@
         <div class="about-content fade-in">
             <span class="section-label">About</span>
             <h2>Christopher Harris</h2>
-            <p>I make patterns, products, autonomous systems, and apps. Open to feedback and ideas.</p>
             <div class="about-links">
-                <a href="https://github.com/artchristech" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://gittimes.com" target="_blank" rel="noopener">gittimes</a>
                 <a href="contact.html" class="contact-btn">Contact</a>
             </div>
         </div>
@@ -1311,7 +1335,7 @@
     
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <script src="script.js?v=8" type="module"></script>
+    <script src="script.js?v=14" type="module"></script>
 
 
 </body></html>

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('seed-canvas');
             if (!canvas) return;
             const label = document.querySelector('.seed-label');
-            const { initMarbleHero } = await import('./marble.js?v=8');
+            const { initMarbleHero } = await import('./marble.js?v=14');
             initMarbleHero(canvas, label);
         } catch (err) {
             console.warn('[hero] marble hero init failed:', err && err.message);
@@ -118,38 +118,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Splide Carousels ---
-    document.querySelectorAll('.art-row-scroll.splide').forEach(el => {
-        new Splide(el, {
-            type: 'slide',
-            perPage: 4,
-            perMove: 1,
-            gap: '1rem',
-            padding: { left: '2.5rem', right: '2.5rem' },
-            pagination: false,
-            arrows: true,
-            drag: 'free',
-            snap: true,
-            breakpoints: {
-                900: {
-                    perPage: 3,
-                    padding: { left: '1.5rem', right: '1.5rem' },
-                },
-                680: {
-                    perPage: 2,
-                    padding: { left: '1rem', right: '1rem' },
-                },
-                400: {
-                    perPage: 1,
-                },
-            },
-        }).mount();
+    // --- Runway lookbook (was Splide carousels) ---
+    // Each category becomes an auto-scrolling editorial band. We curate each
+    // band to a strong subset, number the cards, then duplicate the track so
+    // the CSS marquee loops seamlessly. Splide is NOT mounted — pure CSS.
+    const RUNWAY_CAP = 26;
+    const HERO_ROWS = ['Patterns'];
+
+    document.querySelectorAll('.art-row-scroll').forEach((scroll, rowIdx) => {
+        // curate: keep the first N of each band
+        [...scroll.querySelectorAll('.splide__slide')]
+            .slice(RUNWAY_CAP)
+            .forEach(s => s.remove());
+        const label = scroll.getAttribute('aria-label') || '';
+        if (HERO_ROWS.includes(label)) scroll.setAttribute('data-hero', '');
+        scroll.dataset.dir = rowIdx % 2 ? 'rtl' : 'ltr';  // alternate flow
+    });
+
+    // Number every (original) card — editorial index + a stable PhotoSwipe ref
+    [...document.querySelectorAll('#gallery .art-card')].forEach((card, i) => {
+        card.dataset.pswpIndex = i;
+        const num = document.createElement('span');
+        num.className = 'art-card-num';
+        num.textContent = String(i + 1).padStart(3, '0');
+        card.appendChild(num);
+    });
+
+    // Duplicate each band for a seamless loop; pace the scroll by item count
+    document.querySelectorAll('.art-row-scroll .splide__list').forEach(list => {
+        const slides = [...list.querySelectorAll('.splide__slide')];
+        const isHero = list.closest('.art-row-scroll').hasAttribute('data-hero');
+        list.style.setProperty('--runway-dur', (slides.length * (isHero ? 6 : 4.2)) + 's');
+        slides.forEach(s => {
+            const clone = s.cloneNode(true);
+            clone.classList.add('is-clone');
+            clone.setAttribute('aria-hidden', 'true');
+            // mark the inner card too, so PhotoSwipe's :not(.is-clone) excludes it
+            const card = clone.querySelector('.art-card');
+            if (card) card.classList.add('is-clone');
+            list.appendChild(clone);
+        });
     });
 
     // --- PhotoSwipe Lightbox ---
     const lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',
-        children: '.art-card',
+        children: '.art-card:not(.is-clone)',
         pswpModule: PhotoSwipe,
     });
 
@@ -185,6 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lightbox.init();
 
+    // Cloned runway cards aren't in PhotoSwipe's set — forward their clicks
+    // to the matching original via the index copied by cloneNode.
+    document.querySelectorAll('#gallery .art-card.is-clone').forEach(clone => {
+        clone.addEventListener('click', () => {
+            const i = parseInt(clone.dataset.pswpIndex, 10);
+            if (!Number.isNaN(i)) lightbox.loadAndOpen(i);
+        });
+    });
+
     // --- Smooth scroll for nav links ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
@@ -208,29 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, { threshold: 0.15 });
         fadeEls.forEach(el => observer.observe(el));
-    }
-
-    // --- Scan Line Reveal for Art Cards ---
-    const artCards = document.querySelectorAll('.art-card');
-    if (artCards.length) {
-        const scanObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const card = entry.target;
-                    card.classList.add('scan-reveal');
-                    scanObserver.unobserve(card);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        // Set stagger delay per card within each row
-        document.querySelectorAll('.art-row').forEach(row => {
-            const cards = row.querySelectorAll('.art-card');
-            cards.forEach((card, i) => {
-                card.style.setProperty('--reveal-delay', (i * 0.08).toFixed(2));
-                scanObserver.observe(card);
-            });
-        });
     }
 
 });
