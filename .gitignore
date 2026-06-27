@@ -8,3 +8,6 @@ prototypes/
 prompts/
 PROMPT.md
 CONTEXT.md
+
+# build artifact (assembled by build.sh / CI)
+dist/
