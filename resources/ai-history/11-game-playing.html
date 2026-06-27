@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js-html">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game-Playing Milestones · A History of AI · Era 11 / 15</title>
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{--era:var(--boom);
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* interactive controls */
+  .ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .ctl button{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--paper);background:var(--ink-2);border:1px solid var(--line);border-radius:7px;
+    padding:9px 14px;cursor:pointer;transition:border-color .15s,color .15s;}
+  .ctl button:hover{border-color:var(--era);color:var(--era);}
+  .ctl button:focus-visible{outline:2px solid var(--era);outline-offset:2px;}
+  .readout{font-size:11px;letter-spacing:.06em;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .readout b{font-weight:400;color:var(--paper);}
+  .readout .firm{color:var(--rest);}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  /* no-js / live contract */
+  .static{display:none;}
+  .no-js .static{display:block;}
+  .no-js .live{display:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on title="Era 01 — Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on title="Era 02 — Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on title="Era 03 — Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on title="Era 04 — Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on title="Era 05 — Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" data-on class="winter" title="Era 06 — First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" data-on title="Era 07 — Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" data-on class="winter" title="Era 08 — Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" data-on title="Era 09 — Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" data-on title="Era 10 — Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" class="cur" aria-current="page" title="Era 11 — Game-Playing Milestones"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" title="Era 12 — Deep Learning"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" title="Era 13 — Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" title="Era 14 — Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" title="Era 15 — Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 11 / 15</span> · Game-Playing Milestones <span class="yrs">1997 &amp; 2016</span></p>
+    <h1>Beating the Champions</h1>
+    <p class="changed">Search plus evaluation <b>beat the best humans</b> — chess, then Go.</p>
+  </header>
+
+  <main>
+
+    <!-- ============ BEAT 1 — CONCRETE ============ -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">Looking Ahead</h2>
+      <p class="cap">From one position, the engine fans out candidate moves and looks several plies ahead.</p>
+      <div class="stage">
+        <canvas id="c1" class="live" width="1000" height="440"
+          aria-label="A chess position on the left. From the piece, branches fan out to the right into candidate moves, then deeper plies, showing the engine looking ahead."></canvas>
+        <svg class="static" viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="b1t b1d">
+          <title id="b1t">Look-ahead search tree</title>
+          <desc id="b1d">From a board position, lines branch out to candidate moves and deeper plies.</desc>
+          <rect width="1000" height="440" fill="#0E1B2A"/>
+          <g stroke="#E8DCC0" stroke-opacity=".5" fill="none">
+            <path d="M296 252 L334 252"/>
+            <path d="M334 252 L486 142 M334 252 L486 252 M334 252 L486 362"/>
+            <path d="M486 142 L648 110 M486 142 L648 188 M486 252 L648 220 M486 252 L648 296 M486 362 L648 330 M486 362 L648 406"/>
+          </g>
+          <g fill="#E8DCC0"><circle cx="334" cy="252" r="8"/></g>
+          <g fill="#19E3C1"><circle cx="648" cy="110" r="5"/><circle cx="648" cy="220" r="5"/><circle cx="648" cy="406" r="5"/></g>
+          <rect x="40" y="92" width="256" height="256" fill="none" stroke="#E8DCC0" stroke-opacity=".4"/>
+          <circle cx="136" cy="252" r="14" fill="#19E3C1"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 2 — ABSTRACT ============ -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">The Game Tree</h2>
+      <p class="cap">Minimax scores each line, backs the values up, keeps the best, and prunes the hopeless.</p>
+      <div class="stage">
+        <canvas id="c2" class="live" width="1000" height="460"
+          aria-label="A minimax game tree. Each leaf line gets an evaluation bar — teal for winning, coral for losing. Values back up to the root; the best line glows and a pruned branch dims."></canvas>
+        <svg class="static" viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="b2t b2d">
+          <title id="b2t">Minimax game tree</title>
+          <desc id="b2d">Leaf evaluations back up to the root; the best line is chosen and weak lines pruned.</desc>
+          <rect width="1000" height="460" fill="#0E1B2A"/>
+          <g stroke="#E8DCC0" stroke-opacity=".4" fill="none">
+            <path d="M500 56 L250 182 M500 56 L500 182 M500 56 L760 182"/>
+            <path d="M250 182 L180 270 M250 182 L330 270 M500 182 L430 270 M500 182 L580 270 M760 182 L690 270"/>
+          </g>
+          <path d="M500 56 L500 182 L580 270" stroke="#19E3C1" stroke-width="2.5" fill="none"/>
+          <g fill="#E8DCC0"><circle cx="250" cy="182" r="7"/><circle cx="760" cy="182" r="7"/></g>
+          <circle cx="500" cy="56" r="9" fill="#19E3C1"/><circle cx="500" cy="182" r="7" fill="#19E3C1"/>
+          <circle cx="580" cy="270" r="7" fill="#19E3C1"/>
+          <circle cx="690" cy="270" r="7" fill="#E8DCC0" opacity=".25"/>
+          <circle cx="180" cy="270" r="6" fill="#FF7849"/>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--goal)"></span>winning line · chosen</i>
+        <i><span class="sw" style="background:var(--error)"></span>losing line</i>
+        <i><span class="sw" style="background:var(--struct);opacity:.3"></span>pruned</i>
+        <i><span class="sw" style="background:var(--struct)"></span>tree / structure</i>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 3 — INTERACTIVE ============ -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Expand the Search</h2>
+      <p class="cap">Search deeper or wider; watch the chosen move's evaluation firm up toward certainty.</p>
+      <div class="stage">
+        <canvas id="c3" class="live" width="1000" height="420"
+          aria-label="An expanding search tree on the left and the chosen move's evaluation bar on the right. Expanding the search adds nodes and shrinks the uncertainty band until the evaluation settles."></canvas>
+        <svg class="static" viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="b3t b3d">
+          <title id="b3t">Expandable search</title>
+          <desc id="b3d">More search shrinks the evaluation's uncertainty until the chosen move is firm.</desc>
+          <rect width="1000" height="420" fill="#0E1B2A"/>
+          <line x1="810" y1="120" x2="810" y2="300" stroke="#E8DCC0" stroke-opacity=".4"/>
+          <rect x="745" y="200" width="130" height="14" fill="#9EF01A" opacity=".25"/>
+          <rect x="810" y="200" width="68" height="14" fill="#9EF01A"/>
+          <text x="660" y="110" fill="#9EF01A" font-family="monospace" font-size="14">eval +0.9 · firm</text>
+        </svg>
+      </div>
+      <div class="ctl live">
+        <button type="button" id="deeper">Search deeper</button>
+        <button type="button" id="wider">Search wider</button>
+        <button type="button" id="reset">Reset</button>
+      </div>
+      <p class="readout live" id="ro" aria-live="polite">depth <b>1</b> · breadth <b>3</b> · samples <b>24</b> · eval <b>+0.90</b> · <span id="rost">exploring</span></p>
+      <p class="hint">A nod to AlphaGo's move 37 — deep search surfaces the move no human expected.</p>
+    </section>
+
+    <details class="nods">
+      <summary>Milestones &amp; methods</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <div class="ny">1997 · Chess</div>
+          <div class="nm">Deep Blue beats Kasparov</div>
+          <div class="nd">Brute-force search — ~200M positions/second — plus a handcrafted evaluation toppled the reigning world champion.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">2016 · Go</div>
+          <div class="nm">AlphaGo beats Lee Sedol</div>
+          <div class="nd">Go's branching defeated brute force; learned value and policy networks guided the search. Move 37 stunned the experts.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">Method</div>
+          <div class="nm">Minimax → MCTS</div>
+          <div class="nd">Chess: minimax with alpha-beta pruning. Go: Monte-Carlo Tree Search steered by neural value &amp; policy nets.</div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <nav class="eranav" aria-label="Era navigation">
+    <a class="prev" href="10-statistical-ai.html"><span class="lab">&#9668; Prev</span><span class="ttl">Statistical AI</span></a>
+    <a class="idx" href="index.html"><span class="lab">&#9671; Timeline</span></a>
+    <a class="next" href="12-alexnet.html"><span class="lab">Next &#9658;</span><span class="ttl">Deep Learning</span></a>
+  </nav>
+
+</div>
+
+<script>
+'use strict';
+document.body.classList.remove('no-js');
+document.body.classList.add('js');
+document.documentElement.classList.remove('no-js-html');
+
+(function(){
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function cv(n,f){try{var v=getComputedStyle(document.body).getPropertyValue(n).trim();return v||f;}catch(e){return f;}}
+  var C={
+    era:cv('--era','#19E3C1'), goal:cv('--goal','#19E3C1'), error:cv('--error','#FF7849'),
+    rest:cv('--rest','#9EF01A'), struct:cv('--struct','#E8DCC0'), dim:'rgba(244,246,245,.46)',
+    paper:cv('--paper','#F4F6F5'), ink2:cv('--ink-2','#0E1B2A')
+  };
+  function clamp(v,a,b){return v<a?a:v>b?b:v;}
+  function eo(t){return 1-Math.pow(1-t,3);} // easeOutCubic
+  function rgba(hex,a){
+    hex=hex.replace('#','');
+    if(hex.length===3){hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];}
+    var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+  function dot(ctx,x,y,r,fill,a){ctx.globalAlpha=a==null?1:a;ctx.fillStyle=fill;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+
+  /* ---------- BEAT 1 : look-ahead fan ---------- */
+  (function(){
+    var cv1=document.getElementById('c1'); if(!cv1) return;
+    var ctx=cv1.getContext('2d'); if(!ctx) return;
+    var W=1000,H=440, cy=252;
+    var x1=486,x2=648,x3=812;
+    var root={x:334,y:cy};
+    var p1=[142,252,362].map(function(y){return {x:x1,y:y};});
+    var p2=[]; p1.forEach(function(n){p2.push({x:x2,y:n.y-46,par:n});p2.push({x:x2,y:n.y+46,par:n});});
+    var p3=[]; p2.forEach(function(n,i){p3.push({x:x3,y:n.y+(i%2?15:-15),par:n});});
+
+    function prog(t,a,b){return eo(clamp((t-a)/(b-a),0,1));}
+    function edge(p,c,k){ // draw partial edge by k
+      ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+(c.x-p.x)*k,p.y+(c.y-p.y)*k);ctx.stroke();
+    }
+    function frame(t){
+      ctx.clearRect(0,0,W,H);
+      // board
+      var bx=40,by=92,sq=64;
+      for(var r=0;r<4;r++)for(var cc=0;cc<4;cc++){
+        ctx.fillStyle=rgba(C.struct,((r+cc)%2)?0.07:0.02);
+        ctx.fillRect(bx+cc*sq,by+r*sq,sq,sq);
+      }
+      ctx.strokeStyle=rgba(C.struct,0.35);ctx.lineWidth=1;ctx.strokeRect(bx,by,sq*4,sq*4);
+      // piece (current position) = the agent, --era
+      var px=bx+1*sq+sq/2, py=by+2*sq+sq/2;
+      dot(ctx,px,py,15,C.era,1);
+      ctx.fillStyle=rgba(C.ink2,1);dot(ctx,px,py,6,C.ink2,1);
+
+      var d1=prog(t,0,0.28), d2=prog(t,0.30,0.58), d3=prog(t,0.60,0.82);
+      ctx.lineWidth=1.5;ctx.strokeStyle=rgba(C.struct,0.55);
+      // connector piece->root
+      ctx.beginPath();ctx.moveTo(px+15,py);ctx.lineTo(root.x,root.y);ctx.stroke();
+      dot(ctx,root.x,root.y,8,C.struct,1);
+      // depth 1
+      p1.forEach(function(n){edge(root,n,d1);});
+      if(d1>0.15)p1.forEach(function(n){dot(ctx,n.x,n.y,6,C.struct,clamp((d1-0.15)/0.4,0,1));});
+      // depth 2
+      ctx.strokeStyle=rgba(C.struct,0.5);
+      p2.forEach(function(n){edge(n.par,n,d2);});
+      if(d2>0.1)p2.forEach(function(n){dot(ctx,n.x,n.y,5,C.struct,clamp(d2,0,1));});
+      // depth 3 stubs
+      ctx.strokeStyle=rgba(C.struct,0.4);
+      p3.forEach(function(n){edge(n.par,n,d3);});
+      // frontier glow (--era) on deepest visible nodes
+      var pulse=RM?0.7:(0.55+0.45*Math.abs(Math.sin(t*Math.PI*2)));
+      if(d3>0.2){
+        p3.forEach(function(n){
+          ctx.shadowColor=C.era;ctx.shadowBlur=10*pulse;
+          dot(ctx,n.x,n.y,4.5,C.era,clamp(d3,0,1)*pulse);
+          ctx.shadowBlur=0;
+        });
+      }
+      // label
+      ctx.fillStyle=C.dim;ctx.font='11px '+'ui-monospace,Menlo,monospace';
+      ctx.fillText('position',bx+4,by-12);
+      ctx.fillText('look-ahead →',x1-6,by-12);
+    }
+    if(RM){frame(0.92);return;}
+    var P=5600,t0=performance.now();
+    (function loop(now){
+      frame(((now-t0)%P)/P);
+      requestAnimationFrame(loop);
+    })(t0);
+  })();
+
+  /* ---------- BEAT 2 : minimax game tree ---------- */
+  (function(){
+    var cv2=document.getElementById('c2'); if(!cv2) return;
+    var ctx=cv2.getContext('2d'); if(!ctx) return;
+    var W=1000,H=460;
+    var root={x:500,y:56};
+    var ply1=[{x:250,y:182},{x:500,y:182},{x:760,y:182}];
+    var leaves=[
+      {x:180,y:270,v:0.6,par:0},{x:330,y:270,v:-0.3,par:0},
+      {x:430,y:270,v:1.4,par:1},{x:580,y:270,v:0.2,par:1},
+      {x:690,y:270,v:-1.1,par:2},{x:840,y:270,v:0.9,par:2,pruned:true}
+    ];
+    var backed=[-0.3,0.2,-1.1]; // min of each ply1's leaves
+    var bestPly1=1, bestLeaf=3; // root chooses ply1[1]=B, opponent forces leaf 0.2
+    var BASE=330, SCALE=34;
+    function prog(t,a,b){return eo(clamp((t-a)/(b-a),0,1));}
+    function evalBar(L,fill,k){
+      var h=L.v*SCALE*k;
+      ctx.fillStyle=fill;
+      ctx.fillRect(L.x-11, h>=0?BASE-h:BASE, 22, Math.abs(h));
+    }
+    function frame(t){
+      ctx.clearRect(0,0,W,H);
+      var fillT=prog(t,0,0.4), backT=prog(t,0.42,0.62), chooseT=prog(t,0.64,0.86);
+      // baseline
+      ctx.strokeStyle=rgba(C.struct,0.25);ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(140,BASE);ctx.lineTo(880,BASE);ctx.stroke();
+      // edges
+      ctx.lineWidth=1.5;ctx.strokeStyle=rgba(C.struct,0.45);
+      ply1.forEach(function(n){ctx.beginPath();ctx.moveTo(root.x,root.y);ctx.lineTo(n.x,n.y);ctx.stroke();});
+      leaves.forEach(function(L){
+        var pn=ply1[L.par];
+        ctx.globalAlpha=(L.pruned&&backT>0.5)?0.18:1;
+        ctx.beginPath();ctx.moveTo(pn.x,pn.y);ctx.lineTo(L.x,L.y);ctx.stroke();
+        ctx.globalAlpha=1;
+      });
+      // best path glow
+      if(chooseT>0){
+        ctx.strokeStyle=rgba(C.goal,0.9*chooseT);ctx.lineWidth=3;ctx.shadowColor=C.goal;ctx.shadowBlur=10*chooseT;
+        var bl=leaves[bestLeaf],bp=ply1[bestPly1];
+        ctx.beginPath();ctx.moveTo(root.x,root.y);ctx.lineTo(bp.x,bp.y);ctx.lineTo(bl.x,bl.y);ctx.stroke();
+        ctx.shadowBlur=0;
+      }
+      // eval bars + leaf nodes
+      leaves.forEach(function(L,i){
+        var pruned=L.pruned&&backT>0.5;
+        var col = (chooseT>0&&i===bestLeaf)?C.goal : (L.v<0?C.error:C.struct);
+        ctx.globalAlpha=pruned?0.2:1;
+        evalBar(L,L.v<0?C.error:(i===bestLeaf&&chooseT>0?C.goal:C.struct),fillT);
+        dot(ctx,L.x,L.y,6, (i===bestLeaf&&chooseT>0)?C.goal:(L.v<0?C.error:C.struct),1);
+        ctx.fillStyle=C.dim;ctx.font='10px ui-monospace,Menlo,monospace';ctx.textAlign='center';
+        if(fillT>0.6)ctx.fillText((L.v>0?'+':'')+L.v.toFixed(1), L.x, BASE+36);
+        ctx.globalAlpha=1;
+      });
+      ctx.textAlign='left';
+      // ply1 nodes + backed values
+      ply1.forEach(function(n,i){
+        var isBest=(chooseT>0&&i===bestPly1);
+        dot(ctx,n.x,n.y,7,isBest?C.goal:C.struct,1);
+        if(backT>0.2){
+          ctx.fillStyle=isBest?C.goal:C.dim;ctx.font='11px ui-monospace,Menlo,monospace';ctx.textAlign='center';
+          ctx.fillText((backed[i]>0?'+':'')+backed[i].toFixed(1), n.x, n.y-12);
+          ctx.textAlign='left';
+        }
+      });
+      // root
+      dot(ctx,root.x,root.y,9,chooseT>0?C.goal:C.struct,1);
+      if(chooseT>0.4){ctx.fillStyle=C.goal;ctx.font='12px ui-monospace,Menlo,monospace';ctx.textAlign='center';ctx.fillText('best +0.2',root.x,root.y-15);ctx.textAlign='left';}
+      // layer labels
+      ctx.fillStyle=C.dim;ctx.font='10px ui-monospace,Menlo,monospace';
+      ctx.fillText('our move (max)',20,60);
+      ctx.fillText('reply (min)',20,186);
+      ctx.fillText('eval',20,274);
+      if(backT>0.6){ctx.fillStyle=rgba(C.struct,0.5);ctx.fillText('✂ pruned',795,300);}
+    }
+    if(RM){frame(0.92);return;}
+    var P=6400,t0=performance.now();
+    (function loop(now){frame(((now-t0)%P)/P);requestAnimationFrame(loop);})(t0);
+  })();
+
+  /* ---------- BEAT 3 : interactive expand ---------- */
+  (function(){
+    var cv3=document.getElementById('c3'); if(!cv3) return;
+    var ctx=cv3.getContext('2d'); if(!ctx) return;
+    var W=1000,H=420;
+    var TARGET=0.9, BASE=8;
+    var st={d:1,b:3};
+    var ro=document.getElementById('ro'), rost=document.getElementById('rost');
+    var animFrom=null, animTo=null, animStart=0, raf=null;
+
+    function compute(s){
+      var samples=BASE*s.d*s.b;
+      var unc=1.35/Math.sqrt(samples);
+      var est=TARGET+Math.sin(s.d*1.27+s.b*0.6)*unc*0.5;
+      return {samples:samples,unc:unc,est:est};
+    }
+    function treeNodes(s){
+      // columns 0..d ; col i has up to b nodes (col0 = 1 root)
+      var cols=[];
+      for(var i=0;i<=s.d;i++){
+        var cnt=(i===0)?1:Math.min(s.b, 1+i+1);
+        var arr=[],x=70+i*(560/Math.max(1,s.d));
+        var spread=46, top=210-((cnt-1)*spread)/2;
+        for(var j=0;j<cnt;j++)arr.push({x:x,y:top+j*spread});
+        cols.push(arr);
+      }
+      return cols;
+    }
+    function draw(state){
+      ctx.clearRect(0,0,W,H);
+      var cols=treeNodes(st);
+      // edges (fan): parent first-node -> children
+      ctx.strokeStyle=rgba(C.struct,0.4);ctx.lineWidth=1.2;
+      for(var i=1;i<cols.length;i++){
+        var p=cols[i-1][0];
+        cols[i].forEach(function(c){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(c.x,c.y);ctx.stroke();});
+      }
+      // chosen path = first node each column
+      ctx.strokeStyle=rgba(C.goal,0.8);ctx.lineWidth=2.5;
+      ctx.beginPath();ctx.moveTo(cols[0][0].x,cols[0][0].y);
+      for(var k=1;k<cols.length;k++)ctx.lineTo(cols[k][0].x,cols[k][0].y);
+      ctx.stroke();
+      // nodes
+      cols.forEach(function(col,ci){
+        col.forEach(function(n,ni){
+          var chosen=(ni===0);
+          dot(ctx,n.x,n.y,chosen?7:5,chosen?C.goal:C.struct,chosen?1:0.85);
+        });
+      });
+      // move 37 reveal
+      if(st.d>=3||st.b>=5){
+        var last=cols[cols.length-1];
+        var m=last[last.length-1];
+        ctx.shadowColor=C.era;ctx.shadowBlur=12;
+        dot(ctx,m.x,m.y,6,C.era,1);ctx.shadowBlur=0;
+        ctx.fillStyle=C.era;ctx.font='11px ui-monospace,Menlo,monospace';
+        ctx.fillText('move 37',m.x-22,m.y-12);
+      }
+      ctx.fillStyle=C.dim;ctx.font='10px ui-monospace,Menlo,monospace';
+      ctx.fillText('search tree',70,40);
+
+      // ---- eval panel (right) ----
+      var cx=810, scale=86, zeroV=cx; // px per unit ~ (260/3)
+      var top=120, bot=300, mid=(top+bot)/2;
+      ctx.strokeStyle=rgba(C.struct,0.35);ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(cx,top-18);ctx.lineTo(cx,bot+18);ctx.stroke(); // zero axis
+      ctx.fillStyle=C.dim;ctx.font='10px ui-monospace,Menlo,monospace';ctx.textAlign='center';
+      ctx.fillText('0',cx,bot+34);ctx.fillText('lose',cx-110,bot+34);ctx.fillText('win',cx+110,bot+34);
+      ctx.textAlign='left';
+      // track
+      ctx.strokeStyle=rgba(C.struct,0.18);ctx.lineWidth=14;ctx.lineCap='butt';
+      ctx.beginPath();ctx.moveTo(cx-140,mid);ctx.lineTo(cx+140,mid);ctx.stroke();
+      var est=state.est, unc=state.unc;
+      var firm=unc<0.13;
+      var fillCol=firm?C.rest:(est<0?C.error:C.goal);
+      // uncertainty band
+      ctx.fillStyle=rgba(fillCol,0.22);
+      var bx1=clamp(cx+(est-unc)*scale,cx-150,cx+150), bx2=clamp(cx+(est+unc)*scale,cx-150,cx+150);
+      ctx.fillRect(bx1,mid-9,bx2-bx1,18);
+      // value fill from zero to est
+      ctx.strokeStyle=fillCol;ctx.lineWidth=14;
+      ctx.beginPath();ctx.moveTo(cx,mid);ctx.lineTo(clamp(cx+est*scale,cx-140,cx+140),mid);ctx.stroke();
+      // marker
+      var mx=clamp(cx+est*scale,cx-140,cx+140);
+      ctx.strokeStyle=C.paper;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mx,mid-13);ctx.lineTo(mx,mid+13);ctx.stroke();
+      // text
+      ctx.fillStyle=C.paper;ctx.font='600 22px ui-monospace,Menlo,monospace';ctx.textAlign='center';
+      ctx.fillText((est>0?'+':'')+est.toFixed(2),cx,top-30);
+      ctx.fillStyle=firm?C.rest:C.dim;ctx.font='11px ui-monospace,Menlo,monospace';
+      ctx.fillText(firm?'FIRM':'±'+unc.toFixed(2)+' uncertain',cx,bot+58);
+      ctx.fillStyle=C.dim;ctx.fillText('chosen move eval',cx,top-52);
+      ctx.textAlign='left';
+    }
+    function readout(state){
+      if(!ro)return;
+      var firm=state.unc<0.13;
+      ro.innerHTML='depth <b>'+st.d+'</b> · breadth <b>'+st.b+'</b> · samples <b>'+state.samples+
+        '</b> · eval <b>'+(state.est>0?'+':'')+state.est.toFixed(2)+'</b> · '+
+        '<span class="'+(firm?'firm':'')+'">'+(firm?'firm':'exploring')+'</span>';
+    }
+    function render(){
+      var cur=compute(st);
+      if(RM||!animTo){draw(cur);readout(cur);return;}
+      // tween from animFrom to cur
+      var dur=480;
+      function step(now){
+        var k=clamp((now-animStart)/dur,0,1),e=eo(k);
+        var mid={est:animFrom.est+(cur.est-animFrom.est)*e, unc:animFrom.unc+(cur.unc-animFrom.unc)*e, samples:cur.samples};
+        draw(mid);
+        if(k<1)raf=requestAnimationFrame(step); else readout(cur);
+      }
+      if(raf)cancelAnimationFrame(raf);
+      animStart=performance.now();raf=requestAnimationFrame(step);
+      readout(cur);
+    }
+    function change(fn){
+      animFrom=compute(st); fn(); animTo=compute(st); render();
+    }
+    var bd=document.getElementById('deeper'),bw=document.getElementById('wider'),br=document.getElementById('reset');
+    if(bd)bd.addEventListener('click',function(){change(function(){st.d=Math.min(6,st.d+1);});});
+    if(bw)bw.addEventListener('click',function(){change(function(){st.b=Math.min(6,st.b+1);});});
+    if(br)br.addEventListener('click',function(){change(function(){st.d=1;st.b=3;});});
+    // initial
+    var init=compute(st);draw(init);readout(init);
+  })();
+
+})();
+</script>
+</body>
+</html>

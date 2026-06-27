@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Era 12 · The Deep Learning Revolution (2012, AlexNet) — A History of AI</title>
+
+<!-- ====== SHARED SHELL (inlined verbatim from _shell.html) ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC (SVG semantics + controls) ====== -->
+<style>
+  body{--era:var(--boom);}            /* Era 12 mood: breakthrough boom */
+
+  .stage svg{padding:clamp(8px,2vw,16px);}
+
+  /* shared SVG primitives, keyed to semantic tokens */
+  .fr-base{fill:var(--ink-2);stroke:var(--struct);stroke-opacity:.30;stroke-width:2;}
+  .fr-on{fill:none;stroke:var(--goal);stroke-width:2.6;opacity:var(--a,1);}
+  .mot{fill:none;stroke:var(--struct);stroke-opacity:.55;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .mot-dot{fill:var(--struct);fill-opacity:.55;}
+  .arr-base{stroke:var(--struct);stroke-opacity:.28;stroke-width:2;}
+  .arr-on{stroke:var(--goal);stroke-width:2;opacity:var(--a,0);}
+  .ttl-s{fill:var(--dim);font:600 11px var(--mono);letter-spacing:.14em;}
+  .lab-s{fill:var(--struct);fill-opacity:.85;font:500 15px var(--serif);font-style:italic;}
+  .lab-g{fill:var(--goal);font:500 15px var(--serif);font-style:italic;opacity:var(--a,0);}
+  .ax{fill:var(--dim);font:500 10.5px var(--mono);letter-spacing:.06em;}
+  .grid{stroke:var(--line);stroke-width:1;}
+
+  /* node pipeline (beats 1 & 3) */
+  .nd .nd-on{opacity:var(--a,1);}
+
+  /* interactive controls (beat 3) */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px;}
+  .controls .grp{display:flex;gap:6px;flex-wrap:wrap;}
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--paper);background:var(--ink-2);border:1px solid var(--line);border-radius:7px;
+    padding:9px 13px;cursor:pointer;transition:border-color .15s,color .15s;}
+  .btn:hover{border-color:var(--era);}
+  .btn[aria-pressed="true"]{border-color:var(--era);color:var(--era);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn.primary{border-color:var(--era);color:var(--era);}
+  .status{font-size:11px;letter-spacing:.06em;color:var(--dim);min-height:1.3em;}
+  .status b{color:var(--rest);font-weight:400;}
+
+  /* no-js: hide controls (non-functional), live SVG already shows resolved state */
+  .no-js .controls{display:none;}
+</style>
+</head>
+
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ===== progress rail: 15 ticks ===== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on title="Era 01 · Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on title="Era 02 · Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on title="Era 03 · Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on title="Era 04 · Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on title="Era 05 · Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" data-on class="winter" title="Era 06 · First Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" data-on title="Era 07 · Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" data-on class="winter" title="Era 08 · Second Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" data-on title="Era 09 · Backprop"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" data-on title="Era 10 · Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" data-on title="Era 11 · Game-Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" class="cur" aria-current="page" title="Era 12 · The Deep Learning Revolution"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" title="Era 13 · The Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" title="Era 14 · Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" title="Era 15 · Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ===== masthead ===== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 12 / 15</span> · The Deep Learning Revolution <span class="yrs">2012</span></p>
+    <h1>The Deep Learning Revolution</h1>
+    <p class="changed">Deep nets + GPUs + ImageNet — error fell <b>off a cliff</b>.</p>
+  </header>
+
+  <main>
+
+    <!-- ============ BEAT 1 · CONCRETE ============ -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">Seeing, layer by layer</h2>
+      <p class="cap">A pixel image becomes a label by composing features — edges build textures build parts build “cat”.</p>
+
+      <div class="stage">
+        <svg id="b1" viewBox="0 0 920 360" role="img" aria-labelledby="b1t b1d" preserveAspectRatio="xMidYMid meet">
+          <title id="b1t">A feature hierarchy activating from input image to label</title>
+          <desc id="b1d">Five stacked stages — input image, edges, textures, parts, and the label “cat” — light up in sequence, each activating from the stage before it. Depth is the composition of features.</desc>
+          <defs>
+            <filter id="g1" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="3.4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--struct)" fill-opacity="0.4"/>
+            </marker>
+          </defs>
+
+          <!-- connecting arrows (base + activation overlay tied to the DOWNSTREAM layer) -->
+          <line class="arr-base" x1="165" y1="160" x2="194" y2="160" marker-end="url(#ah1)"/>
+          <line class="arr-base" x1="346" y1="160" x2="375" y2="160" marker-end="url(#ah1)"/>
+          <line class="arr-base" x1="527" y1="160" x2="556" y2="160" marker-end="url(#ah1)"/>
+          <line class="arr-base" x1="708" y1="160" x2="737" y2="160" marker-end="url(#ah1)"/>
+          <line class="arr-on a1" x1="165" y1="160" x2="194" y2="160" filter="url(#g1)"/>
+          <line class="arr-on a2" x1="346" y1="160" x2="375" y2="160" filter="url(#g1)"/>
+          <line class="arr-on a3" x1="527" y1="160" x2="556" y2="160" filter="url(#g1)"/>
+          <line class="arr-on a4" x1="708" y1="160" x2="737" y2="160" filter="url(#g1)"/>
+
+          <!-- L0 · input -->
+          <g class="lay" data-i="0" style="--a:1">
+            <text class="ttl-s" x="90" y="80" text-anchor="middle">INPUT</text>
+            <rect class="fr-base" x="15" y="90" width="150" height="140" rx="10"/>
+            <!-- schematic cat -->
+            <circle class="mot" cx="90" cy="170" r="34"/>
+            <path class="mot" d="M62 146 L56 120 L80 138 Z"/>
+            <path class="mot" d="M118 146 L124 120 L100 138 Z"/>
+            <circle class="mot-dot" cx="78" cy="166" r="3.4"/>
+            <circle class="mot-dot" cx="102" cy="166" r="3.4"/>
+            <path class="mot" d="M90 176 l-12 5 M90 176 l12 5 M90 178 l-13 0 M90 178 l13 0"/>
+            <rect class="fr-on" x="15" y="90" width="150" height="140" rx="10" filter="url(#g1)"/>
+          </g>
+
+          <!-- L1 · edges -->
+          <g class="lay" data-i="1" style="--a:1">
+            <text class="ttl-s" x="271" y="80" text-anchor="middle">EDGES</text>
+            <rect class="fr-base" x="196" y="90" width="150" height="140" rx="10"/>
+            <path class="mot" d="M218 112 L262 112"/>
+            <path class="mot" d="M286 112 L324 150"/>
+            <path class="mot" d="M222 206 L222 162"/>
+            <path class="mot" d="M286 206 L324 168"/>
+            <rect class="fr-on" x="196" y="90" width="150" height="140" rx="10" filter="url(#g1)"/>
+          </g>
+
+          <!-- L2 · textures -->
+          <g class="lay" data-i="2" style="--a:1">
+            <text class="ttl-s" x="452" y="80" text-anchor="middle">TEXTURES</text>
+            <rect class="fr-base" x="377" y="90" width="150" height="140" rx="10"/>
+            <path class="mot" d="M397 120 L507 120 M397 138 L507 138 M397 156 L507 156"/>
+            <path class="mot" d="M404 110 L404 210 M428 110 L428 210 M452 110 L452 210 M476 110 L476 210 M500 110 L500 210" stroke-opacity="0.35"/>
+            <path class="mot" d="M397 182 q28 -22 55 0 q28 22 55 0"/>
+            <rect class="fr-on" x="377" y="90" width="150" height="140" rx="10" filter="url(#g1)"/>
+          </g>
+
+          <!-- L3 · parts -->
+          <g class="lay" data-i="3" style="--a:1">
+            <text class="ttl-s" x="633" y="80" text-anchor="middle">PARTS</text>
+            <rect class="fr-base" x="558" y="90" width="150" height="140" rx="10"/>
+            <ellipse class="mot" cx="600" cy="128" rx="22" ry="13"/>
+            <circle class="mot-dot" cx="600" cy="128" r="5"/>
+            <path class="mot" d="M650 142 L662 110 L678 140 Z"/>
+            <path class="mot" d="M576 186 l30 6 M576 196 l30 0 M576 206 l30 -6"/>
+            <path class="mot" d="M650 196 q18 14 36 0"/>
+            <rect class="fr-on" x="558" y="90" width="150" height="140" rx="10" filter="url(#g1)"/>
+          </g>
+
+          <!-- L4 · label -->
+          <g class="lay" data-i="4" style="--a:1">
+            <text class="ttl-s" x="814" y="80" text-anchor="middle">LABEL</text>
+            <rect class="fr-base" x="739" y="120" width="150" height="80" rx="40"/>
+            <text class="lab-s" x="814" y="167" text-anchor="middle" font-size="26">“cat”</text>
+            <rect class="fr-on" x="739" y="120" width="150" height="80" rx="40" filter="url(#g1)"/>
+            <text class="lab-g" x="814" y="167" text-anchor="middle" font-size="26" filter="url(#g1)">“cat”</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--struct)"></span>structure — a feature stage</i>
+        <i><span class="sw" style="background:var(--goal)"></span>active — firing toward the answer</i>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 2 · ABSTRACT ============ -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">The cliff at 2012</h2>
+      <p class="cap">ImageNet error sat high for years, then AlexNet dropped it sharply — and it kept falling past human level.</p>
+
+      <div class="stage">
+        <svg id="b2" viewBox="0 0 920 420" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+          <title id="b2t">ImageNet classification-error timeline, 2010 to 2017</title>
+          <desc id="b2d">Top-5 classification error is roughly flat near 26 percent through 2011, then falls sharply at 2012 when AlexNet arrives, continuing down past the human level of about 5 percent by 2015 and reaching roughly 2 percent by 2017.</desc>
+
+          <!-- gridlines + y labels (0,10,20,30 %) -->
+          <line class="grid" x1="90" y1="360" x2="880" y2="360"/>
+          <line class="grid" x1="90" y1="250" x2="880" y2="250"/>
+          <line class="grid" x1="90" y1="140" x2="880" y2="140"/>
+          <line class="grid" x1="90" y1="30"  x2="880" y2="30"/>
+          <text class="ax" x="82" y="364" text-anchor="end">0%</text>
+          <text class="ax" x="82" y="254" text-anchor="end">10%</text>
+          <text class="ax" x="82" y="144" text-anchor="end">20%</text>
+          <text class="ax" x="82" y="34"  text-anchor="end">30%</text>
+
+          <!-- y axis caption -->
+          <text class="ax" x="90" y="18" text-anchor="start" fill="var(--error)">classification error</text>
+
+          <!-- human level line -->
+          <line x1="90" y1="305" x2="880" y2="305" stroke="var(--struct)" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="6 5"/>
+          <text class="ax" x="876" y="299" text-anchor="end" fill="var(--struct)" fill-opacity="0.7">human ≈ 5%</text>
+
+          <!-- ERROR path (pre-human): 2010..2014, coral -->
+          <path id="b2-err" d="M90 52 L202.9 74 L315.7 184 L428.6 231.3 L541.4 286.3"
+                fill="none" stroke="var(--error)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- SOLVED path (past human): 2014..2017, chartreuse = resolved -->
+          <path id="b2-rest" d="M541.4 286.3 L654.3 320.4 L767.1 327 L880 335.25"
+                fill="none" stroke="var(--rest)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- year markers -->
+          <g fill="var(--error)">
+            <circle cx="90" cy="52" r="4"/><circle cx="202.9" cy="74" r="4"/>
+            <circle cx="315.7" cy="184" r="6"/><circle cx="428.6" cy="231.3" r="4"/>
+          </g>
+          <g fill="var(--rest)">
+            <circle cx="541.4" cy="286.3" r="4"/><circle cx="654.3" cy="320.4" r="4"/>
+            <circle cx="767.1" cy="327" r="4"/><circle cx="880" cy="335.25" r="4"/>
+          </g>
+
+          <!-- the cliff: emphasize the 2011->2012 drop -->
+          <line class="cliff" x1="315.7" y1="74" x2="315.7" y2="184" stroke="var(--error)" stroke-width="1.5" stroke-dasharray="3 4" stroke-opacity="0.7"/>
+          <g class="callout">
+            <circle cx="315.7" cy="184" r="9" fill="none" stroke="var(--goal)" stroke-width="2"/>
+            <text x="328" y="158" class="ax" fill="var(--goal)" font-size="12">2012 · AlexNet</text>
+            <text x="328" y="174" class="ax" fill="var(--goal)" font-size="11" fill-opacity="0.8">the cliff</text>
+          </g>
+
+          <!-- x axis years -->
+          <line class="grid" x1="90" y1="360" x2="90" y2="366"/>
+          <g class="ax" text-anchor="middle">
+            <text x="90"   y="384">2010</text>
+            <text x="202.9" y="384">2011</text>
+            <text x="315.7" y="384" fill="var(--goal)">2012</text>
+            <text x="428.6" y="384">2013</text>
+            <text x="541.4" y="384">2014</text>
+            <text x="654.3" y="384">2015</text>
+            <text x="767.1" y="384">2016</text>
+            <text x="880"  y="384">2017</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--error)"></span>error — top-5 misclassification</i>
+        <i><span class="sw" style="background:var(--rest)"></span>solved — below human level</i>
+        <i><span class="sw" style="background:var(--struct)"></span>human reference</i>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 3 · INTERACTIVE ============ -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Reveal the depth</h2>
+      <p class="cap">Pick an image, then reveal one layer at a time — watch the features fire toward the correct label.</p>
+
+      <div class="stage">
+        <svg id="b3" viewBox="0 0 920 300" role="img" aria-labelledby="b3t b3d" preserveAspectRatio="xMidYMid meet">
+          <title id="b3t">An interactive feed-forward pipeline from image to label</title>
+          <desc id="b3d">A schematic network: the chosen image feeds three hidden layers of three units each, then three candidate labels — cat, dog, car. Revealing layers in order lights the units; at full depth the correct label is selected.</desc>
+          <defs>
+            <filter id="g3" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--struct)" fill-opacity="0.4"/>
+            </marker>
+          </defs>
+
+          <!-- bundle arrows (overlay opacity = downstream layer activation) -->
+          <line class="arr-base" x1="158" y1="150" x2="226" y2="150" marker-end="url(#ah3)"/>
+          <line class="arr-base" x1="278" y1="150" x2="386" y2="150" marker-end="url(#ah3)"/>
+          <line class="arr-base" x1="438" y1="150" x2="546" y2="150" marker-end="url(#ah3)"/>
+          <line class="arr-base" x1="598" y1="150" x2="688" y2="150" marker-end="url(#ah3)"/>
+          <line class="arr-on b-a1" x1="158" y1="150" x2="226" y2="150" filter="url(#g3)"/>
+          <line class="arr-on b-a2" x1="278" y1="150" x2="386" y2="150" filter="url(#g3)"/>
+          <line class="arr-on b-a3" x1="438" y1="150" x2="546" y2="150" filter="url(#g3)"/>
+          <line class="arr-on b-a4" x1="598" y1="150" x2="688" y2="150" filter="url(#g3)"/>
+
+          <!-- INPUT card with three swappable glyphs -->
+          <text class="ttl-s" x="88" y="64" text-anchor="middle">INPUT</text>
+          <rect class="fr-base" x="28" y="90" width="120" height="120" rx="10"/>
+          <g class="glyph" data-g="0">
+            <circle class="mot" cx="88" cy="150" r="28"/>
+            <path class="mot" d="M66 130 L60 108 L82 124 Z"/><path class="mot" d="M110 130 L116 108 L94 124 Z"/>
+            <circle class="mot-dot" cx="78" cy="148" r="3"/><circle class="mot-dot" cx="98" cy="148" r="3"/>
+          </g>
+          <g class="glyph" data-g="1" style="display:none">
+            <ellipse class="mot" cx="88" cy="156" rx="30" ry="22"/>
+            <path class="mot" d="M62 138 L58 116 L78 132 Z"/><path class="mot" d="M114 138 L118 116 L98 132 Z"/>
+            <circle class="mot-dot" cx="78" cy="152" r="3"/><circle class="mot-dot" cx="98" cy="152" r="3"/>
+            <path class="mot" d="M88 162 l0 12"/>
+          </g>
+          <g class="glyph" data-g="2" style="display:none">
+            <rect class="mot" x="56" y="138" width="64" height="26" rx="6"/>
+            <path class="mot" d="M64 138 L74 120 L104 120 L112 138"/>
+            <circle class="mot" cx="70" cy="170" r="9"/><circle class="mot" cx="106" cy="170" r="9"/>
+          </g>
+          <rect class="fr-on glyph-fr" x="28" y="90" width="120" height="120" rx="10" filter="url(#g3)" style="--a:1"/>
+
+          <!-- hidden layers L1,L2,L3 (3 nodes each) -->
+          <!-- helper: each node = base circle + goal overlay (.nd-on) -->
+          <g class="ndlayer" data-i="1">
+            <text class="ttl-s" x="252" y="64" text-anchor="middle">LAYER 1</text>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="252" cy="90"  r="14"/><circle class="fr-on nd-on" cx="252" cy="90"  r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="252" cy="150" r="14"/><circle class="fr-on nd-on" cx="252" cy="150" r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="252" cy="210" r="14"/><circle class="fr-on nd-on" cx="252" cy="210" r="14" filter="url(#g3)"/></g>
+          </g>
+          <g class="ndlayer" data-i="2">
+            <text class="ttl-s" x="412" y="64" text-anchor="middle">LAYER 2</text>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="412" cy="90"  r="14"/><circle class="fr-on nd-on" cx="412" cy="90"  r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="412" cy="150" r="14"/><circle class="fr-on nd-on" cx="412" cy="150" r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="412" cy="210" r="14"/><circle class="fr-on nd-on" cx="412" cy="210" r="14" filter="url(#g3)"/></g>
+          </g>
+          <g class="ndlayer" data-i="3">
+            <text class="ttl-s" x="572" y="64" text-anchor="middle">LAYER 3</text>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="572" cy="90"  r="14"/><circle class="fr-on nd-on" cx="572" cy="90"  r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="572" cy="150" r="14"/><circle class="fr-on nd-on" cx="572" cy="150" r="14" filter="url(#g3)"/></g>
+            <g class="nd" style="--a:1"><circle class="fr-base" cx="572" cy="210" r="14"/><circle class="fr-on nd-on" cx="572" cy="210" r="14" filter="url(#g3)"/></g>
+          </g>
+
+          <!-- LABEL column -->
+          <text class="ttl-s" x="800" y="64" text-anchor="middle">LABEL</text>
+          <g class="labelnode" data-l="0">
+            <rect class="fr-base" x="700" y="74" width="170" height="42" rx="21"/>
+            <text class="lab-s" x="785" y="101" text-anchor="middle">cat</text>
+            <rect class="fr-on lbl-on" x="700" y="74" width="170" height="42" rx="21" filter="url(#g3)" style="--a:1"/>
+            <text class="lab-g lbl-txt" x="785" y="101" text-anchor="middle" filter="url(#g3)" style="--a:1">cat</text>
+          </g>
+          <g class="labelnode" data-l="1">
+            <rect class="fr-base" x="700" y="129" width="170" height="42" rx="21"/>
+            <text class="lab-s" x="785" y="156" text-anchor="middle">dog</text>
+            <rect class="fr-on lbl-on" x="700" y="129" width="170" height="42" rx="21" filter="url(#g3)" style="--a:0"/>
+            <text class="lab-g lbl-txt" x="785" y="156" text-anchor="middle" filter="url(#g3)" style="--a:0">dog</text>
+          </g>
+          <g class="labelnode" data-l="2">
+            <rect class="fr-base" x="700" y="184" width="170" height="42" rx="21"/>
+            <text class="lab-s" x="785" y="211" text-anchor="middle">car</text>
+            <rect class="fr-on lbl-on" x="700" y="184" width="170" height="42" rx="21" filter="url(#g3)" style="--a:0"/>
+            <text class="lab-g lbl-txt" x="785" y="211" text-anchor="middle" filter="url(#g3)" style="--a:0">car</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="controls" role="group" aria-label="Pipeline controls">
+        <div class="grp" role="group" aria-label="Choose an input image">
+          <button class="btn pick" data-pick="0" aria-pressed="true">cat</button>
+          <button class="btn pick" data-pick="1" aria-pressed="false">dog</button>
+          <button class="btn pick" data-pick="2" aria-pressed="false">car</button>
+        </div>
+        <div class="grp">
+          <button class="btn primary" id="reveal">Reveal next ▸</button>
+          <button class="btn" id="reset">Reset</button>
+        </div>
+      </div>
+      <p class="status" id="b3status" aria-live="polite">Image “cat” — 0 of 3 layers revealed.</p>
+    </section>
+
+    <!-- ============ NODS · progressive disclosure ============ -->
+    <details class="nods">
+      <summary>Footnotes — the three things that lined up</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <p class="ny">2012</p>
+          <p class="nm">AlexNet</p>
+          <p class="nd">Krizhevsky, Sutskever &amp; Hinton won ILSVRC by a landslide with a deep convolutional net — the result that convinced the field depth wins.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Fuel</p>
+          <p class="nm">ImageNet + GPUs</p>
+          <p class="nd">A million labelled images gave the data; two consumer GPUs gave the compute. Scale that was finally large enough met an architecture finally deep enough.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Tricks</p>
+          <p class="nm">ReLU &amp; dropout</p>
+          <p class="nd">ReLU activations let gradients flow through many layers; dropout fought overfitting. Small ideas that made deep training actually trainable.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<!-- ===== bottom nav ===== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="11-game-playing.html"><span class="lab">◄ Prev</span><span class="ttl">Game-Playing</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="13-transformer.html"><span class="lab">Next ►</span><span class="ttl">The Transformer</span></a>
+</nav>
+
+<!-- ===== JS ===== -->
+<script>
+"use strict";
+(function(){
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){ reduce = false; }
+
+  /* ---------- BEAT 1 — activation sweep ---------- */
+  (function(){
+    var svg = document.getElementById('b1');
+    if(!svg) return;
+    var layers = Array.prototype.slice.call(svg.querySelectorAll('.lay'));
+    var arrows = ['a1','a2','a3','a4'].map(function(c){ return svg.querySelector('.'+c); });
+    var N = layers.length;
+    function set(arr){
+      layers.forEach(function(el,i){ el.style.setProperty('--a', arr[i].toFixed(3)); });
+      // an arrow lights with its downstream layer (arrows[k] feeds layer k+1)
+      arrows.forEach(function(el,k){ if(el) el.style.setProperty('--a', (arr[k+1]||0).toFixed(3)); });
+    }
+    if(reduce){ set([1,1,1,1,1]); return; }   // freeze fully lit
+    var t0 = null, raf = 0, cycle = 4600;
+    function frame(ts){
+      if(t0===null) t0 = ts;
+      var p = ((ts - t0) % cycle) / cycle;       // 0..1
+      var w = p < 0.78 ? (p/0.78)*N : N;          // wavefront sweeps then holds
+      var a = layers.map(function(_,i){ return Math.max(0, Math.min(1, w - i)); });
+      set(a);
+      raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+  })();
+
+  /* ---------- BEAT 2 — draw the timeline ---------- */
+  (function(){
+    var err = document.getElementById('b2-err');
+    var rest = document.getElementById('b2-rest');
+    if(!err || !rest) return;
+    if(reduce) return;                            // static = already drawn
+    function arm(path, delay, dur){
+      var len;
+      try { len = path.getTotalLength(); } catch(e){ return; }
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      var start = null;
+      function step(ts){
+        if(start===null) start = ts;
+        var t = ts - start - delay;
+        if(t < 0){ requestAnimationFrame(step); return; }
+        var k = Math.min(1, t/dur);
+        path.style.strokeDashoffset = (len*(1-k)).toFixed(2);
+        if(k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    arm(err, 200, 1700);
+    arm(rest, 1700, 1100);
+  })();
+
+  /* ---------- BEAT 3 — interactive reveal ---------- */
+  (function(){
+    var svg = document.getElementById('b3');
+    if(!svg) return;
+    var status = document.getElementById('b3status');
+    var revealBtn = document.getElementById('reveal');
+    var resetBtn = document.getElementById('reset');
+    var pickBtns = Array.prototype.slice.call(document.querySelectorAll('.pick'));
+    var ndlayers = Array.prototype.slice.call(svg.querySelectorAll('.ndlayer'));
+    var arrows = ['b-a1','b-a2','b-a3','b-a4'].map(function(c){ return svg.querySelector('.'+c); });
+    var glyphs = Array.prototype.slice.call(svg.querySelectorAll('.glyph'));
+    var labels = Array.prototype.slice.call(svg.querySelectorAll('.labelnode'));
+    var names = ['cat','dog','car'];
+
+    var pick = 0;      // correct label index == pick index here
+    var revealed = 0;  // 0..3 hidden layers shown
+    var MAX = 3;
+
+    function render(){
+      // input glyph
+      glyphs.forEach(function(g,i){ g.style.display = (i===pick)?'':'none'; });
+      // hidden layers light up to `revealed`
+      ndlayers.forEach(function(layer){
+        var idx = parseInt(layer.getAttribute('data-i'),10);
+        var on = idx <= revealed ? 1 : 0;
+        Array.prototype.slice.call(layer.querySelectorAll('.nd')).forEach(function(nd){
+          nd.style.setProperty('--a', on);
+        });
+      });
+      // arrows: arrow k (0..3) feeds layer k+1; arrow 3 feeds labels (active only when solved)
+      arrows.forEach(function(el,k){
+        if(!el) return;
+        var on;
+        if(k < MAX) on = (k+1) <= revealed ? 1 : 0;     // into layers 1..3
+        else on = (revealed >= MAX) ? 1 : 0;            // into label column
+        el.style.setProperty('--a', on);
+      });
+      // labels: only at full depth does the correct one fire
+      var solved = revealed >= MAX;
+      labels.forEach(function(lab){
+        var li = parseInt(lab.getAttribute('data-l'),10);
+        var lon = lab.querySelector('.lbl-on');
+        var ltx = lab.querySelector('.lbl-txt');
+        var v = (solved && li===pick) ? 1 : 0;
+        if(lon) lon.style.setProperty('--a', v);
+        if(ltx) ltx.style.setProperty('--a', v);
+        lab.style.opacity = (solved && li!==pick) ? 0.32 : 1;
+      });
+      // controls + status
+      revealBtn.disabled = solved;
+      revealBtn.textContent = solved ? 'Fully revealed' : 'Reveal next ▸';
+      if(solved){
+        status.innerHTML = 'Image “'+names[pick]+'” — full depth: <b>label “'+names[pick]+'” selected.</b>';
+      } else {
+        status.textContent = 'Image “'+names[pick]+'” — '+revealed+' of '+MAX+' layers revealed.';
+      }
+    }
+
+    revealBtn.addEventListener('click', function(){
+      if(revealed < MAX){ revealed++; render(); }
+    });
+    resetBtn.addEventListener('click', function(){ revealed = 0; render(); });
+    pickBtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        pick = parseInt(b.getAttribute('data-pick'),10);
+        pickBtns.forEach(function(o){ o.setAttribute('aria-pressed', o===b ? 'true':'false'); });
+        revealed = 0;
+        render();
+      });
+    });
+
+    // start collapsed (interactive); no-js state stayed fully revealed via markup defaults
+    revealed = 0;
+    render();
+  })();
+})();
+</script>
+</body>
+</html>

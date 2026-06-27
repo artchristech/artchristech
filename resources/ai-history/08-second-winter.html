@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second AI Winter (1987–1993) · A History of AI</title>
+
+<!-- ====== SHARED SHELL (verbatim) ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC STYLE (beats) ====== -->
+<style>
+  /* THIS IS A WINTER PAGE — cold, contracted, quiet */
+  body{--era:var(--winter);}
+
+  /* no-js / live fallback contract (GUIDELINE §f) */
+  .static{display:none;}
+  .live{display:block;}
+  .no-js .static{display:block;}
+  .no-js .live{display:none;}
+  .no-js .hint,.no-js .ctl{opacity:.4;}
+
+  /* beat-1 wall */
+  .brick{fill:var(--struct);fill-opacity:.10;stroke:var(--line);stroke-width:1;}
+  .brick.patch{fill:var(--error);fill-opacity:.13;stroke:var(--error);stroke-opacity:.35;}
+  .crack{fill:none;stroke:var(--error);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .case-dot{fill:var(--error);}
+  .chunk{transition:transform 1.2s cubic-bezier(.45,0,.55,1),opacity 1.2s ease;}
+  .chunk.go{transform:translate(7px,92px) rotate(3.5deg);opacity:.45;}
+
+  /* beat-2 curves */
+  .axis{stroke:var(--line);stroke-width:1;}
+  .axlab{fill:var(--dim);font-family:var(--mono);font-size:11px;letter-spacing:.04em;}
+  .curve{fill:none;stroke-width:3;stroke-linecap:round;}
+  .curve.cost{stroke:var(--error);}
+  .curve.value{stroke:var(--winter);}
+  .xover{fill:none;stroke:var(--error);stroke-width:1.6;}
+  .ghost{fill:none;stroke:var(--struct);stroke-opacity:.3;stroke-width:1.4;stroke-dasharray:4 5;}
+  .mkt{fill:var(--winter);fill-opacity:.5;}
+
+  /* beat-3 interactive */
+  .ctl{display:grid;gap:18px;padding:clamp(16px,3vw,26px);}
+  .ctl .rngrow{display:grid;gap:8px;}
+  .ctl label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);display:flex;justify-content:space-between;align-items:baseline;}
+  .ctl label .lv{color:var(--error);font-variant-numeric:tabular-nums;font-size:14px;}
+  .ctl input[type=range]{width:100%;accent-color:var(--era);cursor:pointer;height:22px;}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .stat{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:4px;}
+  .stat .k{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
+  .stat .v{font-family:var(--serif);font-size:clamp(26px,6vw,40px);line-height:1;font-variant-numeric:tabular-nums;}
+  .stat.patch .v{color:var(--error);}
+  .stat.integ .v{color:var(--struct);}
+  .barwrap{height:18px;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:rgba(255,255,255,.02);position:relative;}
+  .barfill{height:100%;width:60%;background:var(--struct);transition:width .18s linear,background .18s linear;}
+  .failzone{position:absolute;left:0;top:0;bottom:0;width:25%;background:repeating-linear-gradient(45deg,rgba(255,120,73,.16),rgba(255,120,73,.16) 5px,transparent 5px,transparent 10px);pointer-events:none;}
+  .verdict{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);min-height:1.3em;}
+  .verdict.fail{color:var(--error);}
+</style>
+</head>
+
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" class="winter" data-on><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" data-on><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="cur winter" aria-current="page"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 08 / 15</span> · Second AI Winter <span class="yrs">1987–1993</span></p>
+    <h1>The Second Winter</h1>
+    <p class="changed">Expert systems proved <b>brittle</b>; the LISP-machine market collapsed.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ========== BEAT 1 — CONCRETE ========== -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">The wall of rules cracks</h2>
+      <p class="cap">Every case got its own hand-laid rule — until new cases split the wall apart.</p>
+
+      <div class="stage">
+        <!-- LIVE (JS builds + animates the full wall here) -->
+        <svg class="live" id="wallSvg" viewBox="0 0 800 380" role="img"
+             aria-labelledby="wallT wallD" preserveAspectRatio="xMidYMid meet">
+          <title id="wallT">An expert-system rule wall fracturing under new cases</title>
+          <desc id="wallD">A wall built of rule-bricks. As new cases arrive they strike the wall, cracks spread between the bricks, and a section breaks loose and falls.</desc>
+        </svg>
+
+        <!-- STATIC fallback (JS off): already-cracked wall -->
+        <svg class="static" viewBox="0 0 800 380" role="img" aria-labelledby="wallSt wallSd" preserveAspectRatio="xMidYMid meet">
+          <title id="wallSt">A cracked expert-system rule wall</title>
+          <desc id="wallSd">A wall of rule-bricks crossed by coral cracks, with a corner section broken loose.</desc>
+          <g>
+            <rect class="brick" x="40" y="60"  width="150" height="34"/>
+            <rect class="brick" x="200" y="60" width="150" height="34"/>
+            <rect class="brick" x="360" y="60" width="150" height="34"/>
+            <rect class="brick" x="520" y="60" width="150" height="34"/>
+            <rect class="brick" x="40" y="104" width="110" height="34"/>
+            <rect class="brick" x="160" y="104" width="150" height="34"/>
+            <rect class="brick" x="320" y="104" width="150" height="34"/>
+            <rect class="brick" x="480" y="104" width="150" height="34"/>
+            <rect class="brick" x="40" y="148" width="150" height="34"/>
+            <rect class="brick" x="200" y="148" width="150" height="34"/>
+            <rect class="brick patch" x="360" y="148" width="150" height="34"/>
+            <rect class="brick patch" x="520" y="148" width="150" height="34"/>
+          </g>
+          <path class="crack" d="M400,60 L392,100 L408,140 L396,182"/>
+          <path class="crack" d="M250,104 L268,140 L244,178 L262,182"/>
+          <g transform="translate(7,92) rotate(3.5 600 170)" opacity=".45">
+            <rect class="brick patch" x="520" y="148" width="150" height="34"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--struct)"></span>hand-built rules</i>
+        <i><span class="sw" style="background:var(--error)"></span>new cases · cracks</i>
+      </div>
+    </section>
+
+    <!-- ========== BEAT 2 — ABSTRACT ========== -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">Cost up, value down — then collapse</h2>
+      <p class="cap">Upkeep climbed past worth; the specialized LISP-machine market then fell away.</p>
+
+      <div class="stage">
+        <!-- Default markup is the FINAL state (JS off / reduced-motion). JS rewinds, then animates to it. -->
+        <svg id="curveSvg" viewBox="0 0 800 360" role="img" aria-labelledby="curT curD" preserveAspectRatio="xMidYMid meet">
+          <title id="curT">Maintenance cost rising past business value, then the LISP-machine market collapsing</title>
+          <desc id="curD">Two curves cross: a coral maintenance-cost curve rising while a steel-blue business-value curve falls. After the crossover, the tall LISP-machine market column drops to almost nothing as cheap general hardware wins.</desc>
+
+          <!-- axes -->
+          <line class="axis" x1="58" y1="40" x2="58" y2="312"/>
+          <line class="axis" x1="58" y1="312" x2="772" y2="312"/>
+          <text class="axlab" x="58" y="332">1987</text>
+          <text class="axlab" x="492" y="332">1993</text>
+          <text class="axlab" x="14" y="48" transform="rotate(-90 14 48)">magnitude</text>
+
+          <!-- curves -->
+          <path id="costPath"  class="curve cost"  d="M64,300 C220,288 330,180 560,52"/>
+          <path id="valuePath" class="curve value" d="M64,64 C220,116 330,232 560,300"/>
+
+          <!-- crossover marker -->
+          <g id="xoverG">
+            <circle class="xover" cx="320" cy="190" r="13"/>
+            <text class="axlab" x="300" y="168" style="fill:var(--error)">crossover</text>
+          </g>
+
+          <!-- LISP-machine market column: ghost of former height + collapsed live bar -->
+          <rect class="ghost" x="636" y="56" width="96" height="256"/>
+          <rect id="mktBar" class="mkt" x="636" y="282" width="96" height="30"/>
+          <text class="axlab" x="628" y="332" style="fill:var(--winter)">LISP-machine market</text>
+        </svg>
+      </div>
+
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--error)"></span>maintenance cost (rising)</i>
+        <i><span class="sw" style="background:var(--winter)"></span>business value (falling)</i>
+      </div>
+    </section>
+
+    <!-- ========== BEAT 3 — INTERACTIVE ========== -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Add new cases · watch it fail</h2>
+      <p class="cap">Each new case needs more patch-rules; structural integrity slides toward failure.</p>
+
+      <div class="stage">
+        <div class="ctl">
+          <div class="rngrow">
+            <label for="cases">New cases the system must handle
+              <span class="lv" id="casesLv">18</span>
+            </label>
+            <input id="cases" type="range" min="0" max="50" value="18"
+                   aria-describedby="b3h" aria-label="Number of new cases the expert system must handle">
+          </div>
+
+          <div class="stats">
+            <div class="stat patch">
+              <span class="k">Patch-rules needed</span>
+              <span class="v" id="patchV">76</span>
+            </div>
+            <div class="stat integ">
+              <span class="k">Structural integrity</span>
+              <span class="v" id="integV">73%</span>
+            </div>
+          </div>
+
+          <div class="barwrap" role="img" id="barImg" aria-label="Structural integrity 73 percent">
+            <div class="failzone" aria-hidden="true"></div>
+            <div class="barfill" id="barFill"></div>
+          </div>
+
+          <p class="verdict" id="verdict">Brittle, but standing.</p>
+        </div>
+      </div>
+
+      <p class="hint">Drag — more cases, more patches, less integrity</p>
+    </section>
+
+    <!-- ====== NODS ====== -->
+    <details class="nods">
+      <summary>Footnotes &amp; nods</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <p class="ny">~1987</p>
+          <p class="nm">The market vanishes</p>
+          <p class="nd">The specialized LISP-machine business collapsed almost overnight as its reason to exist eroded.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Cheaper iron</p>
+          <p class="nm">General workstations win</p>
+          <p class="nd">Sun and other general-purpose machines ran the same work for far less — dedicated AI hardware lost.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Upkeep</p>
+          <p class="nm">Brittle &amp; costly</p>
+          <p class="nd">Expert systems couldn't generalize; every new case meant more hand-written rules to maintain.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="07-expert-systems.html"><span class="lab">◄ Prev</span><span class="ttl">Expert Systems</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="09-backprop.html"><span class="lab">Next ►</span><span class="ttl">Backprop</span></a>
+</nav>
+
+<!-- ====== SHELL JS SCAFFOLD ====== -->
+<script>
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+</script>
+
+<!-- ====== PAGE JS ====== -->
+<script>
+(function(){
+  'use strict';
+  var REDUCE = false;
+  try { REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  catch(e){ REDUCE = false; }
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function rafTween(dur, onUpdate, onDone){
+    var start = null;
+    function step(ts){
+      if(start === null) start = ts;
+      var t = Math.min(1, (ts - start) / dur);
+      onUpdate(t);
+      if(t < 1){ requestAnimationFrame(step); }
+      else if(onDone){ onDone(); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- BEAT 1: the rule wall ---------- */
+  (function wall(){
+    var svg = document.getElementById('wallSvg');
+    if(!svg) return;
+
+    var BW = 800, ROWH = 38, GAP = 6, TOP = 56, BOT = 366;
+    var rows = [];
+    var y, row, x, w;
+    // running-bond rows: alternate a half-brick offset
+    var offset = false;
+    for(y = TOP; y + ROWH <= BOT; y += ROWH + GAP){
+      row = [];
+      x = 18;
+      if(offset){ row.push({x:18, w:70, y:y}); x = 18 + 70 + GAP; }
+      while(x < BW - 18){
+        w = 142;
+        if(x + w > BW - 18){ w = (BW - 18) - x; }
+        if(w > 24) row.push({x:x, w:w, y:y});
+        x += w + GAP;
+      }
+      rows.push(row);
+      offset = !offset;
+    }
+
+    // build bricks; mark bottom-right region as the chunk that will break loose
+    var chunk = document.createElementNS(SVGNS,'g');
+    chunk.setAttribute('class','chunk');
+    var bricks = [];
+    rows.forEach(function(r){
+      r.forEach(function(b){
+        var rect = document.createElementNS(SVGNS,'rect');
+        rect.setAttribute('class','brick');
+        rect.setAttribute('x', b.x); rect.setAttribute('y', b.y);
+        rect.setAttribute('width', b.w); rect.setAttribute('height', ROWH);
+        rect.setAttribute('rx','1.5');
+        var inChunk = (b.x > 540 && b.y > 250);
+        if(inChunk){ rect.setAttribute('class','brick patch'); chunk.appendChild(rect); }
+        else { svg.appendChild(rect); }
+        bricks.push(rect);
+      });
+    });
+    svg.appendChild(chunk);
+
+    // fixed jagged cracks (coral) — load-bearing motion: cases splitting the wall
+    var crackD = [
+      'M400,60 L390,108 L410,156 L394,204 L408,252 L396,300',
+      'M250,104 L270,150 L242,196 L264,242 L248,300',
+      'M560,250 L546,290 L572,322 L556,360',
+      'M650,200 L672,240 L644,282 L668,322 L650,360'
+    ];
+    var cracks = crackD.map(function(d){
+      var p = document.createElementNS(SVGNS,'path');
+      p.setAttribute('class','crack');
+      p.setAttribute('d', d);
+      svg.appendChild(p);
+      return p;
+    });
+
+    function lenOf(p){ try { return p.getTotalLength(); } catch(e){ return 0; } }
+
+    if(REDUCE){
+      // final static state: cracks shown, chunk displaced
+      chunk.classList.add('go');
+      return;
+    }
+
+    // animate: hide cracks, then reveal one per "case" impact, then drop the chunk
+    cracks.forEach(function(p){
+      var L = lenOf(p);
+      p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+    });
+
+    var i = 0;
+    function dropCase(){
+      if(i >= cracks.length){
+        chunk.classList.add('go');
+        return;
+      }
+      var p = cracks[i];
+      var L = lenOf(p);
+      // a coral case-dot falls from the top to the crack origin, then crack spreads
+      var dot = document.createElementNS(SVGNS,'circle');
+      dot.setAttribute('class','case-dot'); dot.setAttribute('r','5');
+      var dm = /M([\d.]+),([\d.]+)/.exec(p.getAttribute('d'));
+      var ox = dm ? parseFloat(dm[1]) : 400;
+      var oy = dm ? parseFloat(dm[2]) : 60;
+      dot.setAttribute('cx', ox); dot.setAttribute('cy', 10);
+      svg.appendChild(dot);
+      rafTween(420, function(t){
+        dot.setAttribute('cy', 10 + (oy - 10) * t);
+      }, function(){
+        if(dot.parentNode) dot.parentNode.removeChild(dot);
+        rafTween(520, function(t){
+          p.style.strokeDashoffset = L * (1 - t);
+        }, function(){
+          i++;
+          setTimeout(dropCase, 520);
+        });
+      });
+    }
+    setTimeout(dropCase, 500);
+  })();
+
+  /* ---------- BEAT 2: cost vs value + market collapse ---------- */
+  (function curves(){
+    var svg = document.getElementById('curveSvg');
+    if(!svg) return;
+    var cost = document.getElementById('costPath');
+    var value = document.getElementById('valuePath');
+    var xover = document.getElementById('xoverG');
+    var bar = document.getElementById('mktBar');
+    if(!cost || !value || !bar) return;
+
+    function lenOf(p){ try { return p.getTotalLength(); } catch(e){ return 0; } }
+    var TALL_Y = 56, TALL_H = 256, LOW_Y = 282, LOW_H = 30;
+
+    if(REDUCE){ return; } // markup already holds final state
+
+    // rewind to start state
+    var lc = lenOf(cost), lv = lenOf(value);
+    cost.style.strokeDasharray = lc; cost.style.strokeDashoffset = lc;
+    value.style.strokeDasharray = lv; value.style.strokeDashoffset = lv;
+    if(xover){ xover.style.opacity = '0'; xover.style.transition = 'opacity .5s ease'; }
+    // market starts tall (before collapse)
+    bar.setAttribute('y', TALL_Y); bar.setAttribute('height', TALL_H);
+
+    var seen = false;
+    function play(){
+      if(seen) return; seen = true;
+      rafTween(1300, function(t){
+        cost.style.strokeDashoffset = lc * (1 - t);
+        value.style.strokeDashoffset = lv * (1 - t);
+      }, function(){
+        if(xover) xover.style.opacity = '1';
+        setTimeout(function(){
+          rafTween(700, function(t){
+            // sharp collapse of the LISP-machine market
+            var e = t * t; // ease-in: a drop
+            bar.setAttribute('y', TALL_Y + (LOW_Y - TALL_Y) * e);
+            bar.setAttribute('height', TALL_H + (LOW_H - TALL_H) * e);
+          });
+        }, 420);
+      });
+    }
+
+    // play when scrolled into view (guarded)
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(ents){
+        ents.forEach(function(en){ if(en.isIntersecting){ play(); io.disconnect(); } });
+      }, {threshold:.4});
+      io.observe(svg);
+    } else {
+      play();
+    }
+  })();
+
+  /* ---------- BEAT 3: new-cases slider ---------- */
+  (function slider(){
+    var rng = document.getElementById('cases');
+    var casesLv = document.getElementById('casesLv');
+    var patchV = document.getElementById('patchV');
+    var integV = document.getElementById('integV');
+    var fill = document.getElementById('barFill');
+    var verdict = document.getElementById('verdict');
+    var barImg = document.getElementById('barImg');
+    if(!rng || !patchV || !integV || !fill || !verdict) return;
+
+    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+    function update(){
+      var c = parseInt(rng.value, 10) || 0;
+      // patch-rules explode super-linearly with cases
+      var patches = Math.round(c * 2 + c * c * 0.18);
+      // integrity slides toward failure
+      var integ = clamp(Math.round(100 - c * 0.4 - c * c * 0.044), 0, 100);
+
+      if(casesLv) casesLv.textContent = c;
+      patchV.textContent = patches;
+      integV.textContent = integ + '%';
+      fill.style.width = integ + '%';
+
+      // sand while sound, coral as it fails
+      var failing = integ <= 25;
+      fill.style.background = failing ? 'var(--error)' : (integ <= 55 ? 'var(--struct)' : 'var(--struct)');
+      if(integ <= 25) fill.style.background = 'var(--error)';
+      else if(integ <= 55) fill.style.background = 'linear-gradient(90deg,var(--error),var(--struct))';
+      else fill.style.background = 'var(--struct)';
+
+      if(barImg) barImg.setAttribute('aria-label', 'Structural integrity ' + integ + ' percent');
+
+      if(integ <= 0){ verdict.textContent = 'Structure fails — winter.'; verdict.className = 'verdict fail'; }
+      else if(integ <= 25){ verdict.textContent = 'Collapsing under its own rules.'; verdict.className = 'verdict fail'; }
+      else if(integ <= 60){ verdict.textContent = 'Patches everywhere · barely holding.'; verdict.className = 'verdict'; }
+      else { verdict.textContent = 'Brittle, but standing.'; verdict.className = 'verdict'; }
+    }
+
+    rng.addEventListener('input', update);
+    update();
+  })();
+
+})();
+</script>
+</body>
+</html>

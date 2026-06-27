@@ -1,0 +1,136 @@
+<!-- ============================================================
+     SHARED SHELL — "A History of AI" 15-page masterpiece
+     Every era page inlines THIS verbatim (style + masthead + nav).
+     Fill the {{PLACEHOLDERS}} and drop your beats into <main>.
+     The design system is GUIDELINE.md §c (semantic color tokens).
+     ============================================================ -->
+
+<!-- ====== PASTE INTO <head> ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== MASTHEAD (paste at top of .wrap) ====== -->
+<!-- progress rail: 15 links; mark current with class="cur", winters (06,08) with class="winter",
+     earlier-than-current with data-on. href points to each era file. -->
+<nav class="rail" aria-label="Timeline position">
+  <!-- 15 <a> ticks generated per page; current era gets class="cur" -->
+</nav>
+
+<header class="mast">
+  <p class="kicker"><span class="eranum">{{ERANUM e.g. Era 03 / 15}}</span> · {{ERA NAME}} <span class="yrs">{{YEARS}}</span></p>
+  <h1>{{TITLE}}</h1>
+  <p class="changed">{{≤12-word "what changed" — wrap the pivotal phrase in <b>…</b>}}</p>
+</header>
+
+<!-- ====== <main> holds your 2–3 beats (see GUIDELINE §d) ====== -->
+
+<!-- ====== BOTTOM NAV (paste before </body>) ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="{{PREV.html or # with class dis}}"><span class="lab">◄ Prev</span><span class="ttl">{{prev name}}</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="{{NEXT.html or # with class dis}}"><span class="lab">Next ►</span><span class="ttl">{{next name}}</span></a>
+</nav>
+
+<!-- ====== JS SCAFFOLD (paste before </body>) ====== -->
+<script>
+  document.body.classList.remove('no-js');           /* enable live versions */
+  document.body.classList.add('js');
+</script>
+
+<!-- NO-JS / REDUCED-MOTION CONTRACT (GUIDELINE §f):
+     - <body class="no-js"> by default; the line above removes it when JS runs.
+     - CSS .no-js .live{display:none} / .no-js .static{display:block} so a static
+       fallback shows with JS off. The reduced-motion media query above also freezes
+       all animation; pin live elements at a representative frame in your rAF guard.
+     - strict mode, guard every getElementById, bail if a canvas ctx is null. -->
+
+<!-- ORDERED FILE LIST (for prev/next + rail hrefs):
+  01-cybernetics.html · 02-turing.html · 03-dartmouth.html · 04-symbolic-ai.html ·
+  05-perceptron.html · 06-first-winter.html · 07-expert-systems.html · 08-second-winter.html ·
+  09-backprop.html · 10-statistical-ai.html · 11-game-playing.html · 12-alexnet.html ·
+  13-transformer.html · 14-scaling-laws.html · 15-generative-agentic.html · index.html -->

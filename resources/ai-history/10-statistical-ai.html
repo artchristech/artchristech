@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistical AI · A History of AI (10/15)</title>
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  body{--era:var(--boom);}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- interactive controls ---- */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .controls button{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink);background:var(--era);border:none;border-radius:6px;padding:9px 16px;cursor:pointer;}
+  .controls button.ghost{background:transparent;color:var(--era);border:1px solid var(--line);}
+  .controls button:focus-visible{outline:2px solid var(--paper);outline-offset:2px;}
+  .readout{font-size:11px;letter-spacing:.1em;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .readout b{color:var(--rest);font-weight:400;}
+  .readout .e{color:var(--error);}
+
+  /* ---- no-js / live swap ---- */
+  .live{display:block;} .static{display:none;}
+  .no-js .live{display:none;} .no-js .static{display:block;}
+  .no-js .controls{display:none;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on title="Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on title="Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on title="Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on title="Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on title="Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" data-on class="winter" title="First Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" data-on title="Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" data-on class="winter" title="Second Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" data-on title="Backprop"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" class="cur" aria-current="page" title="Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" title="Game-Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" title="AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" title="Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" title="Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" title="Generative &amp; Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 10 / 15</span> · Statistical AI <span class="yrs">1990s–2000s</span></p>
+    <h1>Statistical AI</h1>
+    <p class="changed">From hand-rules to <b>probability and data</b> — let the numbers decide.</p>
+  </header>
+
+  <main>
+
+    <!-- ===================== BEAT 1 — CONCRETE ===================== -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">A belief that sharpens</h2>
+      <p class="cap">A wide guess about a hidden value; each datum slides and tightens it toward the truth.</p>
+      <div class="stage">
+        <canvas class="live" id="c1" width="600" height="260"
+          aria-label="A broad coral belief curve over a hidden value. As data points appear on the axis one by one, the curve slides toward the true value and narrows into a tall, confident green peak."></canvas>
+        <svg class="static" viewBox="0 0 600 260" role="img" aria-labelledby="s1t s1d" preserveAspectRatio="xMidYMid meet">
+          <title id="s1t">Belief sharpening</title>
+          <desc id="s1d">A wide low coral curve of uncertainty and a narrow tall green peak both shown over a hidden true value marked in teal.</desc>
+          <line x1="42" y1="220" x2="558" y2="220" stroke="#E8DCC0" stroke-opacity=".5"/>
+          <line x1="362" y1="40" x2="362" y2="220" stroke="#19E3C1" stroke-width="2" stroke-dasharray="5 5"/>
+          <path d="M42 214 Q200 150 300 154 Q420 158 558 210" fill="none" stroke="#FF7849" stroke-width="2.5" stroke-opacity=".8"/>
+          <path d="M300 220 Q352 44 362 44 Q372 44 424 220 Z" fill="#9EF01A" fill-opacity=".14" stroke="#9EF01A" stroke-width="2.5"/>
+          <text x="48" y="246" fill="#FF7849" font-family="monospace" font-size="12">wide guess</text>
+          <text x="496" y="246" fill="#19E3C1" font-family="monospace" font-size="12">truth</text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--error)"></span>coral = uncertain spread</i>
+        <i><span class="sw" style="background:var(--rest)"></span>green = confident peak</i>
+        <i><span class="sw" style="background:var(--goal)"></span>teal = hidden truth</i>
+      </div>
+    </section>
+
+    <!-- ===================== BEAT 2 — ABSTRACT ===================== -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">Prior × likelihood</h2>
+      <p class="cap">Same mechanism, stripped: a prior, multiplied by each datum's likelihood, gives a tighter posterior.</p>
+      <div class="stage">
+        <canvas class="live" id="c2" width="600" height="260"
+          aria-label="Three curves: a broad sand prior, a coral likelihood that narrows as more data multiply in, and a green posterior — their product — that tightens onto the truth."></canvas>
+        <svg class="static" viewBox="0 0 600 260" role="img" aria-labelledby="s2t s2d" preserveAspectRatio="xMidYMid meet">
+          <title id="s2t">Bayes rule as curves</title>
+          <desc id="s2d">A broad sand prior times a coral likelihood yields a narrow green posterior centered on the truth.</desc>
+          <line x1="42" y1="220" x2="558" y2="220" stroke="#E8DCC0" stroke-opacity=".5"/>
+          <path d="M42 196 Q260 96 300 100 Q360 104 558 188" fill="none" stroke="#E8DCC0" stroke-width="2.2" stroke-opacity=".6"/>
+          <path d="M210 220 Q352 70 372 70 Q392 70 470 220" fill="none" stroke="#FF7849" stroke-width="2.2" stroke-opacity=".85"/>
+          <path d="M300 220 Q360 46 372 46 Q384 46 444 220 Z" fill="#9EF01A" fill-opacity=".14" stroke="#9EF01A" stroke-width="2.6"/>
+          <text x="48" y="246" fill="#E8DCC0" font-family="monospace" font-size="12">prior</text>
+          <text x="252" y="246" fill="#FF7849" font-family="monospace" font-size="12">likelihood</text>
+          <text x="470" y="246" fill="#9EF01A" font-family="monospace" font-size="12">posterior</text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--struct)"></span>prior belief</i>
+        <i><span class="sw" style="background:var(--error)"></span>likelihood of data</i>
+        <i><span class="sw" style="background:var(--rest)"></span>posterior = product</i>
+      </div>
+    </section>
+
+    <!-- ===================== BEAT 3 — INTERACTIVE ===================== -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Add data, watch it tighten</h2>
+      <p class="cap">Click to add observations. More data narrows the posterior around the true value.</p>
+      <div class="stage">
+        <canvas class="live" id="c3" width="600" height="260" tabindex="0" role="button"
+          aria-label="Interactive: click or press Enter to add a data point. The posterior curve tightens around the teal true value with every observation; the uncertainty readout shrinks."></canvas>
+        <svg class="static" viewBox="0 0 600 260" role="img" aria-labelledby="s3t s3d" preserveAspectRatio="xMidYMid meet">
+          <title id="s3t">More data, less uncertainty</title>
+          <desc id="s3d">A narrow green posterior pinned on the teal true value after many observations.</desc>
+          <line x1="42" y1="220" x2="558" y2="220" stroke="#E8DCC0" stroke-opacity=".5"/>
+          <line x1="362" y1="40" x2="362" y2="220" stroke="#19E3C1" stroke-width="2" stroke-dasharray="5 5"/>
+          <path d="M312 220 Q356 50 362 50 Q368 50 412 220 Z" fill="#9EF01A" fill-opacity=".14" stroke="#9EF01A" stroke-width="2.6"/>
+          <text x="496" y="246" fill="#19E3C1" font-family="monospace" font-size="12">truth</text>
+        </svg>
+      </div>
+      <div class="controls">
+        <button id="b3add" type="button">+ Add data</button>
+        <button id="b3ten" class="ghost" type="button">+10</button>
+        <button id="b3reset" class="ghost" type="button">Reset</button>
+        <span class="readout" id="b3read">data: <b>0</b> · uncertainty: <span class="e">wide</span></span>
+      </div>
+      <p class="hint" aria-hidden="true">Tap the chart to add a point</p>
+    </section>
+
+    <details class="nods">
+      <summary>Field notes · the statistical turn</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <div class="ny">1988</div>
+          <div class="nm">Bayesian networks</div>
+          <div class="nd">Judea Pearl gave probability a graph: nodes are variables, edges carry belief that propagates as evidence arrives.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">Speech</div>
+          <div class="nm">HMMs &amp; SVMs</div>
+          <div class="nd">Hidden Markov models drove speech recognition; kernel methods and support-vector machines won on the margin.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">Jelinek</div>
+          <div class="nm">"Fire a linguist"</div>
+          <div class="nd">"Every time I fire a linguist, the system gets better." Data and statistics outran hand-written rules.</div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="09-backprop.html"><span class="lab">◄ Prev</span><span class="ttl">Backprop</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="11-game-playing.html"><span class="lab">Next ►</span><span class="ttl">Game-Playing</span></a>
+</nav>
+
+<script>
+"use strict";
+(function(){
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+
+  var SQRT2PI = Math.sqrt(2*Math.PI);
+  var reduce = false;
+  try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ reduce = false; }
+
+  function randn(){
+    var u=0,v=0;
+    while(u===0){u=Math.random();}
+    while(v===0){v=Math.random();}
+    return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+  }
+
+  // size a canvas for its container at the right DPR; returns CSS-pixel dims
+  function fit(cv){
+    var dpr = window.devicePixelRatio||1;
+    var cssW = cv.clientWidth || cv.parentNode.clientWidth || 600;
+    var cssH = Math.max(190, Math.min(300, cssW*0.43));
+    cv.style.height = cssH+'px';
+    cv.width = Math.round(cssW*dpr);
+    cv.height = Math.round(cssH*dpr);
+    var ctx = cv.getContext('2d');
+    if(!ctx){ return null; }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {ctx:ctx,W:cssW,H:cssH};
+  }
+
+  // mix two #rrggbb colors
+  function mix(a,b,t){
+    var pa=[parseInt(a.slice(1,3),16),parseInt(a.slice(3,5),16),parseInt(a.slice(5,7),16)];
+    var pb=[parseInt(b.slice(1,3),16),parseInt(b.slice(3,5),16),parseInt(b.slice(5,7),16)];
+    var r=Math.round(pa[0]+(pb[0]-pa[0])*t),g=Math.round(pa[1]+(pb[1]-pa[1])*t),bl=Math.round(pa[2]+(pb[2]-pa[2])*t);
+    return 'rgb('+r+','+g+','+bl+')';
+  }
+
+  var COL = {goal:'#19E3C1',error:'#FF7849',rest:'#9EF01A',struct:'#E8DCC0'};
+  var PAD = 0.07, TRUTH = 0.62;
+  var M0 = 0.30, V0 = 0.05, DV = 0.025;          // prior mean/var, data var
+  var SIG0 = Math.sqrt(V0), SIGMIN = 0.043;
+
+  function xMap(t,W){ return W*PAD + t*W*(1-2*PAD); }
+
+  // posterior over the mean given data array (Gaussian, known variance)
+  function posterior(data){
+    var n=data.length, sum=0,i;
+    for(i=0;i<n;i++){ sum+=data[i]; }
+    var prec = 1/V0 + n/DV;
+    var v = 1/prec;
+    var mean = v*(M0/V0 + sum/DV);
+    return {mu:mean, sigma:Math.sqrt(v)};
+  }
+
+  // draw an axis + truth line; returns geometry
+  function frame(ctx,W,H,showTruth){
+    ctx.clearRect(0,0,W,H);
+    var base = H-30, top = 24, drawH = base-top;
+    ctx.strokeStyle='rgba(232,220,192,.45)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(W*PAD-6,base); ctx.lineTo(W*(1-PAD)+6,base); ctx.stroke();
+    if(showTruth){
+      var xt=xMap(TRUTH,W);
+      ctx.strokeStyle=COL.goal; ctx.lineWidth=2; ctx.setLineDash([5,5]);
+      ctx.beginPath(); ctx.moveTo(xt,top-4); ctx.lineTo(xt,base); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=COL.goal; ctx.font='11px ui-monospace,monospace'; ctx.textAlign='center';
+      ctx.fillText('truth',xt,top-9);
+    }
+    return {base:base,top:top,drawH:drawH};
+  }
+
+  // draw a true-pdf curve: narrow => tall (confidence reads as height)
+  function pdfCurve(ctx,W,g,mu,sigma,color,fillA){
+    var scale = g.drawH/8.6;
+    var peak = 1/(sigma*SQRT2PI);
+    var i,t,y,px,py,started=false;
+    ctx.beginPath();
+    for(i=0;i<=120;i++){
+      t=i/120;
+      y = peak*Math.exp(-((t-mu)*(t-mu))/(2*sigma*sigma))*scale;
+      if(y>g.drawH){ y=g.drawH; }
+      px=xMap(t,W); py=g.base-y;
+      if(!started){ ctx.moveTo(px,py); started=true; } else { ctx.lineTo(px,py); }
+    }
+    if(fillA){
+      ctx.lineTo(xMap(1,W),g.base); ctx.lineTo(xMap(0,W),g.base); ctx.closePath();
+      ctx.fillStyle=fillA; ctx.fill();
+      ctx.beginPath();
+      started=false;
+      for(i=0;i<=120;i++){
+        t=i/120;
+        y=peak*Math.exp(-((t-mu)*(t-mu))/(2*sigma*sigma))*scale; if(y>g.drawH){y=g.drawH;}
+        px=xMap(t,W); py=g.base-y;
+        if(!started){ctx.moveTo(px,py);started=true;}else{ctx.lineTo(px,py);}
+      }
+    }
+    ctx.strokeStyle=color; ctx.lineWidth=2.6; ctx.stroke();
+  }
+
+  // fixed-peak normalized curve (for the Bayes comparison beat)
+  function normCurve(ctx,W,g,mu,sigma,color,fillA,label){
+    var i,t,y,px,py,started=false, peakH=g.drawH*0.82;
+    if(fillA){
+      ctx.beginPath();
+      for(i=0;i<=120;i++){ t=i/120; y=peakH*Math.exp(-((t-mu)*(t-mu))/(2*sigma*sigma));
+        px=xMap(t,W); py=g.base-y; if(!started){ctx.moveTo(px,py);started=true;}else{ctx.lineTo(px,py);} }
+      ctx.lineTo(xMap(1,W),g.base); ctx.lineTo(xMap(0,W),g.base); ctx.closePath();
+      ctx.fillStyle=fillA; ctx.fill(); started=false;
+    }
+    ctx.beginPath();
+    for(i=0;i<=120;i++){ t=i/120; y=peakH*Math.exp(-((t-mu)*(t-mu))/(2*sigma*sigma));
+      px=xMap(t,W); py=g.base-y; if(!started){ctx.moveTo(px,py);started=true;}else{ctx.lineTo(px,py);} }
+    ctx.strokeStyle=color; ctx.lineWidth=2.4; ctx.stroke();
+    if(label){
+      var lx=xMap(mu,W), ly=g.base-peakH*Math.exp(0)-8;
+      ctx.fillStyle=color; ctx.font='11px ui-monospace,monospace'; ctx.textAlign='center';
+      ctx.fillText(label,lx,Math.max(g.top+2,ly));
+    }
+  }
+
+  function ticks(ctx,W,g,data){
+    var i,x; ctx.strokeStyle=COL.struct; ctx.lineWidth=1.4;
+    for(i=0;i<data.length;i++){ x=xMap(data[i],W);
+      ctx.globalAlpha=.55; ctx.beginPath(); ctx.moveTo(x,g.base); ctx.lineTo(x,g.base+7); ctx.stroke(); }
+    ctx.globalAlpha=1;
+  }
+
+  // ---------- BEAT 1 : auto-playing belief sharpening ----------
+  (function(){
+    var cv=document.getElementById('c1'); if(!cv){return;}
+    var dim=fit(cv); if(!dim){return;}
+    var data=[], cur={mu:M0,sigma:SIG0}, tgt={mu:M0,sigma:SIG0};
+    var N=12, raf=0, lastAdd=0, holding=0;
+
+    function render(){
+      var g=frame(dim.ctx,dim.W,dim.H,true);
+      var t=(SIG0-cur.sigma)/(SIG0-SIGMIN); if(t<0){t=0;} if(t>1){t=1;}
+      var c=mix(COL.error,COL.rest,t);
+      var fa = 'rgba('+(t>.5?'158,240,26':'255,120,73')+','+(0.05+0.12*t).toFixed(3)+')';
+      pdfCurve(dim.ctx,dim.W,g,cur.mu,cur.sigma,c,fa);
+      ticks(dim.ctx,dim.W,g,data);
+      dim.ctx.fillStyle=COL.error; dim.ctx.font='11px ui-monospace,monospace'; dim.ctx.textAlign='left';
+      dim.ctx.globalAlpha=(1-t); dim.ctx.fillText('uncertain',dim.W*PAD,dim.H-10); dim.ctx.globalAlpha=1;
+    }
+    function addDatum(){ data.push(Math.max(0.06,Math.min(0.94,TRUTH+randn()*Math.sqrt(DV)))); var p=posterior(data); tgt=p; }
+
+    if(reduce){
+      var i; for(i=0;i<N;i++){ addDatum(); } cur={mu:tgt.mu,sigma:tgt.sigma}; render(); return;
+    }
+    function loop(ts){
+      if(!lastAdd){ lastAdd=ts; }
+      if(holding){
+        if(ts-holding>1600){ data=[]; tgt={mu:M0,sigma:SIG0}; cur={mu:M0,sigma:SIG0}; holding=0; lastAdd=ts; }
+      } else if(ts-lastAdd>760){
+        if(data.length<N){ addDatum(); lastAdd=ts; } else { holding=ts; }
+      }
+      cur.mu += (tgt.mu-cur.mu)*0.14;
+      cur.sigma += (tgt.sigma-cur.sigma)*0.14;
+      render();
+      raf=requestAnimationFrame(loop);
+    }
+    raf=requestAnimationFrame(loop);
+    window.addEventListener('resize',function(){ var d=fit(cv); if(d){dim=d; render();} });
+  })();
+
+  // ---------- BEAT 2 : prior × likelihood → posterior ----------
+  (function(){
+    var cv=document.getElementById('c2'); if(!cv){return;}
+    var dim=fit(cv); if(!dim){return;}
+    var priorMu=0.34, priorSig=0.20, likeMu=TRUTH, NMAX=8;
+    var n=1, dir=1, raf=0, last=0, pause=0;
+
+    function curvesFor(nn){
+      var likeSig=0.165/Math.sqrt(nn);
+      var pv=priorSig*priorSig, lv=likeSig*likeSig;
+      var postVar=1/(1/pv+1/lv);
+      var postMu=postVar*(priorMu/pv+likeMu/lv);
+      return {likeSig:likeSig,postMu:postMu,postSig:Math.sqrt(postVar)};
+    }
+    function render(nn){
+      var g=frame(dim.ctx,dim.W,dim.H,false);
+      var c=curvesFor(nn);
+      normCurve(dim.ctx,dim.W,g,priorMu,priorSig,'rgba(232,220,192,.65)',null,'prior');
+      normCurve(dim.ctx,dim.W,g,likeMu,c.likeSig,COL.error,null,'likelihood');
+      normCurve(dim.ctx,dim.W,g,c.postMu,c.postSig,COL.rest,'rgba(158,240,26,.13)','posterior');
+      dim.ctx.fillStyle=COL.struct; dim.ctx.font='11px ui-monospace,monospace'; dim.ctx.textAlign='right';
+      dim.ctx.globalAlpha=.7; dim.ctx.fillText('×'+nn+' data',dim.W*(1-PAD),dim.H-10); dim.ctx.globalAlpha=1;
+    }
+    if(reduce){ render(6); return; }
+    function loop(ts){
+      if(!last){last=ts;}
+      if(pause){ if(ts-pause>1400){ pause=0; last=ts; n=1; dir=1; } }
+      else if(ts-last>520){
+        n+=dir; if(n>=NMAX){ n=NMAX; pause=ts; } last=ts;
+      }
+      render(n);
+      raf=requestAnimationFrame(loop);
+    }
+    raf=requestAnimationFrame(loop);
+    window.addEventListener('resize',function(){ var d=fit(cv); if(d){dim=d; render(n);} });
+  })();
+
+  // ---------- BEAT 3 : interactive ----------
+  (function(){
+    var cv=document.getElementById('c3'); if(!cv){return;}
+    var dim=fit(cv); if(!dim){return;}
+    var read=document.getElementById('b3read');
+    var data=[], cur={mu:M0,sigma:SIG0}, tgt={mu:M0,sigma:SIG0}, raf=0, animating=false;
+
+    function uncertWord(s){
+      if(s>0.16){return ['wide','e'];}
+      if(s>0.10){return ['narrowing','e'];}
+      if(s>0.065){return ['tight','b'];}
+      return ['sharp','b'];
+    }
+    function updateRead(){
+      var w=uncertWord(tgt.sigma);
+      if(read){ read.innerHTML='data: <b>'+data.length+'</b> · uncertainty: <span class="'+(w[1])+'">'+w[0]+'</span>'; }
+    }
+    function render(){
+      var g=frame(dim.ctx,dim.W,dim.H,true);
+      var t=(SIG0-cur.sigma)/(SIG0-SIGMIN); if(t<0){t=0;} if(t>1){t=1;}
+      var c=mix(COL.error,COL.rest,t);
+      var fa='rgba('+(t>.5?'158,240,26':'255,120,73')+','+(0.05+0.12*t).toFixed(3)+')';
+      pdfCurve(dim.ctx,dim.W,g,cur.mu,cur.sigma,c,fa);
+      ticks(dim.ctx,dim.W,g,data);
+      if(data.length===0){
+        dim.ctx.fillStyle='rgba(244,246,245,.4)'; dim.ctx.font='12px ui-monospace,monospace'; dim.ctx.textAlign='center';
+        dim.ctx.fillText('click to add data',dim.W/2,g.base-g.drawH*0.5);
+      }
+    }
+    function ease(){
+      cur.mu+=(tgt.mu-cur.mu)*0.18; cur.sigma+=(tgt.sigma-cur.sigma)*0.18;
+      render();
+      if(Math.abs(tgt.mu-cur.mu)>0.0008||Math.abs(tgt.sigma-cur.sigma)>0.0008){ raf=requestAnimationFrame(ease); }
+      else { cur.mu=tgt.mu; cur.sigma=tgt.sigma; render(); animating=false; }
+    }
+    function bump(){ if(reduce){ cur.mu=tgt.mu; cur.sigma=tgt.sigma; render(); return; }
+      if(!animating){ animating=true; raf=requestAnimationFrame(ease); } }
+    function add(k){ var i; for(i=0;i<k;i++){ data.push(Math.max(0.06,Math.min(0.94,TRUTH+randn()*Math.sqrt(DV)))); }
+      tgt=posterior(data); updateRead(); bump(); }
+    function reset(){ data=[]; tgt={mu:M0,sigma:SIG0}; if(reduce){cur={mu:M0,sigma:SIG0};} updateRead(); bump(); }
+
+    var bA=document.getElementById('b3add'), bT=document.getElementById('b3ten'), bR=document.getElementById('b3reset');
+    if(bA){ bA.addEventListener('click',function(){add(1);}); }
+    if(bT){ bT.addEventListener('click',function(){add(10);}); }
+    if(bR){ bR.addEventListener('click',reset); }
+    cv.addEventListener('click',function(){add(1);});
+    cv.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); add(1); } });
+
+    updateRead(); render();
+    window.addEventListener('resize',function(){ var d=fit(cv); if(d){dim=d; render();} });
+  })();
+
+})();
+</script>
+</body>
+</html>

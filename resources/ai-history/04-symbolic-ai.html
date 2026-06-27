@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reasoning by Search — Symbolic AI (GOFAI) · A History of AI</title>
+<!--
+  ==========================================================================
+  ERA 04 / 15 — SYMBOLIC AI (GOFAI), 1956–1974 — instance of ../GUIDELINE.md
+  Subject shape: SEARCH (a process explored through a space).
+  Three beats, concrete → abstract → interactive:
+    BEAT 1  CONCRETE     a maze solved by exploring + backtracking (means-ends).
+    BEAT 2  ABSTRACT     the same as a search TREE expanding toward a goal node.
+    BEAT 3  INTERACTIVE  press Step; branches multiply → combinatorial explosion.
+  Semantic tokens (fixed meaning): --goal teal = goal node/cell sought;
+    --error coral = frontier / unexplored distance; --rest chartreuse = solution
+    path; --struct sand = walls / expanded mechanism; --ink = ground.
+  No network. Inline. Strict-mode vanilla JS. Canvas + SVG. Reduced-motion +
+  JS-off fallbacks. Reflows to ~375px. Zero console errors.
+  ==========================================================================
+-->
+
+<!-- ====== SHARED SHELL — pasted verbatim ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC STYLE (beats, canvas sizing, fallbacks) ====== -->
+<style>
+  body{--era:var(--dawn);}
+  .stage canvas{background:var(--ink);}
+  #maze{height:clamp(280px,50vw,440px);}
+  #tree2{height:clamp(260px,42vw,400px);}
+  #tree3{height:clamp(280px,44vw,420px);}
+
+  /* JS-off / live toggle: .static shows by default, JS reveals .live */
+  .static{display:block;}
+  .live{display:none;}
+  .js .static{display:none;}
+  .js .live{display:block;}
+  .static svg{display:block;width:100%;height:auto;}
+
+  /* interactive controls (beat 3) */
+  .controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:4px;}
+  .controls button{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink);background:var(--era);border:none;border-radius:6px;padding:9px 16px;cursor:pointer;
+    transition:opacity .15s,transform .05s;
+  }
+  .controls button:hover{opacity:.88;}
+  .controls button:active{transform:translateY(1px);}
+  .controls button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line);}
+  .controls button:disabled{opacity:.32;cursor:default;}
+  .readout{display:flex;gap:18px;align-items:baseline;margin-left:auto;font-variant-numeric:tabular-nums;}
+  .readout .grp{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;}
+  .readout .lbl{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+  .readout .val{font-size:18px;}
+  .readout .exp{color:var(--struct);}
+  .readout .fro{color:var(--error);}
+  .msg{font-size:10.5px;letter-spacing:.1em;color:var(--dim);min-height:1.2em;}
+  .msg.found{color:var(--rest);}
+
+  .reduced-note{display:none;}
+  @media (prefers-reduced-motion: reduce){.reduced-note{display:inline;color:var(--rest);}}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL — 15 eras; 04 current ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on aria-label="Era 01 Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on aria-label="Era 02 Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on aria-label="Era 03 Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" class="cur" aria-current="page" aria-label="Era 04 Symbolic AI (current)"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" aria-label="Era 05 The Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" class="winter" aria-label="Era 06 First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" aria-label="Era 07 Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="winter" aria-label="Era 08 Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" aria-label="Era 09 Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" aria-label="Era 10 Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" aria-label="Era 11 Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" aria-label="Era 12 AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" aria-label="Era 13 Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" aria-label="Era 14 Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" aria-label="Era 15 Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 04 / 15</span> · Symbolic AI (GOFAI) <span class="yrs">1956 – 1974</span></p>
+    <h1>Reasoning by Search</h1>
+    <p class="changed">Intelligence reframed as <b>manipulating symbols</b> by logic and search.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ============ BEAT 1 — CONCRETE: the maze ============ -->
+    <section class="beat" aria-labelledby="b1">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1">Find a way through</h2>
+      <p class="cap">A solver tries routes from start toward the goal, <b>backtracking at every dead end</b> — finding a path by trying options.</p>
+      <div class="stage">
+        <div class="live">
+          <canvas id="maze" aria-label="Animated maze. A solver explores corridors from the coral start cell toward the teal goal cell, marking the trail it is trying in coral; when a corridor dead-ends it backtracks and dims that branch in sand, then tries another. On reaching the goal the successful route is highlighted in chartreuse. This is search: trying options and backing out of dead ends."></canvas>
+        </div>
+        <div class="static" aria-label="A maze with the solution route drawn from start to goal; abandoned dead-end branches shown faintly.">
+          <svg viewBox="0 0 600 380" role="img" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="600" height="380" fill="#0A1622"/>
+            <g stroke="#E8DCC0" stroke-opacity="0.22" stroke-width="10" fill="none" stroke-linecap="square">
+              <path d="M40,40 H560 V340 H40 Z"/>
+              <path d="M160,40 V200 M280,120 V340 M400,40 V240 M40,200 H120 M280,200 H520 M160,280 H360"/>
+            </g>
+            <path d="M70,70 H120 V160 M120,160 H230 V250 H330" fill="none" stroke="#FF7849" stroke-opacity="0.3" stroke-width="6" stroke-dasharray="2 8" stroke-linecap="round"/>
+            <path d="M70,70 V300 H230 V250 H350 V300 H520 V90 H470" fill="none" stroke="#9EF01A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="70" cy="70" r="13" fill="#FF7849"/>
+            <circle cx="470" cy="90" r="13" fill="#19E3C1"/>
+            <text x="70" y="36" fill="#FF7849" font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">START</text>
+            <text x="470" y="62" fill="#19E3C1" font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">GOAL</text>
+          </svg>
+        </div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:#FF7849"></span>trying / dead end</i>
+        <i><span class="sw" style="background:#9EF01A"></span>solution path</i>
+        <i><span class="sw" style="background:#19E3C1"></span>goal cell</i>
+        <i><span class="sw" style="background:#E8DCC0"></span>walls</i>
+        <span class="reduced-note">motion reduced — final route shown</span>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 2 — ABSTRACT: the search tree ============ -->
+    <section class="beat" aria-labelledby="b2">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2">The same, as a tree</h2>
+      <p class="cap">Strip the walls away: each choice is a branch. A root <b>expands node by node</b> until the goal node is reached — Logic Theorist proving by search.</p>
+      <div class="stage">
+        <div class="live">
+          <canvas id="tree2" aria-label="Animated search tree. From a single root node, the search expands node by node in breadth-first order; freshly generated frontier nodes glow coral while fully expanded nodes settle to sand. When the goal node is generated, the route from root to goal lights up chartreuse and the goal turns teal — the proof found by search."></canvas>
+        </div>
+        <div class="static" aria-label="A search tree from a root node fanning out to many leaves, with the path from root to one goal node highlighted.">
+          <svg viewBox="0 0 600 320" role="img" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="600" height="320" fill="#0A1622"/>
+            <g stroke="#E8DCC0" stroke-opacity="0.18" stroke-width="1.4">
+              <line x1="300" y1="46" x2="140" y2="150"/><line x1="300" y1="46" x2="300" y2="150"/><line x1="300" y1="46" x2="460" y2="150"/>
+              <line x1="140" y1="150" x2="80" y2="262"/><line x1="140" y1="150" x2="140" y2="262"/><line x1="140" y1="150" x2="200" y2="262"/>
+              <line x1="460" y1="150" x2="400" y2="262"/><line x1="460" y1="150" x2="460" y2="262"/><line x1="460" y1="150" x2="520" y2="262"/>
+            </g>
+            <g stroke="#9EF01A" stroke-width="2.4"><line x1="300" y1="46" x2="300" y2="150"/><line x1="300" y1="150" x2="300" y2="262"/></g>
+            <g stroke="#E8DCC0" stroke-opacity="0.18" stroke-width="1.4"><line x1="300" y1="150" x2="240" y2="262"/><line x1="300" y1="150" x2="360" y2="262"/></g>
+            <g fill="#E8DCC0" fill-opacity="0.5">
+              <circle cx="140" cy="150" r="9"/><circle cx="460" cy="150" r="9"/>
+              <circle cx="80" cy="262" r="7"/><circle cx="200" cy="262" r="7"/><circle cx="240" cy="262" r="7"/><circle cx="360" cy="262" r="7"/><circle cx="400" cy="262" r="7"/><circle cx="460" cy="262" r="7"/><circle cx="520" cy="262" r="7"/><circle cx="140" cy="262" r="7"/>
+            </g>
+            <circle cx="300" cy="46" r="11" fill="#E8DCC0" fill-opacity="0.5"/>
+            <circle cx="300" cy="150" r="10" fill="#9EF01A"/>
+            <circle cx="300" cy="262" r="10" fill="#19E3C1"/>
+            <text x="300" y="30" fill="#E8DCC0" fill-opacity="0.6" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">ROOT</text>
+            <text x="300" y="294" fill="#19E3C1" font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">GOAL</text>
+          </svg>
+        </div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:#FF7849"></span>frontier (just generated)</i>
+        <i><span class="sw" style="background:#E8DCC0"></span>expanded</i>
+        <i><span class="sw" style="background:#9EF01A"></span>solution path</i>
+        <i><span class="sw" style="background:#19E3C1"></span>goal node</i>
+        <span class="reduced-note">motion reduced — solved tree shown</span>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 3 — INTERACTIVE: step the search ============ -->
+    <section class="beat" aria-labelledby="b3">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3">Expand it yourself</h2>
+      <p class="cap">Each <b>Step</b> expands one node. Watch the frontier multiply — the search space explodes faster than it shrinks.</p>
+      <div class="stage">
+        <div class="live">
+          <canvas id="tree3" aria-label="Interactive search tree. Press Step to expand one frontier node into its children; the frontier count multiplies with each layer. Expanded nodes are sand, frontier nodes are coral, the goal is teal. When the goal node is generated the path is traced in chartreuse. Reset returns to the root."></canvas>
+        </div>
+        <div class="static" aria-label="A search tree whose frontier fans out by a factor of three at each level, illustrating combinatorial explosion.">
+          <svg viewBox="0 0 600 300" role="img" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="600" height="300" fill="#0A1622"/>
+            <g stroke="#E8DCC0" stroke-opacity="0.16" stroke-width="1.2">
+              <line x1="300" y1="40" x2="160" y2="130"/><line x1="300" y1="40" x2="300" y2="130"/><line x1="300" y1="40" x2="440" y2="130"/>
+            </g>
+            <circle cx="300" cy="40" r="10" fill="#E8DCC0" fill-opacity="0.5"/>
+            <g fill="#E8DCC0" fill-opacity="0.5"><circle cx="160" cy="130" r="8"/><circle cx="300" cy="130" r="8"/><circle cx="440" cy="130" r="8"/></g>
+            <g fill="#FF7849"><circle cx="80" cy="240" r="6"/><circle cx="140" cy="240" r="6"/><circle cx="200" cy="240" r="6"/><circle cx="260" cy="240" r="6"/><circle cx="300" cy="240" r="6"/><circle cx="340" cy="240" r="6"/><circle cx="400" cy="240" r="6"/><circle cx="460" cy="240" r="6"/><circle cx="520" cy="240" r="6"/></g>
+            <text x="300" y="284" fill="#FF7849" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">frontier × 3 each level → explosion</text>
+          </svg>
+        </div>
+      </div>
+      <div class="live controls">
+        <button id="stepBtn" type="button">Step ▸ expand</button>
+        <button id="resetBtn" type="button" class="ghost">Reset</button>
+        <div class="readout" aria-hidden="true">
+          <span class="grp"><span class="lbl">Expanded</span><span class="val exp" id="expVal">0</span></span>
+          <span class="grp"><span class="lbl">Frontier</span><span class="val fro" id="froVal">1</span></span>
+        </div>
+      </div>
+      <p class="live msg" id="msg" role="status" aria-live="polite">Frontier grows ×3 per layer — this is the combinatorial explosion ahead.</p>
+      <p class="hint live" aria-hidden="true">Press Step — watch branches multiply</p>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:#FF7849"></span>frontier (unexplored)</i>
+        <i><span class="sw" style="background:#E8DCC0"></span>expanded</i>
+        <i><span class="sw" style="background:#19E3C1"></span>goal node</i>
+        <i><span class="sw" style="background:#9EF01A"></span>solution path</i>
+      </div>
+    </section>
+
+    <!-- ====== NODS — progressive disclosure ====== -->
+    <details class="nods">
+      <summary>Where this came from</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <p class="ny">1956 · 1957</p>
+          <p class="nm">Logic Theorist &amp; GPS</p>
+          <p class="nd">Newell &amp; Simon built programs that <em>proved theorems</em> and solved problems by means-ends search — the first working AI.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">1976</p>
+          <p class="nm">Physical Symbol System</p>
+          <p class="nd">Their hypothesis: a system manipulating symbols has the <em>necessary and sufficient</em> means for general intelligence.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">1970</p>
+          <p class="nm">SHRDLU · blocks world</p>
+          <p class="nd">Winograd's program understood English commands to stack blocks — fluent reasoning, but only inside a tiny toy world.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <!-- ====== BOTTOM NAV ====== -->
+  <nav class="eranav" aria-label="Era navigation">
+    <a class="prev" href="03-dartmouth.html"><span class="lab">◄ Prev</span><span class="ttl">Dartmouth 1956</span></a>
+    <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+    <a class="next" href="05-perceptron.html"><span class="lab">Next ►</span><span class="ttl">The Perceptron</span></a>
+  </nav>
+
+</div>
+
+<!-- ====== SHELL JS SCAFFOLD (verbatim) ====== -->
+<script>
+  document.body.classList.remove('no-js');           /* enable live versions */
+  document.body.classList.add('js');
+</script>
+
+<!-- ====== PAGE BEHAVIOUR ====== -->
+<script>
+(function(){
+  "use strict";
+  var INK="#0A1622", GOAL="#19E3C1", ERROR="#FF7849", REST="#9EF01A", STRUCT="#E8DCC0";
+  var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  function fit(cv){
+    if(!cv) return null;
+    var ctx; try{ ctx = cv.getContext("2d",{alpha:false}); }catch(e){ return null; }
+    if(!ctx) return null;
+    var DPR = Math.min(window.devicePixelRatio||1, 2);
+    var W = cv.clientWidth, H = cv.clientHeight;
+    if(W<=0 || H<=0) return null;
+    cv.width = Math.max(1, Math.floor(W*DPR));
+    cv.height = Math.max(1, Math.floor(H*DPR));
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    return {ctx:ctx, W:W, H:H};
+  }
+  function debounce(fn, ms){ var t; return function(){ clearTimeout(t); t=setTimeout(fn, ms); }; }
+
+  /* ============================================================
+     BEAT 1 — MAZE (recursive-backtracker maze, DFS solve replay)
+     ============================================================ */
+  (function maze(){
+    var cv = document.getElementById("maze");
+    var f = fit(cv); if(!f) return;
+    var ctx, W, H;
+    var CW=8, CH=6, gw=2*CW+1, gh=2*CH+1;
+    var grid, blockStat, events, evIdx, pathCells;
+    var raf=0, acc=0, last=0, phase="explore", restTimer=0, running=true;
+    var STEP_MS=70, bs=0, ox=0, oy=0;
+    var dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+
+    function gen(){
+      grid=[]; for(var y=0;y<gh;y++){ grid[y]=[]; for(var x=0;x<gw;x++) grid[y][x]=1; }
+      var visited=[]; for(var c=0;c<CW*CH;c++) visited[c]=false;
+      var stack=[[0,0]]; visited[0]=true; grid[1][1]=0;
+      while(stack.length){
+        var t=stack[stack.length-1], cx=t[0], cy=t[1], nb=[];
+        for(var d=0;d<4;d++){ var nx=cx+dirs[d][0], ny=cy+dirs[d][1];
+          if(nx>=0&&nx<CW&&ny>=0&&ny<CH&&!visited[ny*CW+nx]) nb.push([nx,ny,dirs[d]]); }
+        if(nb.length){
+          var p=nb[(Math.random()*nb.length)|0];
+          visited[p[1]*CW+p[0]]=true;
+          grid[2*p[1]+1][2*p[0]+1]=0;
+          grid[2*cy+1+p[2][1]][2*cx+1+p[2][0]]=0;
+          stack.push([p[0],p[1]]);
+        } else stack.pop();
+      }
+    }
+    function solve(){
+      events=[]; var seen=[]; for(var c=0;c<CW*CH;c++) seen[c]=false;
+      var stack=[[0,0]]; seen[0]=true; events.push({t:"v",x:0,y:0,fx:-1,fy:-1});
+      while(stack.length){
+        var cur=stack[stack.length-1], cx=cur[0], cy=cur[1];
+        if(cx===CW-1&&cy===CH-1) break;
+        var moved=false;
+        for(var d=0;d<4;d++){
+          var nx=cx+dirs[d][0], ny=cy+dirs[d][1];
+          if(nx<0||nx>=CW||ny<0||ny>=CH||seen[ny*CW+nx]) continue;
+          if(grid[2*cy+1+dirs[d][1]][2*cx+1+dirs[d][0]]===0){
+            seen[ny*CW+nx]=true; stack.push([nx,ny]);
+            events.push({t:"v",x:nx,y:ny,fx:cx,fy:cy}); moved=true; break;
+          }
+        }
+        if(!moved){
+          var me=stack.pop(), par=stack.length?stack[stack.length-1]:null;
+          events.push({t:"b",x:me[0],y:me[1],fx:par?par[0]:-1,fy:par?par[1]:-1});
+        }
+      }
+      pathCells=stack.slice();
+    }
+    function clearStat(){ blockStat=[]; for(var y=0;y<gh;y++){ blockStat[y]=[]; for(var x=0;x<gw;x++) blockStat[y][x]=0; } } // 0 none,1 cur,2 aband,3 sol
+    function apply(ev, val){
+      var bx=2*ev.x+1, by=2*ev.y+1; blockStat[by][bx]=val;
+      if(ev.fx>=0){ var px=ev.fx+ev.x+1, py=ev.fy+ev.y+1; blockStat[py][px]=val; }
+    }
+    function metrics(){
+      bs = Math.min(W/gw, H/gh);
+      ox = (W - bs*gw)/2; oy = (H - bs*gh)/2;
+    }
+    function reset(){
+      gen(); solve(); clearStat(); evIdx=0; phase="explore"; restTimer=0; acc=0; metrics();
+    }
+    function fullStatic(){
+      // apply every event, then overlay solution
+      for(var i=0;i<events.length;i++) apply(events[i], events[i].t==="v"?1:2);
+      markSolution();
+    }
+    function markSolution(){
+      for(var i=0;i<pathCells.length;i++){
+        var c=pathCells[i]; var bx=2*c[0]+1, by=2*c[1]+1; blockStat[by][bx]=3;
+        if(i>0){ var pc=pathCells[i-1]; blockStat[c[1]+pc[1]+1][c[0]+pc[0]+1]=3; }
+      }
+    }
+    function draw(){
+      ctx.fillStyle=INK; ctx.fillRect(0,0,W,H);
+      for(var y=0;y<gh;y++) for(var x=0;x<gw;x++){
+        var X=ox+x*bs, Y=oy+y*bs;
+        if(grid[y][x]===1){ ctx.fillStyle="rgba(232,220,192,0.20)"; ctx.fillRect(X,Y,bs+0.6,bs+0.6); }
+        else {
+          var s=blockStat[y][x];
+          if(s===1){ ctx.fillStyle="rgba(255,120,73,0.78)"; ctx.fillRect(X,Y,bs+0.6,bs+0.6); }
+          else if(s===2){ ctx.fillStyle="rgba(232,220,192,0.10)"; ctx.fillRect(X,Y,bs+0.6,bs+0.6); }
+          else if(s===3){ ctx.fillStyle="rgba(158,240,26,0.85)"; ctx.fillRect(X,Y,bs+0.6,bs+0.6); }
+        }
+      }
+      // start + goal markers
+      function dot(cx,cy,col){ ctx.beginPath(); ctx.fillStyle=col; ctx.arc(ox+(2*cx+1)*bs+bs/2, oy+(2*cy+1)*bs+bs/2, bs*0.42, 0, Math.PI*2); ctx.fill(); }
+      dot(0,0,ERROR); dot(CW-1,CH-1,GOAL);
+    }
+    function loop(ts){
+      if(!running) return;
+      if(!last) last=ts; var dt=ts-last; last=ts; acc+=dt;
+      while(acc>=STEP_MS && phase==="explore"){
+        acc-=STEP_MS;
+        if(evIdx<events.length){
+          var ev=events[evIdx++]; apply(ev, ev.t==="v"?1:2);
+          if(ev.t==="v" && ev.x===CW-1 && ev.y===CH-1){ markSolution(); phase="done"; }
+        } else { markSolution(); phase="done"; }
+      }
+      if(phase==="done"){ restTimer+=dt; if(restTimer>2600){ reset(); last=ts; } }
+      draw();
+      raf=requestAnimationFrame(loop);
+    }
+
+    ctx=f.ctx; W=f.W; H=f.H; reset();
+    if(reduce){ fullStatic(); draw(); }
+    else { last=0; raf=requestAnimationFrame(loop); }
+
+    document.addEventListener("visibilitychange", function(){
+      if(reduce) return;
+      if(document.hidden){ running=false; cancelAnimationFrame(raf); }
+      else { running=true; last=0; raf=requestAnimationFrame(loop); }
+    });
+    window.addEventListener("resize", debounce(function(){
+      var nf=fit(cv); if(!nf) return; ctx=nf.ctx; W=nf.W; H=nf.H; metrics();
+      if(reduce){ draw(); } else { cancelAnimationFrame(raf); running=true; last=0; raf=requestAnimationFrame(loop); }
+    }, 160));
+  })();
+
+  /* ============================================================
+     SHARED — search-tree data + layout
+     ============================================================ */
+  function buildTree(B,D){
+    var nodes=[];
+    (function rec(parent,depth){
+      var id=nodes.length;
+      nodes.push({id:id,parent:parent,depth:depth,children:[],x:0,y:0});
+      if(parent>=0) nodes[parent].children.push(id);
+      if(depth<D){ for(var k=0;k<B;k++) rec(id,depth+1); }
+      return id;
+    })(-1,0);
+    var leaves=[]; for(var i=0;i<nodes.length;i++) if(nodes[i].depth===D) leaves.push(nodes[i]);
+    var goalId=leaves[Math.floor(leaves.length*0.62)].id;
+    var path={}; for(var p=goalId; p>=0; p=nodes[p].parent) path[p]=true;
+    var order=[], q=[0]; while(q.length){ var id=q.shift(); order.push(id);
+      for(var c=0;c<nodes[id].children.length;c++) q.push(nodes[id].children[c]); }
+    return {nodes:nodes,leaves:leaves,goalId:goalId,path:path,order:order,B:B,D:D};
+  }
+  function layoutTree(T,W,H){
+    var padX=Math.max(22,W*0.05), padTop=34, padBot=30, L=T.leaves.length;
+    var innerW=W-2*padX;
+    for(var i=0;i<L;i++) T.leaves[i].x = L>1 ? padX + i*(innerW/(L-1)) : W/2;
+    var levelGap=(H-padTop-padBot)/T.D;
+    (function setX(id){
+      var n=T.nodes[id]; n.y=padTop+n.depth*levelGap;
+      if(!n.children.length) return n.x;
+      var s=0; for(var i=0;i<n.children.length;i++) s+=setX(n.children[i]);
+      n.x=s/n.children.length; return n.x;
+    })(0);
+  }
+  function drawEdge(ctx,a,b,col,w){ ctx.strokeStyle=col; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+  function drawNode(ctx,n,col,r){ ctx.beginPath(); ctx.fillStyle=col; ctx.arc(n.x,n.y,r,0,Math.PI*2); ctx.fill(); }
+
+  /* ============================================================
+     BEAT 2 — AUTO search tree (BFS reveal, then highlight path)
+     ============================================================ */
+  (function tree2(){
+    var cv=document.getElementById("tree2");
+    var f=fit(cv); if(!f) return;
+    var ctx=f.ctx, W=f.W, H=f.H, T, revealed, idx, phase, restTimer, raf=0, last=0, acc=0, running=true;
+    var STEP_MS=240;
+
+    function reset(){ T=buildTree(3,3); layoutTree(T,W,H); revealed={0:true}; idx=1; phase="reveal"; restTimer=0; acc=0; }
+    function allRevealed(){ for(var i=0;i<T.order.length;i++) if(!revealed[T.order[i]]) return false; return true; }
+    function isFrontier(n){ if(!n.children.length) return true; for(var i=0;i<n.children.length;i++) if(!revealed[n.children[i]]) return true; return false; }
+    function draw(){
+      ctx.fillStyle=INK; ctx.fillRect(0,0,W,H);
+      var solved = phase==="solved";
+      for(var i=0;i<T.nodes.length;i++){
+        var n=T.nodes[i]; if(!revealed[i] || n.parent<0) continue;
+        var par=T.nodes[n.parent]; if(!revealed[n.parent]) continue;
+        if(solved && T.path[i] && T.path[n.parent]) drawEdge(ctx,par,n,REST,2.6);
+        else drawEdge(ctx,par,n,"rgba(232,220,192,0.20)",1.3);
+      }
+      for(var j=0;j<T.nodes.length;j++){
+        if(!revealed[j]) continue; var nd=T.nodes[j], col, r;
+        if(solved){ if(j===T.goalId){col=GOAL;r=8;} else if(T.path[j]){col=REST;r=7;} else {col="rgba(232,220,192,0.5)";r=5;} }
+        else { if(isFrontier(nd)){col=ERROR;r=6;} else {col="rgba(232,220,192,0.5)";r=5;} }
+        drawNode(ctx,nd,col,r);
+      }
+      ctx.font="11px ui-monospace,monospace"; ctx.textAlign="center";
+      ctx.fillStyle="rgba(232,220,192,0.6)"; ctx.fillText("ROOT", T.nodes[0].x, T.nodes[0].y-14);
+      ctx.fillStyle=GOAL; ctx.fillText("GOAL", T.nodes[T.goalId].x, T.nodes[T.goalId].y+20);
+    }
+    function loop(ts){
+      if(!running) return; if(!last) last=ts; var dt=ts-last; last=ts; acc+=dt;
+      while(acc>=STEP_MS && phase==="reveal"){
+        acc-=STEP_MS;
+        if(idx<T.order.length){ revealed[T.order[idx++]]=true; }
+        if(allRevealed()) phase="solved";
+      }
+      if(phase==="solved"){ restTimer+=dt; if(restTimer>2400){ reset(); last=ts; } }
+      draw(); raf=requestAnimationFrame(loop);
+    }
+    reset();
+    if(reduce){ revealed={}; for(var i=0;i<T.nodes.length;i++) revealed[i]=true; phase="solved"; draw(); }
+    else { last=0; raf=requestAnimationFrame(loop); }
+
+    document.addEventListener("visibilitychange", function(){
+      if(reduce) return;
+      if(document.hidden){ running=false; cancelAnimationFrame(raf); }
+      else { running=true; last=0; raf=requestAnimationFrame(loop); }
+    });
+    window.addEventListener("resize", debounce(function(){
+      var nf=fit(cv); if(!nf) return; ctx=nf.ctx; W=nf.W; H=nf.H; layoutTree(T,W,H);
+      if(reduce){ draw(); } else { cancelAnimationFrame(raf); running=true; last=0; raf=requestAnimationFrame(loop); }
+    }, 160));
+  })();
+
+  /* ============================================================
+     BEAT 3 — INTERACTIVE step expansion
+     ============================================================ */
+  (function tree3(){
+    var cv=document.getElementById("tree3");
+    var f=fit(cv); if(!f) return;
+    var ctx=f.ctx, W=f.W, H=f.H, T, revealed, frontier, expanded, found;
+    var stepBtn=document.getElementById("stepBtn");
+    var resetBtn=document.getElementById("resetBtn");
+    var expVal=document.getElementById("expVal");
+    var froVal=document.getElementById("froVal");
+    var msg=document.getElementById("msg");
+
+    function reset(){
+      T=buildTree(3,3); layoutTree(T,W,H);
+      revealed={0:true}; frontier=[0]; expanded=0; found=false;
+      stepGo(); // open the root so a tree is visible
+      update(); draw();
+    }
+    function stepGo(){
+      if(found || !frontier.length) return;
+      var id=frontier.shift(); expanded++;
+      var ch=T.nodes[id].children;
+      for(var i=0;i<ch.length;i++){ revealed[ch[i]]=true; frontier.push(ch[i]); }
+      if(revealed[T.goalId]) found=true;
+    }
+    function update(){
+      if(expVal) expVal.textContent=String(expanded);
+      if(froVal) froVal.textContent=String(frontier.length);
+      if(msg){
+        if(found){ msg.textContent="Goal found — path traced. But the frontier had already exploded."; msg.classList.add("found"); }
+        else if(!frontier.length){ msg.textContent="Frontier exhausted."; msg.classList.remove("found"); }
+        else { msg.textContent="Frontier ×3 per layer — the search space explodes faster than you can search it."; msg.classList.remove("found"); }
+      }
+      if(stepBtn) stepBtn.disabled = found || !frontier.length;
+    }
+    function draw(){
+      ctx.fillStyle=INK; ctx.fillRect(0,0,W,H);
+      var inFront={}; for(var i=0;i<frontier.length;i++) inFront[frontier[i]]=true;
+      for(var e=0;e<T.nodes.length;e++){
+        var n=T.nodes[e]; if(!revealed[e]||n.parent<0||!revealed[n.parent]) continue;
+        var par=T.nodes[n.parent];
+        if(found && T.path[e] && T.path[n.parent]) drawEdge(ctx,par,n,REST,2.6);
+        else drawEdge(ctx,par,n,"rgba(232,220,192,0.20)",1.3);
+      }
+      for(var j=0;j<T.nodes.length;j++){
+        if(!revealed[j]) continue; var nd=T.nodes[j], col, r=6;
+        if(found && j===T.goalId){ col=GOAL; r=8; }
+        else if(found && T.path[j]){ col=REST; r=7; }
+        else if(j===T.goalId && inFront[j]){ col=GOAL; r=7; }
+        else if(inFront[j]){ col=ERROR; r=6; }
+        else { col="rgba(232,220,192,0.5)"; r=5; }
+        drawNode(ctx,nd,col,r);
+      }
+      ctx.font="11px ui-monospace,monospace"; ctx.textAlign="center";
+      ctx.fillStyle="rgba(232,220,192,0.6)"; ctx.fillText("ROOT", T.nodes[0].x, T.nodes[0].y-14);
+      ctx.fillStyle=GOAL; ctx.fillText("GOAL", T.nodes[T.goalId].x, T.nodes[T.goalId].y+20);
+    }
+    if(stepBtn) stepBtn.addEventListener("click", function(){ stepGo(); update(); draw(); });
+    if(resetBtn) resetBtn.addEventListener("click", reset);
+    window.addEventListener("resize", debounce(function(){
+      var nf=fit(cv); if(!nf) return; ctx=nf.ctx; W=nf.W; H=nf.H; layoutTree(T,W,H); draw();
+    }, 160));
+    reset();
+  })();
+})();
+</script>
+</body>
+</html>

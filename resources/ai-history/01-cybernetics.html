@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybernetics — A History of AI · Era 01</title>
+<!--
+  ==========================================================================
+  A HISTORY OF AI — Era 01 / 15 · CYBERNETICS (1943–1948)
+  Page 1 of a 15-page set. Shared shell (_shell.html) inlined VERBATIM below.
+  Subject shape: a PROCESS / LOOP → metaphor = steering toward a target.
+    BEAT 1  CONCRETE     a boat corrects course toward a lighthouse (animateMotion).
+    BEAT 2  ABSTRACT     the same mechanism as goal→error→correct→move→loop.
+    BEAT 3  INTERACTIVE  a spring-mesh homeostat the reader perturbs and watches settle.
+  Mood: --era = --dawn (early optimism); semantic --goal teal carries the resolved idea.
+  No network. Everything inline. Vanilla strict-mode JS. SVG + Canvas.
+  ==========================================================================
+-->
+
+<!-- ====== SHARED SHELL STYLE (verbatim from _shell.html) ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC STYLE (beat stages, fallbacks; tokens unchanged) ====== -->
+<style>
+  /* canvas needs an explicit height (shell sets height:auto for svg) */
+  .homeostat canvas{height:clamp(300px,52vw,460px);touch-action:none;cursor:crosshair;background:#0C1A12;}
+  .ho-readout{position:absolute;top:12px;right:14px;text-align:right;font-size:11px;letter-spacing:.05em;pointer-events:none;line-height:1.6;}
+  .ho-readout .lbl{display:block;font-size:9px;letter-spacing:.12em;color:var(--dim);}
+  .ho-readout .val{font-size:15px;font-weight:600;color:var(--rest);}
+  .ho-readout.perturbed .val{color:var(--error);}
+  .ho-bar{margin-top:5px;width:120px;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-left:auto;}
+  .ho-bar>i{display:block;height:100%;width:0%;background:var(--error);}
+  .ho-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:clamp(11px,2.6vw,13px);letter-spacing:.05em;color:var(--paper);
+    background:rgba(255,120,73,.12);border:1px solid rgba(255,120,73,.4);padding:7px 15px;border-radius:30px;pointer-events:none;white-space:nowrap;
+    animation:hopulse 2.6s ease-in-out infinite;}
+  .ho-hint b{color:var(--error);}
+  @keyframes hopulse{0%,100%{opacity:.55}50%{opacity:1}}
+  .ho-hint.gone{opacity:0;visibility:hidden;transition:opacity .6s;}
+
+  /* static before→after fallback (JS-off / reduced-motion) */
+  .ho-static{display:none;padding:clamp(22px,4vw,34px);}
+  .ho-static .ba{display:flex;align-items:center;justify-content:center;gap:clamp(18px,6vw,56px);flex-wrap:wrap;}
+  .ho-static .panel{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .ho-static .field{width:clamp(110px,28vw,170px);height:clamp(110px,28vw,170px);border-radius:14px;border:1px solid rgba(255,255,255,.1);}
+  .ho-static .field.before{background:radial-gradient(circle at 60% 40%,var(--error),#7a2d12 60%,#2a160d);}
+  .ho-static .field.after{background:radial-gradient(circle at 50% 50%,var(--rest),#3d5c0c 70%,#1c220a);}
+  .ho-static .cap{font-size:12px;letter-spacing:.04em;color:var(--dim);text-align:center;}
+  .ho-static .cap b{color:var(--paper);display:block;font-size:13px;margin-bottom:2px;}
+  .ho-static .big-arrow{font-size:28px;color:var(--dim);}
+  .js .ho-static{display:none;}
+  .no-js .ho-live{display:none;}
+  .no-js .ho-static{display:block;}
+
+  /* etymology chips for the closing word */
+  .etym{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;margin:4px 0 0;}
+  .etym .chip{border:1px solid var(--line);border-radius:999px;padding:6px 13px;white-space:nowrap;color:var(--paper);}
+  .etym .greek{color:var(--goal);border-color:rgba(25,227,193,.35);}
+  .etym .now{color:var(--rest);border-color:rgba(158,240,26,.4);}
+  .etym .arrow{color:var(--dim);}
+
+  .reduced-note{display:none;}
+  @media (prefers-reduced-motion: reduce){
+    .reduced-note{display:inline;color:var(--rest);}
+    .ho-live{display:none;}
+    .ho-static{display:block;}
+  }
+</style>
+</head>
+
+<body class="no-js" style="--era:var(--dawn)">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL (15 ticks; this era cur, winters 06 & 08) ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a class="cur" href="01-cybernetics.html" aria-current="page" aria-label="Era 01 Cybernetics (current)"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" aria-label="Era 02 The Turing Era"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" aria-label="Era 03 Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" aria-label="Era 04 Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" aria-label="Era 05 Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a class="winter" href="06-first-winter.html" aria-label="Era 06 First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" aria-label="Era 07 Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a class="winter" href="08-second-winter.html" aria-label="Era 08 Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" aria-label="Era 09 Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" aria-label="Era 10 Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" aria-label="Era 11 Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" aria-label="Era 12 AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" aria-label="Era 13 Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" aria-label="Era 14 Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" aria-label="Era 15 Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 01 / 15</span> · Cybernetics <span class="yrs">1943–1948</span></p>
+    <h1>Cybernetics</h1>
+    <p class="changed">Machines could <b>steer themselves</b> — control as feedback, not command.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ============================ BEAT 1 — CONCRETE ============================ -->
+    <section class="beat" aria-labelledby="b1">
+      <p class="badge"><b>01 · concrete</b> &nbsp;the steersman</p>
+      <h2 id="b1">A boat finds the light</h2>
+      <p class="cap">Wind pushes it astray; it senses the error and corrects. The wavy path <b style="color:var(--paper)">is</b> the feedback.</p>
+      <div class="stage">
+        <svg viewBox="0 0 1000 520" role="img" aria-labelledby="b1t b1d" preserveAspectRatio="xMidYMid meet">
+          <title id="b1t">A boat steering toward a lighthouse</title>
+          <desc id="b1d">A boat sails toward a teal lighthouse on the right. Wind pushes it off course, so it follows a wavy correcting path rather than the straight dashed ideal line — a feedback loop made physical. Coral marks error, teal marks the goal.</desc>
+          <defs>
+            <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0E2233"/><stop offset="1" stop-color="#081420"/>
+            </linearGradient>
+            <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#19E3C1" stop-opacity="0.30"/>
+              <stop offset="1" stop-color="#19E3C1" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#19E3C1" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#19E3C1" stop-opacity="0"/>
+            </radialGradient>
+            <marker id="aSand" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#E8DCC0" opacity="0.6"/>
+            </marker>
+          </defs>
+          <rect x="0" y="0" width="1000" height="520" fill="url(#sea)"/>
+          <g stroke="#E8DCC0" stroke-opacity="0.06" stroke-width="1">
+            <line x1="0" y1="140" x2="1000" y2="140"/>
+            <path d="M0,240 Q250,228 500,240 T1000,240" fill="none"/>
+            <path d="M0,330 Q250,318 500,330 T1000,330" fill="none"/>
+            <path d="M0,420 Q250,408 500,420 T1000,420" fill="none"/>
+          </g>
+          <!-- GOAL: lighthouse -->
+          <g>
+            <polygon points="880,140 360,110 360,240" fill="url(#beam)">
+              <animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"/>
+            </polygon>
+            <circle cx="884" cy="140" r="46" fill="url(#glow)">
+              <animate attributeName="r" values="40;52;40" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <rect x="870" y="148" width="28" height="86" rx="3" fill="#0E2233" stroke="#19E3C1" stroke-opacity="0.5"/>
+            <rect x="874" y="128" width="20" height="22" rx="2" fill="#19E3C1" fill-opacity="0.85"/>
+            <polygon points="868,128 900,128 884,108" fill="#19E3C1" fill-opacity="0.7"/>
+            <rect x="862" y="234" width="44" height="8" rx="3" fill="#0E2233" stroke="#19E3C1" stroke-opacity="0.4"/>
+            <text x="884" y="268" text-anchor="middle" fill="#19E3C1" font-family="ui-monospace,monospace" font-size="15" letter-spacing="2">GOAL</text>
+          </g>
+          <!-- ideal straight line (inert structure / sand) -->
+          <line x1="120" y1="360" x2="858" y2="190" stroke="#E8DCC0" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="4 7"/>
+          <text x="430" y="296" fill="#E8DCC0" fill-opacity="0.4" font-family="ui-monospace,monospace" font-size="11" transform="rotate(-13 430 296)">ideal straight course</text>
+          <!-- the correcting path (the feedback loop, physical) -->
+          <path id="course" d="M120,360 C 200,235 250,450 330,345 C 400,255 470,425 540,315 C 605,225 660,365 720,288 C 780,228 820,258 858,200"
+                fill="none" stroke="#FF7849" stroke-width="3" stroke-linecap="round" stroke-opacity="0.9">
+            <animate attributeName="stroke-opacity" values="0.55;0.95;0.55" dur="5s" repeatCount="indefinite"/>
+          </path>
+          <!-- disturbance arrows (wind) -->
+          <g stroke="#E8DCC0" stroke-opacity="0.5" stroke-width="2">
+            <line x1="250" y1="112" x2="300" y2="146" marker-end="url(#aSand)"/>
+            <line x1="470" y1="126" x2="520" y2="160" marker-end="url(#aSand)"/>
+            <line x1="660" y1="140" x2="710" y2="174" marker-end="url(#aSand)"/>
+          </g>
+          <text x="430" y="92" text-anchor="middle" fill="#E8DCC0" fill-opacity="0.6" font-family="ui-monospace,monospace" font-size="12" letter-spacing="2">WIND · the disturbance</text>
+          <!-- error bracket -->
+          <g font-family="ui-monospace,monospace">
+            <line x1="540" y1="315" x2="540" y2="278" stroke="#FF7849" stroke-opacity="0.7" stroke-width="1.5"/>
+            <line x1="535" y1="315" x2="545" y2="315" stroke="#FF7849" stroke-opacity="0.7" stroke-width="1.5"/>
+            <line x1="535" y1="278" x2="545" y2="278" stroke="#FF7849" stroke-opacity="0.7" stroke-width="1.5"/>
+            <text x="552" y="300" fill="#FF7849" font-size="12">ERROR</text>
+          </g>
+          <!-- the boat -->
+          <g id="boat">
+            <g transform="translate(-26,-20)">
+              <path d="M0,30 q-22,-2 -34,8 q14,-2 34,2 Z" fill="#FF7849" fill-opacity="0.18"/>
+              <path d="M-2,26 L40,26 Q52,26 50,34 L8,38 Q-4,38 -2,26 Z" fill="#FF7849"/>
+              <line x1="20" y1="26" x2="20" y2="-8" stroke="#E8DCC0" stroke-width="2"/>
+              <path d="M20,-6 L20,22 L44,22 Q34,6 20,-6 Z" fill="#E8DCC0"/>
+              <path d="M20,-4 L20,20 L6,20 Q12,7 20,-4 Z" fill="#E8DCC0" fill-opacity="0.7"/>
+              <line x1="-2" y1="32" x2="-12" y2="42" stroke="#19E3C1" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <animateMotion id="boatMotion" dur="11s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+              <mpath href="#course"/>
+            </animateMotion>
+          </g>
+          <text x="120" y="388" text-anchor="middle" fill="#FF7849" font-family="ui-monospace,monospace" font-size="13" letter-spacing="2">START</text>
+        </svg>
+      </div>
+      <div class="legend">
+        <i><span class="sw" style="background:var(--goal)"></span> goal / rudder</i>
+        <i><span class="sw" style="background:var(--error)"></span> error &amp; correcting path</i>
+        <i><span class="sw" style="background:var(--struct)"></span> wind &amp; ideal line</i>
+        <span class="reduced-note">motion reduced — boat frozen mid-correction</span>
+      </div>
+    </section>
+
+    <!-- ============================ BEAT 2 — ABSTRACT ============================ -->
+    <section class="beat" aria-labelledby="b2">
+      <p class="badge"><b>02 · abstract</b> &nbsp;the loop, stripped bare</p>
+      <h2 id="b2">The same loop, stripped bare</h2>
+      <p class="cap">Strip the sea away and the correction <b style="color:var(--paper)">is</b> this cycle: goal → error → correct → move → repeat.</p>
+      <div class="stage">
+        <svg viewBox="0 0 1000 420" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+          <title id="b2t">The feedback loop, abstracted</title>
+          <desc id="b2d">The boat scene redrawn as an abstract closed loop. A token circulates clockwise through five nodes — goal, error, correct, move, new state — and back to goal. Teal nodes are goal-aligned, coral nodes are error, sand nodes are mechanism. The same mechanism as the boat.</desc>
+          <defs>
+            <marker id="lp" markerWidth="11" markerHeight="11" refX="6" refY="3.2" orient="auto">
+              <path d="M0,0 L7,3.2 L0,6.4 Z" fill="#FF7849"/>
+            </marker>
+          </defs>
+          <!-- circular flow path (clockwise), token rides it -->
+          <path id="loopPath" d="M500,70 A 330 150 0 1 1 499,70" fill="none"
+                stroke="#FF7849" stroke-opacity="0.30" stroke-width="2" stroke-dasharray="6 10" marker-mid="url(#lp)"/>
+          <!-- direction arrowheads spaced around -->
+          <g fill="#FF7849" opacity="0.55">
+            <polygon points="828,170 812,164 818,180"/>
+            <polygon points="640,366 624,360 632,374"/>
+            <polygon points="172,250 188,256 182,240"/>
+            <polygon points="360,54 376,60 368,74"/>
+          </g>
+          <!-- nodes -->
+          <g font-family="ui-monospace,monospace" font-size="14" text-anchor="middle">
+            <g>
+              <circle cx="500" cy="70" r="44" fill="#0E2233" stroke="#19E3C1" stroke-width="1.8"/>
+              <text x="500" y="66" fill="#19E3C1">GOAL</text>
+              <text x="500" y="84" fill="#19E3C1" fill-opacity="0.6" font-size="10">the light</text>
+            </g>
+            <g>
+              <circle cx="830" cy="210" r="44" fill="#0E2233" stroke="#FF7849" stroke-width="1.8"/>
+              <text x="830" y="206" fill="#FF7849">ERROR</text>
+              <text x="830" y="224" fill="#FF7849" fill-opacity="0.6" font-size="10">off course</text>
+            </g>
+            <g>
+              <circle cx="650" cy="350" r="46" fill="#0E2233" stroke="#19E3C1" stroke-width="1.8"/>
+              <text x="650" y="346" fill="#19E3C1">CORRECT</text>
+              <text x="650" y="364" fill="#19E3C1" fill-opacity="0.6" font-size="10">rudder</text>
+            </g>
+            <g>
+              <circle cx="350" cy="350" r="44" fill="#0E2233" stroke="#E8DCC0" stroke-opacity="0.6" stroke-width="1.8"/>
+              <text x="350" y="354" fill="#E8DCC0">MOVE</text>
+            </g>
+            <g>
+              <circle cx="170" cy="210" r="48" fill="#0E2233" stroke="#E8DCC0" stroke-opacity="0.6" stroke-width="1.8"/>
+              <text x="170" y="206" fill="#E8DCC0">NEW</text>
+              <text x="170" y="224" fill="#E8DCC0">STATE</text>
+            </g>
+          </g>
+          <!-- circulating token: the "boat" as it goes round -->
+          <g id="token">
+            <circle r="9" fill="#FF7849"/>
+            <circle r="15" fill="none" stroke="#FF7849" stroke-opacity="0.4" stroke-width="2"/>
+            <animateMotion id="tokenMotion" dur="9s" repeatCount="indefinite" rotate="0" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+              <mpath href="#loopPath"/>
+            </animateMotion>
+          </g>
+          <text x="500" y="216" text-anchor="middle" fill="#E8DCC0" fill-opacity="0.4" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">sense · correct · repeat</text>
+        </svg>
+      </div>
+      <div class="legend">
+        <i><span class="sw" style="background:var(--goal)"></span> goal-aligned</i>
+        <i><span class="sw" style="background:var(--error)"></span> error / the deviation in motion</i>
+        <i><span class="sw" style="background:var(--struct)"></span> mechanism</i>
+      </div>
+    </section>
+
+    <!-- ============================ BEAT 3 — INTERACTIVE ============================ -->
+    <section class="beat" aria-labelledby="b3">
+      <p class="badge"><b>03 · interactive</b> &nbsp;the homeostat</p>
+      <h2 id="b3">Now disturb it yourself</h2>
+      <p class="cap">A whole field running the loop at once = <b style="color:var(--paper)">homeostasis</b>. Push it into error; watch it steer back to rest.</p>
+      <div class="stage homeostat">
+        <div class="ho-live">
+          <canvas id="ho" aria-label="Live simulation of a coupled spring mesh resting at equilibrium in chartreuse. Click or drag to perturb it: the disturbed region turns coral with energy, then the mesh damps and self-regulates back to its ordered chartreuse rest state — the same goal-seeking loop as the boat, run by many units at once."></canvas>
+          <div class="ho-readout" id="hoReadout">
+            <span class="lbl">DISTANCE FROM GOAL</span>
+            <span class="val" id="hoVal">at rest</span>
+            <div class="ho-bar"><i id="hoBar"></i></div>
+          </div>
+          <div class="ho-hint" id="hoHint">Drag the field — <b>watch it settle back</b></div>
+        </div>
+        <!-- static fallback: shown when JS off or reduced-motion -->
+        <div class="ho-static" aria-label="Static diagram: a perturbed field returns to equilibrium">
+          <div class="ba">
+            <div class="panel">
+              <div class="field before"></div>
+              <div class="cap"><b>Disturbed</b>far from goal · coral</div>
+            </div>
+            <div class="big-arrow" aria-hidden="true">→</div>
+            <div class="panel">
+              <div class="field after"></div>
+              <div class="cap"><b>Re-equilibrated</b>at goal-state · chartreuse</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="legend">
+        <i><span class="sw" style="background:var(--error)"></span> disturbance / far from goal</i>
+        <i><span class="sw" style="background:var(--rest)"></span> equilibrium / at goal-state</i>
+        <span class="reduced-note">motion reduced — before / after shown statically</span>
+      </div>
+    </section>
+
+    <!-- ============================ THE WORD + NODS ============================ -->
+    <section aria-labelledby="word">
+      <div class="etym">
+        <span class="chip greek">kybernetes</span>
+        <span class="arrow">→</span>
+        <span class="chip">steersman</span>
+        <span class="arrow">→</span>
+        <span class="chip">governor</span>
+        <span class="arrow">→</span>
+        <span class="chip now">cybernetics</span>
+      </div>
+      <details class="nods">
+        <summary id="word">Founding texts &amp; the people</summary>
+        <div class="nodgrid">
+          <div class="nod">
+            <div class="ny">1948 · Wiener</div>
+            <div class="nm">Cybernetics</div>
+            <div class="nd">Norbert Wiener names the field: <em>control and communication in the animal and the machine.</em> One loop for both.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">1943 · McCulloch–Pitts</div>
+            <div class="nm">Threshold neuron</div>
+            <div class="nd">A neuron as a logic gate: sum the inputs, fire past a setpoint. The brain as a steering circuit.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">1948 · Shannon</div>
+            <div class="nm">Signal &amp; noise</div>
+            <div class="nd">Information as a measurable signal through a noisy channel. Feedback needs a message to act on.</div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- ====== BOTTOM NAV ====== -->
+  <nav class="eranav" aria-label="Era navigation">
+    <a class="prev dis" href="#" aria-disabled="true"><span class="lab">◄ Prev</span><span class="ttl">The beginning</span></a>
+    <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+    <a class="next" href="02-turing.html"><span class="lab">Next ►</span><span class="ttl">The Turing Era</span></a>
+  </nav>
+
+</div>
+
+<!-- ====== JS SCAFFOLD (shell) + beat behaviour ====== -->
+<script>
+(function(){
+  "use strict";
+  document.body.classList.remove("no-js");   /* enable live versions */
+  document.body.classList.add("js");
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- BEAT 1: freeze the boat when reduced-motion ---------- */
+  (function freezeBoat(){
+    if(!reduce) return;
+    try{
+      var motion = document.getElementById("boatMotion");
+      var path = document.getElementById("course");
+      var boat = document.getElementById("boat");
+      if(motion && path && boat && path.getTotalLength){
+        var len = path.getTotalLength();
+        var p = path.getPointAtLength(len*0.46);
+        var p2 = path.getPointAtLength(Math.min(len, len*0.46 + 1));
+        var ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180/Math.PI;
+        if(motion.parentNode) motion.parentNode.removeChild(motion);
+        boat.setAttribute("transform","translate("+p.x.toFixed(1)+","+p.y.toFixed(1)+") rotate("+ang.toFixed(1)+")");
+      }
+    }catch(e){/* scene stays static-safe */}
+  })();
+
+  /* ---------- BEAT 2: freeze the token when reduced-motion ---------- */
+  (function freezeToken(){
+    if(!reduce) return;
+    try{
+      var m = document.getElementById("tokenMotion");
+      var path = document.getElementById("loopPath");
+      var tok = document.getElementById("token");
+      if(m && path && tok && path.getTotalLength){
+        var len = path.getTotalLength();
+        var p = path.getPointAtLength(len*0.18); // sitting near ERROR
+        if(m.parentNode) m.parentNode.removeChild(m);
+        tok.setAttribute("transform","translate("+p.x.toFixed(1)+","+p.y.toFixed(1)+")");
+      }
+    }catch(e){/* static-safe */}
+  })();
+
+  /* ---------- BEAT 3: the homeostat ---------- */
+  if(reduce){ return; } // CSS shows the static before/after fallback
+
+  var canvas = document.getElementById("ho");
+  if(!canvas || !canvas.getContext){ return; } // graceful: static fallback visible
+  var ctx = canvas.getContext("2d", {alpha:false});
+  if(!ctx){ return; }
+  var readout = document.getElementById("hoReadout");
+  var hoVal = document.getElementById("hoVal");
+  var hoBar = document.getElementById("hoBar");
+  var hint = document.getElementById("hoHint");
+  if(!readout || !hoVal || !hoBar){ return; }
+
+  var W=0,H=0,DPR=1;
+  var cols=0, rows=0, spacing=0;
+  var nodes=[], springs=[];
+  var STIFF=0.045;   // neighbor coupling
+  var ANCHOR=0.012;  // pull to own setpoint (the homeostatic goal)
+  var DAMP=0.93;     // dissipation
+  var energy=0;
+  var running=true, hintGone=false, restFrames=0, raf=0;
+
+  function build(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    if(W<=0||H<=0){ return; }
+    canvas.width = Math.max(1,Math.floor(W*DPR));
+    canvas.height = Math.max(1,Math.floor(H*DPR));
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    spacing = Math.max(34, Math.min(W,H) / 7.5);
+    cols = Math.max(4, Math.min(16, Math.round(W/spacing)+1));
+    rows = Math.max(4, Math.min(16, Math.round(H/spacing)+1));
+    while(cols*rows > 150){ if(cols>=rows) cols--; else rows--; }
+    var gw=(cols-1)*spacing, gh=(rows-1)*spacing;
+    var ox0=(W-gw)/2, oy0=(H-gh)/2;
+    nodes=[]; springs=[];
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        var x=ox0+c*spacing, y=oy0+r*spacing;
+        nodes.push({x:x,y:y,ox:x,oy:y,vx:0,vy:0});
+      }
+    }
+    var idx=function(r,c){return r*cols+c;};
+    for(var r2=0;r2<rows;r2++){
+      for(var c2=0;c2<cols;c2++){
+        if(c2<cols-1) springs.push({a:idx(r2,c2),b:idx(r2,c2+1),len:spacing});
+        if(r2<rows-1) springs.push({a:idx(r2,c2),b:idx(r2+1,c2),len:spacing});
+      }
+    }
+  }
+
+  function perturb(px,py){
+    if(!nodes.length) return;
+    var radius = Math.min(W,H)*0.30;
+    for(var i=0;i<nodes.length;i++){
+      var n=nodes[i];
+      var dx=n.x-px, dy=n.y-py, d=Math.hypot(dx,dy);
+      if(d<radius){
+        var f=(1-d/radius), ang=Math.atan2(dy,dx), kick=9*f*f;
+        n.vx += Math.cos(ang)*kick + (Math.random()-0.5)*3*f;
+        n.vy += Math.sin(ang)*kick + (Math.random()-0.5)*3*f;
+      }
+    }
+    running=true;
+    if(!hintGone && hint){ hintGone=true; hint.classList.add("gone"); }
+  }
+
+  function step(){
+    for(var i=0;i<springs.length;i++){
+      var s=springs[i], a=nodes[s.a], b=nodes[s.b];
+      var dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||1e-4;
+      var diff=(d-s.len)/d*STIFF, fx=dx*diff, fy=dy*diff;
+      a.vx+=fx; a.vy+=fy; b.vx-=fx; b.vy-=fy;
+    }
+    var ke=0;
+    for(var j=0;j<nodes.length;j++){
+      var n=nodes[j];
+      n.vx += (n.ox-n.x)*ANCHOR;
+      n.vy += (n.oy-n.y)*ANCHOR;
+      n.vx*=DAMP; n.vy*=DAMP;
+      n.x+=n.vx; n.y+=n.vy;
+      ke += n.vx*n.vx + n.vy*n.vy;
+    }
+    var inst = Math.min(1, ke/(nodes.length*6));
+    energy += (inst-energy)*0.18;
+    return energy;
+  }
+
+  function colorAt(e){
+    // chartreuse (#9EF01A, at rest) -> coral (#FF7849, far from goal) as e: 0 -> 1
+    var t=Math.max(0,Math.min(1,e));
+    var r=Math.round(0x9E + (0xFF-0x9E)*t);
+    var g=Math.round(0xF0 + (0x78-0xF0)*t);
+    var b=Math.round(0x1A + (0x49-0x1A)*t);
+    return [r,g,b];
+  }
+
+  function draw(){
+    ctx.fillStyle="rgba(12,26,18,0.30)";
+    ctx.fillRect(0,0,W,H);
+    ctx.lineWidth=1;
+    ctx.globalCompositeOperation="lighter";
+    for(var i=0;i<springs.length;i++){
+      var s=springs[i], a=nodes[s.a], b=nodes[s.b];
+      var tension=Math.min(1, Math.abs(Math.hypot(b.x-a.x,b.y-a.y)-s.len)/spacing*2);
+      var c=colorAt(Math.min(1, tension*0.9 + energy*0.6));
+      ctx.strokeStyle="rgba("+c[0]+","+c[1]+","+c[2]+","+(0.18+tension*0.55)+")";
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    }
+    for(var k=0;k<nodes.length;k++){
+      var n=nodes[k];
+      var speed=Math.min(1, Math.hypot(n.vx,n.vy)/4);
+      var c2=colorAt(speed);
+      var rad=2.2+speed*3.5;
+      ctx.beginPath();
+      ctx.fillStyle="rgba("+c2[0]+","+c2[1]+","+c2[2]+","+(0.55+speed*0.45)+")";
+      ctx.arc(n.x,n.y,rad,0,Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation="source-over";
+  }
+
+  function updateReadout(e){
+    var pct=Math.round(e*100);
+    hoBar.style.width=Math.min(100,pct)+"%";
+    if(e<0.012){
+      hoVal.textContent="at rest";
+      readout.classList.remove("perturbed");
+      hoBar.style.background="#9EF01A";
+    } else {
+      hoVal.textContent="settling "+pct+"%";
+      readout.classList.add("perturbed");
+      var c=colorAt(e);
+      hoBar.style.background="rgb("+c[0]+","+c[1]+","+c[2]+")";
+    }
+  }
+
+  function frame(){
+    if(!running) return;
+    var e=step();
+    draw();
+    updateReadout(e);
+    if(e<0.004){
+      restFrames++;
+      if(restFrames>40){
+        running=false;
+        ctx.fillStyle="#0C1A12"; ctx.fillRect(0,0,W,H);
+        draw(); updateReadout(0);
+        return;
+      }
+    } else { restFrames=0; }
+    raf=requestAnimationFrame(frame);
+  }
+  function start(){ running=true; cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); }
+
+  function pos(ev){
+    var r=canvas.getBoundingClientRect();
+    var p=(ev.touches&&ev.touches[0])?ev.touches[0]:ev;
+    return {x:p.clientX-r.left, y:p.clientY-r.top};
+  }
+  var dragging=false;
+  canvas.addEventListener("pointerdown", function(ev){ dragging=true; var p=pos(ev); perturb(p.x,p.y); start(); });
+  canvas.addEventListener("pointermove", function(ev){ if(!dragging) return; var p=pos(ev); perturb(p.x,p.y); start(); });
+  window.addEventListener("pointerup", function(){ dragging=false; });
+
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden){ running=false; cancelAnimationFrame(raf); }
+    else { restFrames=0; start(); }
+  });
+  var rt;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt=setTimeout(function(){ build(); restFrames=0; running=true; start(); }, 150);
+  });
+
+  build();
+  setTimeout(function(){ if(W>0){ perturb(W*0.5, H*0.5); start(); } }, 400);
+  start();
+  setTimeout(function(){ if(!hintGone && hint){ hintGone=true; hint.classList.add("gone"); } }, 11000);
+})();
+</script>
+</body>
+</html>

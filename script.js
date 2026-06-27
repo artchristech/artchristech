@@ -15,10 +15,81 @@ document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('seed-canvas');
             if (!canvas) return;
             const label = document.querySelector('.seed-label');
-            const { initMarbleHero } = await import('./marble.js?v=14');
+            const { initMarbleHero } = await import('./marble.js?v=23');
             initMarbleHero(canvas, label);
         } catch (err) {
             console.warn('[hero] marble hero init failed:', err && err.message);
+        }
+    })();
+
+    // --- DK SKI arcade (sandboxed iframe, loaded on demand) ---
+    // The game is a self-contained Three.js page (dkski.html). We don't load its
+    // heavy WebGL/CDN payload until the visitor clicks "Press to play". Playing
+    // enters "theater" mode: the page scroll is locked (so arrow keys can't move
+    // it) and the stage floats over a dimmed page, with an option for fullscreen.
+    (() => {
+        try {
+            const frame = document.getElementById('dkski-frame');
+            const stage = document.getElementById('arcade-stage');
+            const overlay = document.getElementById('arcade-overlay');
+            const playBtn = document.getElementById('arcade-play');
+            const backdrop = document.getElementById('arcade-backdrop');
+            const fsBtn = document.getElementById('arcade-fs');
+            const exitBtn = document.getElementById('arcade-exit');
+            if (!frame || !stage) return;
+
+            let loaded = false;
+
+            const enterTheater = () => {
+                document.body.classList.add('arcade-theater');
+                if (backdrop) backdrop.classList.add('is-open');
+                stage.classList.add('is-theater');
+                frame.focus(); // arrows drive the game, not the page
+            };
+
+            const exitTheater = () => {
+                if (document.fullscreenElement) {
+                    (document.exitFullscreen || document.webkitExitFullscreen || (() => {})).call(document);
+                }
+                document.body.classList.remove('arcade-theater');
+                if (backdrop) backdrop.classList.remove('is-open');
+                stage.classList.remove('is-theater');
+                if (overlay) overlay.classList.remove('is-hidden'); // offer "Press to play" again
+            };
+
+            const launch = () => {
+                if (!loaded) {
+                    frame.src = frame.dataset.src;
+                    loaded = true;
+                }
+                if (overlay) overlay.classList.add('is-hidden');
+                enterTheater();
+            };
+
+            const toggleFullscreen = () => {
+                if (document.fullscreenElement) {
+                    (document.exitFullscreen || document.webkitExitFullscreen || (() => {})).call(document);
+                } else {
+                    const req = stage.requestFullscreen || stage.webkitRequestFullscreen;
+                    if (req) req.call(stage);
+                }
+                frame.focus();
+            };
+
+            if (playBtn) playBtn.addEventListener('click', launch);
+            if (exitBtn) exitBtn.addEventListener('click', exitTheater);
+            if (fsBtn) fsBtn.addEventListener('click', toggleFullscreen);
+            if (backdrop) backdrop.addEventListener('click', exitTheater);
+
+            // Esc leaves theater (only when not in native fullscreen — the browser
+            // consumes Esc itself to exit fullscreen first).
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && stage.classList.contains('is-theater') && !document.fullscreenElement) {
+                    exitTheater();
+                }
+            });
+        } catch (err) {
+            console.warn('[arcade] dkski setup failed:', err && err.message);
         }
     })();
 

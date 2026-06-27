@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Turing Era · 1936–1950 — A History of AI</title>
+<meta name="description" content="Era 02 of 15: computation got a precise definition, and ‘can it think?’ got a test.">
+
+<!-- ============================================================
+     SHARED SHELL — "A History of AI" 15-page masterpiece
+     Inlined verbatim; placeholders filled for Era 02.
+     ============================================================ -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC (era mood + no-js contract + beat styles) ====== -->
+<style>
+  body{--era:var(--dawn);}                 /* Era 02 mood: dawn */
+  .no-js .live{display:none;}
+  .static{display:none;}
+  .no-js .static{display:block;}
+
+  /* beat 1 — Turing machine (global reduced-motion rule already kills the transition) */
+  #tm-head{transition:transform .5s cubic-bezier(.5,0,.2,1);}
+  .tm-status{font-variant-numeric:tabular-nums;}
+
+  /* beat 2 — imitation game (CSS-animated; reduced-motion freezes to end frame) */
+  @keyframes ig-msg{0%{transform:translateX(0)}8%{opacity:1}46%{transform:translateX(250px)}54%{transform:translateX(250px)}92%{transform:translateX(0)}100%{transform:translateX(0)}}
+  #ig2-msg{animation:ig-msg 5s ease-in-out infinite;}
+
+  /* beat 3 — interactive */
+  .ig-q{font-family:var(--serif);font-style:italic;font-size:clamp(16px,3.6vw,23px);margin:0 0 2px;}
+  .ig-opts{display:grid;gap:12px;grid-template-columns:1fr;}
+  @media(min-width:560px){.ig-opts{grid-template-columns:1fr 1fr;}}
+  .ig-opt{text-align:left;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.5;
+    cursor:pointer;display:flex;gap:12px;align-items:flex-start;transition:border-color .15s,box-shadow .15s;}
+  .ig-opt:hover{border-color:var(--era);}
+  .ig-opt:disabled{cursor:default;}
+  .ig-tag{font-size:10px;letter-spacing:.18em;color:var(--era);border:1px solid var(--line);
+    border-radius:5px;padding:3px 8px;flex:none;white-space:nowrap;}
+  .ig-opt.is-machine{border-color:var(--error);box-shadow:0 0 0 1px var(--error) inset;}
+  .ig-opt.is-human{border-color:var(--goal);}
+  .ig-opt.is-machine .ig-tag{color:var(--error);border-color:var(--error);}
+  .ig-opt.is-human .ig-tag{color:var(--goal);border-color:var(--goal);}
+  .ig-verdict{font-size:12.5px;margin:6px 0 0;color:var(--dim);min-height:2.6em;line-height:1.5;}
+  .ig-verdict.good{color:var(--rest);}
+  .ig-verdict.bad{color:var(--error);}
+  .ig-next{margin-top:4px;background:transparent;border:1px solid var(--era);color:var(--era);
+    border-radius:8px;padding:8px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;cursor:pointer;justify-self:start;}
+  .ig-static-row{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:13px;}
+  .ig-static-row .t{color:var(--dim);font-size:10px;letter-spacing:.18em;text-transform:uppercase;}
+</style>
+</head>
+
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on title="01 · Cybernetics"><span class="tick"></span><span class="n">01</span></a>
+    <a href="02-turing.html" class="cur" aria-current="page" title="02 · The Turing Era"><span class="tick"></span><span class="n">02</span></a>
+    <a href="03-dartmouth.html" title="03 · Dartmouth 1956"><span class="tick"></span><span class="n">03</span></a>
+    <a href="04-symbolic-ai.html" title="04 · Symbolic AI"><span class="tick"></span><span class="n">04</span></a>
+    <a href="05-perceptron.html" title="05 · Perceptron"><span class="tick"></span><span class="n">05</span></a>
+    <a href="06-first-winter.html" class="winter" title="06 · First AI Winter"><span class="tick"></span><span class="n">06</span></a>
+    <a href="07-expert-systems.html" title="07 · Expert Systems"><span class="tick"></span><span class="n">07</span></a>
+    <a href="08-second-winter.html" class="winter" title="08 · Second AI Winter"><span class="tick"></span><span class="n">08</span></a>
+    <a href="09-backprop.html" title="09 · Backpropagation"><span class="tick"></span><span class="n">09</span></a>
+    <a href="10-statistical-ai.html" title="10 · Statistical AI"><span class="tick"></span><span class="n">10</span></a>
+    <a href="11-game-playing.html" title="11 · Game Playing"><span class="tick"></span><span class="n">11</span></a>
+    <a href="12-alexnet.html" title="12 · AlexNet"><span class="tick"></span><span class="n">12</span></a>
+    <a href="13-transformer.html" title="13 · The Transformer"><span class="tick"></span><span class="n">13</span></a>
+    <a href="14-scaling-laws.html" title="14 · Scaling Laws"><span class="tick"></span><span class="n">14</span></a>
+    <a href="15-generative-agentic.html" title="15 · Generative & Agentic"><span class="tick"></span><span class="n">15</span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 02 / 15</span> · The Turing Era <span class="yrs">1936–1950</span></p>
+    <h1>Can a Machine Think?</h1>
+    <p class="changed">Computation got a <b>precise definition</b>, and “can it think?” got a test.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ===== BEAT 1 · CONCRETE — the Turing machine ===== -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">A head, a tape, a rule</h2>
+      <p class="cap">All of computing, stripped bare: read a symbol, write a symbol, step. Here it adds one.</p>
+      <div class="stage">
+        <svg id="tm" viewBox="0 0 800 300" role="img" aria-labelledby="tm-t tm-d" preserveAspectRatio="xMidYMid meet">
+          <title id="tm-t">A Turing machine incrementing a binary number</title>
+          <desc id="tm-d">A read/write head moves along a tape of cells holding the binary number 23. Reading a 1 it writes 0 and steps left; reading a 0 it writes 1 and halts, leaving 24.</desc>
+
+          <!-- tape cells -->
+          <g font-family="ui-monospace,Menlo,monospace" font-size="28" text-anchor="middle">
+            <!-- cell rects + digits drawn in JS-friendly static markup -->
+            <g fill="none" stroke="var(--struct)" stroke-opacity=".5">
+              <rect x="51"  y="140" width="58" height="58" rx="5"/>
+              <rect x="115" y="140" width="58" height="58" rx="5"/>
+              <rect x="179" y="140" width="58" height="58" rx="5"/>
+              <rect x="243" y="140" width="58" height="58" rx="5"/>
+              <rect x="307" y="140" width="58" height="58" rx="5"/>
+              <rect x="371" y="140" width="58" height="58" rx="5"/>
+              <rect x="435" y="140" width="58" height="58" rx="5"/>
+              <rect x="499" y="140" width="58" height="58" rx="5"/>
+              <rect x="563" y="140" width="58" height="58" rx="5"/>
+              <rect x="627" y="140" width="58" height="58" rx="5"/>
+              <rect x="691" y="140" width="58" height="58" rx="5"/>
+            </g>
+            <g fill="var(--struct)">
+              <text id="tm-c0"  x="80"  y="178"></text>
+              <text id="tm-c1"  x="144" y="178"></text>
+              <text id="tm-c2"  x="208" y="178">0</text>
+              <text id="tm-c3"  x="272" y="178">0</text>
+              <text id="tm-c4"  x="336" y="178">1</text>
+              <text id="tm-c5"  x="400" y="178">0</text>
+              <text id="tm-c6"  x="464" y="178">1</text>
+              <text id="tm-c7"  x="528" y="178">1</text>
+              <text id="tm-c8"  x="592" y="178">1</text>
+              <text id="tm-c9"  x="656" y="178"></text>
+              <text id="tm-c10" x="720" y="178"></text>
+            </g>
+          </g>
+
+          <!-- infinite-tape ellipses -->
+          <text x="30" y="178" fill="var(--dim)" font-size="22" text-anchor="middle">…</text>
+          <text x="772" y="178" fill="var(--dim)" font-size="22" text-anchor="middle">…</text>
+          <text x="51" y="124" fill="var(--dim)" font-size="9" letter-spacing="2">TAPE</text>
+
+          <!-- read/write head (translated by JS to current cell; base over cell 0) -->
+          <g id="tm-head" transform="translate(512,0)">
+            <rect x="49" y="138" width="62" height="62" rx="6" fill="none" stroke="var(--error)" stroke-width="2.5"/>
+            <polygon points="80,108 68,90 92,90" fill="var(--error)"/>
+            <rect x="62" y="76" width="36" height="14" rx="3" fill="var(--error)"/>
+            <text x="80" y="87" fill="var(--ink)" font-size="9" font-family="ui-monospace,monospace" text-anchor="middle" letter-spacing="1">R/W</text>
+          </g>
+
+          <!-- rule card -->
+          <g font-family="ui-monospace,Menlo,monospace" font-size="13" fill="var(--paper)">
+            <text x="51" y="246" fill="var(--dim)" font-size="10" letter-spacing="2">RULE TABLE</text>
+            <text x="51" y="268"><tspan fill="var(--struct)">read</tspan> 1 → <tspan fill="var(--struct)">write</tspan> 0, step <tspan fill="var(--error)">◄ left</tspan></text>
+            <text x="430" y="268"><tspan fill="var(--struct)">read</tspan> 0 → <tspan fill="var(--struct)">write</tspan> 1, <tspan fill="var(--rest)">halt</tspan></text>
+          </g>
+
+          <!-- status -->
+          <text id="tm-status" class="tm-status" x="691" y="124" fill="var(--era)" font-size="11" text-anchor="end" letter-spacing="1.5">READ → WRITE → STEP</text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--error)"></span>head (the computation)</i>
+        <i><span class="sw" style="background:var(--struct)"></span>tape symbols</i>
+        <i><span class="sw" style="background:var(--rest)"></span>halted · answer</i>
+      </div>
+      <p class="hint">23 → 24 · the head's motion <em>is</em> the arithmetic</p>
+    </section>
+
+    <!-- ===== BEAT 2 · ABSTRACT — the imitation game ===== -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">The imitation game</h2>
+      <p class="cap">A judge questions two hidden voices — one human, one machine — and must tell which is which.</p>
+      <div class="stage">
+        <svg viewBox="0 0 800 280" role="img" aria-labelledby="ig2-t ig2-d" preserveAspectRatio="xMidYMid meet">
+          <title id="ig2-t">The imitation game</title>
+          <desc id="ig2-d">A judge on the left sends a question across a curtain to two hidden respondents on the right, a human and a machine. Both send replies back. The judge must guess which reply came from the machine.</desc>
+
+          <!-- judge -->
+          <g>
+            <circle cx="120" cy="150" r="60" fill="none" stroke="var(--goal)" stroke-width="1.5" stroke-dasharray="3 6" opacity=".7"/>
+            <circle cx="120" cy="150" r="34" fill="var(--ink-2)" stroke="var(--struct)" stroke-width="1.5"/>
+            <text x="120" y="156" fill="var(--struct)" font-size="22" text-anchor="middle">?</text>
+            <text x="120" y="232" fill="var(--paper)" font-size="11" text-anchor="middle" letter-spacing="2">JUDGE</text>
+            <text x="120" y="92" fill="var(--goal)" font-size="9.5" text-anchor="middle" letter-spacing="1">which is the machine?</text>
+          </g>
+
+          <!-- question / answer channels -->
+          <defs>
+            <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--struct)"/>
+            </marker>
+            <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--dim)"/>
+            </marker>
+          </defs>
+          <line x1="168" y1="118" x2="408" y2="118" stroke="var(--struct)" stroke-width="1.5" marker-end="url(#ah)"/>
+          <text x="288" y="108" fill="var(--dim)" font-size="9.5" text-anchor="middle" letter-spacing="1">question →</text>
+          <line x1="408" y1="174" x2="172" y2="174" stroke="var(--dim)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+          <line x1="408" y1="192" x2="172" y2="192" stroke="var(--dim)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+          <text x="288" y="210" fill="var(--dim)" font-size="9.5" text-anchor="middle" letter-spacing="1">← two answers</text>
+
+          <!-- traveling message token (load-bearing motion) -->
+          <g id="ig2-msg"><circle cx="176" cy="118" r="7" fill="var(--struct)"/></g>
+
+          <!-- curtain -->
+          <line x1="430" y1="40" x2="430" y2="240" stroke="var(--era)" stroke-width="2" stroke-dasharray="2 8" opacity=".8"/>
+          <text x="430" y="30" fill="var(--era)" font-size="9" text-anchor="middle" letter-spacing="2">CURTAIN</text>
+
+          <!-- two hidden respondents -->
+          <g>
+            <rect x="600" y="76" width="150" height="56" rx="10" fill="var(--ink-2)" stroke="var(--struct)" stroke-width="1.4"/>
+            <text x="675" y="100" fill="var(--struct)" font-size="20" text-anchor="middle">?</text>
+            <text x="675" y="120" fill="var(--dim)" font-size="10" text-anchor="middle" letter-spacing="1">voice A</text>
+            <rect x="600" y="168" width="150" height="56" rx="10" fill="var(--ink-2)" stroke="var(--struct)" stroke-width="1.4"/>
+            <text x="675" y="192" fill="var(--struct)" font-size="20" text-anchor="middle">?</text>
+            <text x="675" y="212" fill="var(--dim)" font-size="10" text-anchor="middle" letter-spacing="1">voice B</text>
+          </g>
+
+          <!-- strip-it-bare stages -->
+          <text x="120" y="266" fill="var(--era)" font-size="10" text-anchor="middle" letter-spacing="1">① question</text>
+          <text x="400" y="266" fill="var(--era)" font-size="10" text-anchor="middle" letter-spacing="1">② two answers</text>
+          <text x="675" y="266" fill="var(--era)" font-size="10" text-anchor="middle" letter-spacing="1">③ a guess</text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--goal)"></span>the judgment sought</i>
+        <i><span class="sw" style="background:var(--struct)"></span>messages</i>
+      </div>
+      <p class="hint">identity is hidden — only the words cross the curtain</p>
+    </section>
+
+    <!-- ===== BEAT 3 · INTERACTIVE — which is the machine? ===== -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Which is the machine?</h2>
+      <p class="cap">Two replies, one written by a machine trying to pass. Click the one you suspect.</p>
+
+      <div class="stage" style="padding:clamp(16px,3.5vw,26px);">
+        <!-- live, JS-driven -->
+        <div id="ig" class="live" aria-live="polite">
+          <p class="ig-q" id="ig-q">—</p>
+          <p class="hint" id="ig-prog" style="margin:0 0 12px;">Round 1 of 3 · spotted 0</p>
+          <div class="ig-opts">
+            <button class="ig-opt" id="ig-a" type="button"><span class="ig-tag">A</span><span class="ig-txt" id="ig-at"></span></button>
+            <button class="ig-opt" id="ig-b" type="button"><span class="ig-tag">B</span><span class="ig-txt" id="ig-bt"></span></button>
+          </div>
+          <p class="ig-verdict" id="ig-v" role="status">Click the reply you think a machine wrote.</p>
+          <button class="ig-next" id="ig-next" type="button" hidden>Next round ►</button>
+        </div>
+
+        <!-- no-js fallback -->
+        <div class="static">
+          <p class="ig-q">“Add 34957 and 70764.”</p>
+          <div class="ig-static-row"><span class="t">Reply A</span><br>“Let me see… (pause) 105621.”</div>
+          <div class="ig-static-row"><span class="t">Reply B</span><br>“Around 105,700 — honestly I'd reach for a calculator.”</div>
+          <p class="cap" style="color:var(--rest);">Reveal: <b>A</b> was the machine. In Turing's own 1950 example it pauses and answers slightly wrong — playing dumb to seem human.</p>
+        </div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--goal)"></span>correct judgment</i>
+        <i><span class="sw" style="background:var(--error)"></span>fooled</i>
+      </div>
+      <p class="hint">a correct guess = you saw through the imitation</p>
+    </section>
+
+    <!-- ===== NODS (progressive disclosure) ===== -->
+    <details class="nods">
+      <summary>Footnotes · three turning points</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <div class="ny">1936</div>
+          <div class="nm">On Computable Numbers</div>
+          <div class="nd">Turing defines computation with an abstract machine — and proves the halting problem: no procedure can decide, for every program, whether it will ever stop.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">Universal</div>
+          <div class="nm">The universal machine</div>
+          <div class="nd">One machine can read another's rule table from its tape and run it. Software as data — the seed of every stored-program computer.</div>
+        </div>
+        <div class="nod">
+          <div class="ny">1950</div>
+          <div class="nm">Computing Machinery &amp; Intelligence</div>
+          <div class="nd">Turing replaces “can machines think?” with a game you can actually run: if a judge can't tell machine from human by conversation, the question dissolves.</div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="01-cybernetics.html"><span class="lab">◄ Prev</span><span class="ttl">Cybernetics</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="03-dartmouth.html"><span class="lab">Next ►</span><span class="ttl">Dartmouth 1956</span></a>
+</nav>
+
+<!-- ====== JS SCAFFOLD ====== -->
+<script>
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+</script>
+
+<!-- ====== BEAT LOGIC ====== -->
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Beat 1: Turing machine (increment 23 -> 24) ---------- */
+  (function(){
+    var svg = document.getElementById('tm');
+    if(!svg) return;
+    var INIT = ['','','0','0','1','0','1','1','1','',''];
+    var tape = INIT.slice();
+    var headG = document.getElementById('tm-head');
+    var statusEl = document.getElementById('tm-status');
+    var cells = [];
+    for(var i=0;i<11;i++){ cells.push(document.getElementById('tm-c'+i)); }
+    var head = 8, halted = false;
+
+    function paintAll(color){ for(var i=0;i<11;i++){ if(cells[i]) cells[i].setAttribute('fill', color); } }
+    function place(){ if(headG) headG.setAttribute('transform','translate('+(head*64)+',0)'); }
+    function flash(i, color){
+      var c = cells[i]; if(!c) return;
+      c.setAttribute('fill', color);
+      window.setTimeout(function(){ if(!halted) c.setAttribute('fill','var(--struct)'); }, 420);
+    }
+    function reset(){
+      tape = INIT.slice(); head = 8; halted = false;
+      for(var i=0;i<11;i++){ if(cells[i]) cells[i].textContent = tape[i]; }
+      paintAll('var(--struct)'); place();
+      if(statusEl) statusEl.textContent = 'READ → WRITE → STEP';
+    }
+    function step(){
+      if(halted) return;
+      if(statusEl) statusEl.textContent = 'COMPUTING…';
+      var s = tape[head];
+      if(s === '1'){
+        tape[head] = '0';
+        if(cells[head]) cells[head].textContent = '0';
+        flash(head, 'var(--error)');
+        head--; place();
+      } else {
+        tape[head] = '1';
+        if(cells[head]) cells[head].textContent = '1';
+        halted = true;
+        for(var i=2;i<9;i++){ if(cells[i]) cells[i].setAttribute('fill','var(--rest)'); }
+        if(statusEl){ statusEl.setAttribute('fill','var(--rest)'); statusEl.textContent = 'HALTED ✓  23 + 1 = 24'; }
+      }
+    }
+    function loop(){
+      step();
+      if(halted){
+        window.setTimeout(function(){
+          if(statusEl) statusEl.setAttribute('fill','var(--era)');
+          reset();
+          window.setTimeout(loop, 600);
+        }, 2100);
+      } else {
+        window.setTimeout(loop, 1100);
+      }
+    }
+
+    reset();
+    if(!reduce){ window.setTimeout(loop, 900); }  /* reduced motion: stays on legible start frame */
+  })();
+
+  /* ---------- Beat 3: imitation-game quiz ---------- */
+  (function(){
+    var root = document.getElementById('ig');
+    if(!root) return;
+    var rounds = [
+      { q:'“Do you like poetry?”',
+        a:'“Some. Never could get on with sonnets, myself.”',
+        b:'“I enjoy it, though rhythm is harder for me than meaning.”',
+        m:'b',
+        note:'B leans on “harder for me” — a tell of a system describing its own limits.' },
+      { q:'“Add 34957 and 70764.”',
+        a:'“Let me see… (pause) 105621.”',
+        b:'“Around 105,700 — honestly I’d reach for a calculator.”',
+        m:'a',
+        note:'Turing’s own 1950 example: A pauses and answers slightly wrong — playing dumb to seem human.' },
+      { q:'“What did you have for breakfast?”',
+        a:'“Toast. Ran out of coffee, which ruined the morning.”',
+        b:'“Cereal — the dull kind you buy when you forget to shop.”',
+        m:'b',
+        note:'B invents a plausible memory it never had. Lived detail is cheap to fake.' }
+    ];
+    var idx = 0, score = 0, answered = false;
+    var qEl = document.getElementById('ig-q');
+    var progEl = document.getElementById('ig-prog');
+    var btnA = document.getElementById('ig-a'), btnB = document.getElementById('ig-b');
+    var txtA = document.getElementById('ig-at'), txtB = document.getElementById('ig-bt');
+    var vEl = document.getElementById('ig-v');
+    var nextBtn = document.getElementById('ig-next');
+    if(!qEl||!btnA||!btnB||!txtA||!txtB||!vEl||!nextBtn||!progEl) return;
+
+    function render(){
+      var r = rounds[idx];
+      answered = false;
+      qEl.textContent = r.q;
+      txtA.textContent = r.a; txtB.textContent = r.b;
+      btnA.className = 'ig-opt'; btnB.className = 'ig-opt';
+      btnA.disabled = false; btnB.disabled = false;
+      btnA.querySelector('.ig-tag').textContent = 'A';
+      btnB.querySelector('.ig-tag').textContent = 'B';
+      vEl.className = 'ig-verdict';
+      vEl.textContent = 'Click the reply you think a machine wrote.';
+      progEl.textContent = 'Round ' + (idx+1) + ' of ' + rounds.length + ' · spotted ' + score;
+      nextBtn.hidden = true;
+      nextBtn.textContent = (idx + 1 < rounds.length) ? 'Next round ►' : 'See result ►';
+    }
+    function guess(pick){
+      if(answered) return;
+      answered = true;
+      var r = rounds[idx];
+      btnA.disabled = true; btnB.disabled = true;
+      var mBtn = (r.m === 'a') ? btnA : btnB;
+      var hBtn = (r.m === 'a') ? btnB : btnA;
+      mBtn.classList.add('is-machine');
+      hBtn.classList.add('is-human');
+      mBtn.querySelector('.ig-tag').textContent = mBtn.querySelector('.ig-tag').textContent.charAt(0) + ' · MACHINE';
+      hBtn.querySelector('.ig-tag').textContent = hBtn.querySelector('.ig-tag').textContent.charAt(0) + ' · HUMAN';
+      var correct = (pick === r.m);
+      if(correct){ score++; vEl.className = 'ig-verdict good';
+        vEl.textContent = 'Correct — ' + r.m.toUpperCase() + ' was the machine. ' + r.note;
+      } else { vEl.className = 'ig-verdict bad';
+        vEl.textContent = 'Fooled — ' + r.m.toUpperCase() + ' was the machine. ' + r.note;
+      }
+      progEl.textContent = 'Round ' + (idx+1) + ' of ' + rounds.length + ' · spotted ' + score;
+      nextBtn.hidden = false;
+    }
+    function next(){
+      if(idx + 1 < rounds.length){ idx++; render(); }
+      else { finish(); }
+    }
+    function finish(){
+      qEl.textContent = 'You spotted ' + score + ' of ' + rounds.length + '.';
+      progEl.textContent = score === rounds.length ? 'A sharp judge.' : 'The imitation works — that was Turing’s point.';
+      btnA.disabled = true; btnB.disabled = true;
+      vEl.className = 'ig-verdict';
+      vEl.textContent = 'If a judge can’t reliably tell which is which, asking “can it think?” stops being a useful question.';
+      nextBtn.textContent = 'Play again ►';
+      nextBtn.hidden = false;
+      nextBtn.onclick = function(){ idx = 0; score = 0; nextBtn.onclick = next; render(); };
+    }
+
+    btnA.addEventListener('click', function(){ guess('a'); });
+    btnB.addEventListener('click', function(){ guess('b'); });
+    nextBtn.onclick = next;
+    render();
+  })();
+})();
+</script>
+</body>
+</html>

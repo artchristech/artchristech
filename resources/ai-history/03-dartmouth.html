@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dartmouth 1956 — A History of AI</title>
+<!-- ============================================================
+     SHARED SHELL — "A History of AI" 15-page masterpiece
+     (inlined verbatim from _shell.html; placeholders filled)
+     ============================================================ -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+
+  /* ======== PAGE-LOCAL (era 03 beats) ======== */
+  body{--era:var(--dawn);}
+
+  /* beat 1 — spark + conjecture */
+  .b1stage{aspect-ratio:16/8;}
+  .conj{position:absolute;left:0;right:0;bottom:0;padding:clamp(14px,3vw,28px);
+    font-family:var(--serif);font-style:italic;font-size:clamp(14px,3vw,24px);line-height:1.4;
+    color:var(--struct);max-width:30ch;margin:0 auto;text-align:center;}
+  .conj .em{color:var(--era);font-style:normal;}
+  .conj .ltr{opacity:0;transition:opacity .18s ease;}
+  .no-js .conj .ltr,.rm .conj .ltr{opacity:1;}
+
+  /* constellation (beats 2 & 3) */
+  .ray{stroke:var(--struct);stroke-width:1;opacity:.16;}
+  .js .b2 .ray,.js .b2 .nodeg{opacity:0;transition:opacity .5s ease;}
+  .js .b2 .ray.lit{opacity:.30;}
+  .js .b2 .nodeg.lit{opacity:1;}
+  .core{fill:var(--era);}
+  .nodedot{fill:var(--ink-2);stroke:var(--era);stroke-width:1.5;}
+  .nodelbl{fill:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:.04em;}
+  .corehalo{fill:var(--era);opacity:.18;}
+
+  /* beat 3 interactive */
+  .b3 .probe{cursor:pointer;}
+  .b3 .probe:focus{outline:none;}
+  .b3 .probe .nodedot{transition:r .15s ease,stroke-width .15s ease;}
+  .b3 .probe:hover .nodedot,.b3 .probe:focus-visible .nodedot{r:11;stroke-width:2.5;}
+  .vtxt{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;}
+  .b3 .probe .vtxt{opacity:0;transition:opacity .18s ease;}
+  .js .b3 .probe:hover .vtxt,
+  .js .b3 .probe:focus-visible .vtxt,
+  .js .b3 .probe.open .vtxt{opacity:1;}
+  .no-js .b3 .probe .vtxt{opacity:1;}
+  .v-soon{fill:var(--rest);}
+  .v-late{fill:var(--error);}
+  .b3 .gap{fill:var(--dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on title="Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on title="The Turing Era"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" class="cur" aria-current="page" title="Dartmouth 1956"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" title="Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" title="The Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" class="winter" title="The First Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" title="Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="winter" title="The Second Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" title="Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" title="Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" title="Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" title="AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" title="The Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" title="Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" title="Generative &amp; Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 03 / 15</span> · Dartmouth 1956 <span class="yrs">1956</span></p>
+    <h1>The field is named</h1>
+    <p class="changed">A summer workshop gave the field its <b>name</b> and its founding conjecture.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- BEAT 1 — CONCRETE: the spark catches, the conjecture letters in -->
+    <section class="beat b1" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1 · Concrete</b> — Summer 1956</p>
+      <h2 id="b1h">A spark catches</h2>
+      <p class="cap">In a small workshop, one idea ignites — and the founding conjecture letters in.</p>
+      <div class="stage b1stage">
+        <canvas id="spark" width="800" height="400"
+          aria-label="A single ember at the center ignites and flares into a steady flame — the moment the founding idea catches."></canvas>
+        <p class="conj" id="conj">
+          <span class="seg">&ldquo;Every aspect of <span class="em">learning</span> can be so precisely described that a machine can <span class="em">simulate</span> it.&rdquo;</span>
+        </p>
+      </div>
+      <div class="legend"><i><span class="sw" style="background:var(--era)"></span>dawn = the founding optimism, catching</i></div>
+    </section>
+
+    <!-- BEAT 2 — ABSTRACT: the agenda branches out as a constellation -->
+    <section class="beat b2" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2 · Abstract</b> — The agenda</p>
+      <h2 id="b2h">It branches into a field</h2>
+      <p class="cap">From that one spark, the sub-fields the proposal named light up in sequence.</p>
+      <div class="stage">
+        <svg id="constellation" viewBox="0 0 600 340" role="img" aria-labelledby="b2t b2d">
+          <title id="b2t">The Dartmouth agenda as a constellation</title>
+          <desc id="b2d">A central spark radiates lines to six named ambitions: Learning, Language, Reasoning, Search, Neural Nets, and Creativity.</desc>
+          <!-- rays -->
+          <g id="rays">
+            <line class="ray" data-i="0" x1="300" y1="170" x2="300" y2="55"></line>
+            <line class="ray" data-i="1" x1="300" y1="170" x2="400" y2="112"></line>
+            <line class="ray" data-i="2" x1="300" y1="170" x2="400" y2="228"></line>
+            <line class="ray" data-i="3" x1="300" y1="170" x2="300" y2="285"></line>
+            <line class="ray" data-i="4" x1="300" y1="170" x2="200" y2="228"></line>
+            <line class="ray" data-i="5" x1="300" y1="170" x2="200" y2="112"></line>
+          </g>
+          <!-- core spark -->
+          <circle class="corehalo" cx="300" cy="170" r="16"></circle>
+          <circle class="core" cx="300" cy="170" r="6"></circle>
+          <!-- nodes -->
+          <g class="nodeg" data-i="0"><circle class="nodedot" cx="300" cy="55" r="8"></circle><text class="nodelbl" x="300" y="42" text-anchor="middle">Learning</text></g>
+          <g class="nodeg" data-i="1"><circle class="nodedot" cx="400" cy="112" r="8"></circle><text class="nodelbl" x="414" y="110" text-anchor="start">Language</text></g>
+          <g class="nodeg" data-i="2"><circle class="nodedot" cx="400" cy="228" r="8"></circle><text class="nodelbl" x="414" y="232" text-anchor="start">Reasoning</text></g>
+          <g class="nodeg" data-i="3"><circle class="nodedot" cx="300" cy="285" r="8"></circle><text class="nodelbl" x="300" y="305" text-anchor="middle">Search</text></g>
+          <g class="nodeg" data-i="4"><circle class="nodedot" cx="200" cy="228" r="8"></circle><text class="nodelbl" x="186" y="232" text-anchor="end">Neural Nets</text></g>
+          <g class="nodeg" data-i="5"><circle class="nodedot" cx="200" cy="112" r="8"></circle><text class="nodelbl" x="186" y="110" text-anchor="end">Creativity</text></g>
+        </svg>
+      </div>
+      <div class="legend"><i><span class="sw" style="background:var(--era)"></span>each node = one ambition the proposal named</i></div>
+    </section>
+
+    <!-- BEAT 3 — INTERACTIVE: probe each ambition; promise vs. delivery -->
+    <section class="beat b3" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3 · Interactive</b> — Promise vs. delivery</p>
+      <h2 id="b3h">How long did each take?</h2>
+      <p class="cap">Hover or tap an ambition. The gap between promise and delivery foreshadows the winters.</p>
+      <div class="stage">
+        <svg id="forecast" viewBox="0 0 600 340" role="img" aria-labelledby="b3t b3d">
+          <title id="b3t">Each ambition, honestly marked</title>
+          <desc id="b3d">Activating each ambition reveals whether it was solved soon or took decades — the gap the field underestimated.</desc>
+          <line class="ray" x1="300" y1="170" x2="300" y2="55"></line>
+          <line class="ray" x1="300" y1="170" x2="400" y2="112"></line>
+          <line class="ray" x1="300" y1="170" x2="400" y2="228"></line>
+          <line class="ray" x1="300" y1="170" x2="300" y2="285"></line>
+          <line class="ray" x1="300" y1="170" x2="200" y2="228"></line>
+          <line class="ray" x1="300" y1="170" x2="200" y2="112"></line>
+          <circle class="corehalo" cx="300" cy="170" r="16"></circle>
+          <circle class="core" cx="300" cy="170" r="6"></circle>
+          <text class="gap" x="300" y="174" text-anchor="middle" dominant-baseline="middle"></text>
+
+          <!-- probe groups: tabindex + role=button for keyboard/AT -->
+          <g class="probe" data-v="late"  tabindex="0" role="button" aria-label="Learning: took decades">
+            <circle class="nodedot" cx="300" cy="55" r="8"></circle>
+            <text class="nodelbl" x="300" y="42" text-anchor="middle">Learning</text>
+            <text class="vtxt v-late" x="300" y="26" text-anchor="middle">took decades</text>
+          </g>
+          <g class="probe" data-v="late" tabindex="0" role="button" aria-label="Language: took decades">
+            <circle class="nodedot" cx="400" cy="112" r="8"></circle>
+            <text class="nodelbl" x="414" y="110" text-anchor="start">Language</text>
+            <text class="vtxt v-late" x="414" y="126" text-anchor="start">took decades</text>
+          </g>
+          <g class="probe" data-v="soon" tabindex="0" role="button" aria-label="Reasoning: solved soon">
+            <circle class="nodedot" cx="400" cy="228" r="8"></circle>
+            <text class="nodelbl" x="414" y="232" text-anchor="start">Reasoning</text>
+            <text class="vtxt v-soon" x="414" y="248" text-anchor="start">solved soon</text>
+          </g>
+          <g class="probe" data-v="soon" tabindex="0" role="button" aria-label="Search: solved soon">
+            <circle class="nodedot" cx="300" cy="285" r="8"></circle>
+            <text class="nodelbl" x="300" y="305" text-anchor="middle">Search</text>
+            <text class="vtxt v-soon" x="300" y="321" text-anchor="middle">solved soon</text>
+          </g>
+          <g class="probe" data-v="late" tabindex="0" role="button" aria-label="Neural Nets: took decades">
+            <circle class="nodedot" cx="200" cy="228" r="8"></circle>
+            <text class="nodelbl" x="186" y="232" text-anchor="end">Neural Nets</text>
+            <text class="vtxt v-late" x="186" y="248" text-anchor="end">took decades</text>
+          </g>
+          <g class="probe" data-v="late" tabindex="0" role="button" aria-label="Creativity: took decades">
+            <circle class="nodedot" cx="200" cy="112" r="8"></circle>
+            <text class="nodelbl" x="186" y="110" text-anchor="end">Creativity</text>
+            <text class="vtxt v-late" x="186" y="126" text-anchor="end">took decades</text>
+          </g>
+        </svg>
+      </div>
+      <div class="legend">
+        <i><span class="sw" style="background:var(--rest)"></span>solved soon</i>
+        <i><span class="sw" style="background:var(--error)"></span>took decades — the gap</i>
+        <span class="hint">hover / tap a node</span>
+      </div>
+    </section>
+
+    <!-- ====== NODS (progressive disclosure) ====== -->
+    <details class="nods">
+      <summary>Footnotes &amp; nods</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <p class="ny">The name</p>
+          <p class="nm">"Artificial Intelligence"</p>
+          <p class="nd">John McCarthy coined the term in the 1955 proposal, partly to avoid the baggage of "cybernetics."</p>
+        </div>
+        <div class="nod">
+          <p class="ny">The room</p>
+          <p class="nm">Ten men, one summer</p>
+          <p class="nd">McCarthy, Minsky, Shannon, Rochester — and visitors Newell &amp; Simon, who arrived already running a working program.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">The optimism</p>
+          <p class="nm">"Two months"</p>
+          <p class="nd">The proposal believed a summer of ten people could make significant progress. The winters were decades away.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="02-turing.html"><span class="lab">&#9668; Prev</span><span class="ttl">The Turing Era</span></a>
+  <a class="idx" href="index.html"><span class="lab">&#9671; Timeline</span></a>
+  <a class="next" href="04-symbolic-ai.html"><span class="lab">Next &#9658;</span><span class="ttl">Symbolic AI</span></a>
+</nav>
+
+<!-- ====== JS ====== -->
+<script>
+"use strict";
+(function(){
+  var body=document.body;
+  body.classList.remove('no-js');
+  body.classList.add('js');
+
+  var RM=false;
+  try{ RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ RM=false; }
+  if(RM) body.classList.add('rm');
+
+  /* ---------- helpers ---------- */
+  function onVisible(el,cb){
+    if(!el) return;
+    if(!('IntersectionObserver' in window)){ cb(); return; }
+    var io=new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        if(en.isIntersecting){ cb(); io.disconnect(); }
+      });
+    },{threshold:.35});
+    io.observe(el);
+  }
+
+  /* ---------- BEAT 1: spark catches + conjecture letters in ---------- */
+  (function(){
+    var cv=document.getElementById('spark');
+    var conj=document.getElementById('conj');
+    if(conj){
+      // wrap conjecture text in per-letter spans for the reveal
+      var segs=conj.querySelectorAll('.seg');
+      segs.forEach(function(seg){
+        var walk=document.createTreeWalker(seg,NodeFilter.SHOW_TEXT,null);
+        var nodes=[],n;
+        while((n=walk.nextNode())) nodes.push(n);
+        nodes.forEach(function(tn){
+          var parent=tn.parentNode, frag=document.createDocumentFragment();
+          var txt=tn.nodeValue;
+          for(var i=0;i<txt.length;i++){
+            var s=document.createElement('span');
+            s.className='ltr'; s.textContent=txt[i];
+            frag.appendChild(s);
+          }
+          parent.replaceChild(frag,tn);
+        });
+      });
+    }
+    var letters=conj?conj.querySelectorAll('.ltr'):[];
+
+    if(!cv||!cv.getContext){ // no canvas: still reveal text
+      for(var k=0;k<letters.length;k++) letters[k].style.opacity=1;
+      return;
+    }
+    var ctx;
+    try{ ctx=cv.getContext('2d'); }catch(e){ ctx=null; }
+    if(!ctx){ for(var j=0;j<letters.length;j++) letters[j].style.opacity=1; return; }
+
+    var W=cv.width,H=cv.height,cx=W/2,cy=H*0.46;
+    var DAWN='#F2C14E';
+
+    function drawFrame(t){ // t: 0..1 ignition progress
+      ctx.clearRect(0,0,W,H);
+      var ease=t*t*(3-2*t);
+      var R=10+ease*70;
+      // outer glow
+      var g=ctx.createRadialGradient(cx,cy,0,cx,cy,R*2.4);
+      g.addColorStop(0,'rgba(242,193,78,'+(0.85*ease+0.1)+')');
+      g.addColorStop(0.4,'rgba(242,193,78,'+(0.25*ease)+')');
+      g.addColorStop(1,'rgba(242,193,78,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(cx,cy,R*2.4,0,Math.PI*2); ctx.fill();
+      // core
+      ctx.fillStyle=DAWN;
+      ctx.beginPath(); ctx.arc(cx,cy,4+ease*5,0,Math.PI*2); ctx.fill();
+      // rising embers (catching)
+      var n=Math.floor(ease*9);
+      for(var i=0;i<n;i++){
+        var a=(i/9)*Math.PI*2+t*2.0;
+        var rr=R*(0.4+0.6*((i*37)%10)/10);
+        var ex=cx+Math.cos(a)*rr;
+        var ey=cy+Math.sin(a)*rr*0.7-ease*18;
+        ctx.globalAlpha=0.5*ease;
+        ctx.fillStyle=DAWN;
+        ctx.beginPath(); ctx.arc(ex,ey,1.6,0,Math.PI*2); ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    }
+
+    function revealText(p){ // p:0..1 fraction of letters shown
+      var show=Math.floor(letters.length*p);
+      for(var i=0;i<letters.length;i++) letters[i].style.opacity=(i<show)?1:0;
+    }
+
+    if(RM){ drawFrame(1); revealText(1); return; }
+
+    onVisible(cv.closest('.beat'),function(){
+      var start=null, DUR=1500;
+      function step(ts){
+        if(start===null) start=ts;
+        var t=Math.min(1,(ts-start)/DUR);
+        drawFrame(t<0.55? t/0.55 : 1); // ignite first, hold
+        if(t>0.35) revealText(Math.min(1,(t-0.35)/0.6));
+        if(t<1) requestAnimationFrame(step);
+        else { drawFrame(1); revealText(1); }
+      }
+      requestAnimationFrame(step);
+    });
+  })();
+
+  /* ---------- BEAT 2: constellation lights up in sequence ---------- */
+  (function(){
+    var svg=document.getElementById('constellation');
+    if(!svg) return;
+    var rays=svg.querySelectorAll('.ray');
+    var nodes=svg.querySelectorAll('.nodeg');
+    function litAll(){
+      rays.forEach(function(r){r.classList.add('lit');});
+      nodes.forEach(function(nd){nd.classList.add('lit');});
+    }
+    if(RM){ litAll(); return; }
+    onVisible(svg.closest('.beat'),function(){
+      for(var i=0;i<nodes.length;i++){
+        (function(i){
+          setTimeout(function(){
+            var r=svg.querySelector('.ray[data-i="'+i+'"]');
+            var nd=svg.querySelector('.nodeg[data-i="'+i+'"]');
+            if(r) r.classList.add('lit');
+            if(nd) nd.classList.add('lit');
+          }, 220*i+120);
+        })(i);
+      }
+    });
+  })();
+
+  /* ---------- BEAT 3: probe each ambition (tap = sticky toggle) ---------- */
+  (function(){
+    var svg=document.getElementById('forecast');
+    if(!svg) return;
+    var probes=svg.querySelectorAll('.probe');
+    var gapTxt=svg.querySelector('.gap');
+    function setGap(v){
+      if(!gapTxt) return;
+      gapTxt.textContent = v==='late' ? 'the gap' : (v==='soon' ? 'kept' : '');
+      gapTxt.setAttribute('fill', v==='late' ? '#FF7849' : (v==='soon' ? '#9EF01A' : 'rgba(244,246,245,.46)'));
+    }
+    probes.forEach(function(p){
+      function activate(){
+        probes.forEach(function(q){ if(q!==p) q.classList.remove('open'); });
+        p.classList.toggle('open');
+        setGap(p.classList.contains('open')? p.getAttribute('data-v') : '');
+      }
+      function preview(){ setGap(p.getAttribute('data-v')); }
+      function clear(){ if(!svg.querySelector('.probe.open')) setGap(''); }
+      p.addEventListener('click',activate);
+      p.addEventListener('mouseenter',preview);
+      p.addEventListener('mouseleave',clear);
+      p.addEventListener('focus',preview);
+      p.addEventListener('blur',clear);
+      p.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){ e.preventDefault(); activate(); }
+      });
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generative &amp; Agentic · A History of AI · Era 15 / 15</title>
+
+<!-- ============================================================
+     SHARED SHELL (inlined verbatim from _shell.html)
+     ============================================================ -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== page-specific styles (no-js contract + controls) ====== -->
+<style>
+  body.no-js .live{display:none;}
+  .static{display:none;}
+  body.no-js .static{display:block;}
+  .stage figcaption{position:absolute;left:12px;bottom:10px;font-size:9.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--dim);pointer-events:none;}
+  .controls{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;margin-top:4px;}
+  .controls button{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink);background:var(--era);border:0;border-radius:6px;padding:9px 16px;cursor:pointer;}
+  .controls button.ghost{background:transparent;color:var(--era);border:1px solid var(--era);}
+  .controls button:focus-visible{outline:2px solid var(--paper);outline-offset:2px;}
+  .controls label{display:inline-flex;align-items:center;gap:9px;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--dim);}
+  .controls input[type=range]{accent-color:var(--era);width:130px;}
+  .readout{font-size:10.5px;letter-spacing:.1em;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .readout b{color:var(--era);font-weight:400;}
+  .readout b.atrest{color:var(--rest);}
+</style>
+</head>
+
+<body class="no-js" style="--era:var(--boom)">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on aria-label="Era 1: Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on aria-label="Era 2: Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on aria-label="Era 3: Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on aria-label="Era 4: Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on aria-label="Era 5: Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" class="winter" aria-label="Era 6: First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" data-on aria-label="Era 7: Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="winter" aria-label="Era 8: Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" data-on aria-label="Era 9: Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" data-on aria-label="Era 10: Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" data-on aria-label="Era 11: Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" data-on aria-label="Era 12: AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" data-on aria-label="Era 13: Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" data-on aria-label="Era 14: Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" class="cur" aria-current="page" aria-label="Era 15: Generative and Agentic (current)"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 15 / 15</span> · Generative &amp; Agentic <span class="yrs">2022 — now</span></p>
+    <h1>Generative &amp; Agentic</h1>
+    <p class="changed">Models <b>generate and act</b> — and the feedback loop returns.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ============ BEAT 1 · CONCRETE ============ -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">The output becomes the next input</h2>
+      <p class="cap">One token at a time — each generated token is fed back in to predict the next.</p>
+      <figure class="stage" style="margin:0">
+        <!-- LIVE -->
+        <canvas class="live" id="c1" width="1080" height="300"
+          aria-label="A token tape generated left to right. The model emits one token, and a curved arrow loops that newest token back to the model as its next input — the output becomes the next input.">
+        </canvas>
+        <!-- STATIC fallback (JS off / reduced motion baseline) -->
+        <svg class="static" viewBox="0 0 1080 300" role="img" aria-labelledby="b1t b1d" preserveAspectRatio="xMidYMid meet">
+          <title id="b1t">Autoregressive generation</title>
+          <desc id="b1d">A row of generated tokens, with an arrow feeding the newest token back into the model as its next input.</desc>
+          <g font-family="ui-monospace,monospace" font-size="20" text-anchor="middle">
+            <rect x="60" y="130" width="110" height="46" rx="8" fill="none" stroke="#E8DCC0" opacity=".5"/>
+            <text x="115" y="160" fill="#E8DCC0" opacity=".7">the</text>
+            <rect x="190" y="130" width="110" height="46" rx="8" fill="none" stroke="#E8DCC0" opacity=".5"/>
+            <text x="245" y="160" fill="#E8DCC0" opacity=".7">loop</text>
+            <rect x="320" y="130" width="110" height="46" rx="8" fill="none" stroke="#E8DCC0" opacity=".5"/>
+            <text x="375" y="160" fill="#E8DCC0" opacity=".7">comes</text>
+            <rect x="450" y="130" width="130" height="46" rx="8" fill="#19E3C1" opacity=".18" stroke="#19E3C1"/>
+            <text x="515" y="160" fill="#19E3C1">back ▍</text>
+          </g>
+          <path d="M515 130 C 515 60, 760 60, 760 150" fill="none" stroke="#FF7849" stroke-width="3"/>
+          <path d="M760 150 l -8 -14 l 16 0 z" fill="#FF7849"/>
+          <text x="640" y="48" fill="#FF7849" font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">fed back as next input</text>
+        </svg>
+        <figcaption>autoregressive · token stream</figcaption>
+      </figure>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--struct)"></span> already-generated context</i>
+        <i><span class="sw" style="background:var(--goal)"></span> the new token</i>
+        <i><span class="sw" style="background:var(--error)"></span> fed back as next input</i>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 2 · ABSTRACT ============ -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">The agent loop is the same loop</h2>
+      <p class="cap">Propose an action, the world responds, observe, repeat — and reward tunes the policy.</p>
+      <figure class="stage" style="margin:0">
+        <canvas class="live" id="c2" width="1080" height="460"
+          aria-label="A closed feedback loop with four stages — model, action, world, observe — drawn as a circle. A signal token travels clockwise around the loop and returns to the model. A reward pulse periodically nudges the model, tuning the policy toward the goal at the centre. This is the cybernetic loop of Era 01.">
+        </canvas>
+        <svg class="static" viewBox="0 0 1080 460" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+          <title id="b2t">The agent feedback loop</title>
+          <desc id="b2d">A closed circular loop: model proposes an action, the world responds, the agent observes, and the cycle repeats. A reward signal tunes the model toward the central goal.</desc>
+          <circle cx="540" cy="230" r="150" fill="none" stroke="#E8DCC0" stroke-width="2" opacity=".45"/>
+          <circle cx="540" cy="230" r="10" fill="#19E3C1"/>
+          <text x="540" y="262" fill="#19E3C1" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">GOAL</text>
+          <g font-family="ui-monospace,monospace" font-size="13" text-anchor="middle" fill="#F4F6F5">
+            <circle cx="540" cy="80" r="34" fill="#0E1B2A" stroke="#E8DCC0"/><text x="540" y="84">MODEL</text>
+            <circle cx="690" cy="230" r="34" fill="#0E1B2A" stroke="#E8DCC0"/><text x="690" y="234">ACTION</text>
+            <circle cx="540" cy="380" r="34" fill="#0E1B2A" stroke="#E8DCC0"/><text x="540" y="384">WORLD</text>
+            <circle cx="390" cy="230" r="34" fill="#0E1B2A" stroke="#E8DCC0"/><text x="390" y="234">OBSERVE</text>
+          </g>
+          <circle cx="624" cy="124" r="9" fill="#FF7849"/>
+          <path d="M250 120 L 506 80" fill="none" stroke="#9EF01A" stroke-width="3" stroke-dasharray="5 5"/>
+          <text x="250" y="108" fill="#9EF01A" font-family="ui-monospace,monospace" font-size="12">reward tunes policy</text>
+        </svg>
+        <figcaption>agent loop = cybernetic loop · Era 01 returns</figcaption>
+      </figure>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--struct)"></span> the closed loop</i>
+        <i><span class="sw" style="background:var(--error)"></span> signal in motion</i>
+        <i><span class="sw" style="background:var(--rest)"></span> reward tuning</i>
+        <i><span class="sw" style="background:var(--goal)"></span> goal</i>
+      </div>
+    </section>
+
+    <!-- ============ BEAT 3 · INTERACTIVE ============ -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Close the loop yourself</h2>
+      <p class="cap">Step the loop or nudge the reward; watch behavior settle toward the goal.</p>
+      <figure class="stage" style="margin:0">
+        <canvas class="live" id="c3" width="1080" height="300"
+          aria-label="An agent value on a track. Drag to set the goal, adjust the reward-gain slider, then step or run the loop. Each iteration the agent moves toward the goal by gain times the error; the dot is coral when far and turns chartreuse when it settles at rest.">
+        </canvas>
+        <svg class="static" viewBox="0 0 1080 300" role="img" aria-labelledby="b3t b3d" preserveAspectRatio="xMidYMid meet">
+          <title id="b3t">Settling toward the goal</title>
+          <desc id="b3d">An agent moving along a track from a far position (coral) toward a goal (teal), arriving at rest (chartreuse).</desc>
+          <line x1="120" y1="160" x2="960" y2="160" stroke="#E8DCC0" stroke-width="2" opacity=".4"/>
+          <line x1="820" y1="130" x2="820" y2="190" stroke="#19E3C1" stroke-width="3"/>
+          <text x="820" y="118" fill="#19E3C1" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">GOAL</text>
+          <circle cx="300" cy="160" r="9" fill="#FF7849" opacity=".35"/>
+          <circle cx="520" cy="160" r="9" fill="#FF7849" opacity=".55"/>
+          <circle cx="700" cy="160" r="9" fill="#FF7849" opacity=".8"/>
+          <circle cx="820" cy="160" r="13" fill="#9EF01A"/>
+          <text x="820" y="210" fill="#9EF01A" font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">at rest</text>
+        </svg>
+        <figcaption>control &amp; communication — the arc closes</figcaption>
+      </figure>
+      <div class="controls live" role="group" aria-label="Agent loop controls">
+        <button id="step" type="button">Step the loop</button>
+        <button id="run" type="button" class="ghost">Run</button>
+        <label>Reward gain
+          <input id="gain" type="range" min="5" max="60" value="22" aria-label="Reward gain">
+        </label>
+        <span class="readout" aria-live="polite">error <b id="err">—</b> · step <b id="steps">0</b> · <b id="state">running</b></span>
+      </div>
+      <p class="hint live">Drag inside the stage to move the goal · inject error, watch it resolve</p>
+      <div class="legend" aria-hidden="true">
+        <i><span class="sw" style="background:var(--error)"></span> far from goal</i>
+        <i><span class="sw" style="background:var(--goal)"></span> the goal</i>
+        <i><span class="sw" style="background:var(--rest)"></span> at rest</i>
+      </div>
+    </section>
+
+    <!-- ====== NODS ====== -->
+    <details class="nods">
+      <summary>The threads that tie back</summary>
+      <div class="nodgrid">
+        <div class="nod">
+          <p class="ny">2022 · ChatGPT</p>
+          <p class="nm">RLHF</p>
+          <p class="nd">Human preference becomes a reward signal; the policy is tuned by the same loop it runs in.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Generation</p>
+          <p class="nm">Diffusion</p>
+          <p class="nd">Image models denoise from pure noise back toward a sample — generation as iterated correction.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Agents</p>
+          <p class="nm">Tool use</p>
+          <p class="nd">The model proposes an action, a tool or the world responds, it observes, and acts again.</p>
+        </div>
+        <div class="nod">
+          <p class="ny">Era 01 · 1948</p>
+          <p class="nm">The loop returns</p>
+          <p class="nd">Wiener: "control and communication in the animal and the machine." The arc closes where it opened.</p>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="14-scaling-laws.html"><span class="lab">◄ Prev</span><span class="ttl">Scaling Laws</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="index.html"><span class="lab">Next ►</span><span class="ttl">The arc closes</span></a>
+</nav>
+
+<!-- ====== JS ====== -->
+<script>
+(function(){
+  'use strict';
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+
+  var reduce = false;
+  try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ reduce = false; }
+
+  // ---- shared canvas fit (DPR-crisp, logical coords) ----
+  function setup(canvas, logicalH){
+    if(!canvas) return null;
+    var ctx;
+    try{ ctx = canvas.getContext('2d'); }catch(e){ return null; }
+    if(!ctx) return null;
+    var state = {ctx:ctx, w:0, h:logicalH};
+    function fit(){
+      var cssW = canvas.clientWidth || canvas.parentNode.clientWidth || 1080;
+      var dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+      state.w = cssW;
+      canvas.width = Math.round(cssW * dpr);
+      canvas.height = Math.round(logicalH * dpr);
+      canvas.style.height = logicalH + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    fit();
+    try{
+      if(window.ResizeObserver){
+        var ro = new ResizeObserver(function(){ fit(); state.dirty = true; });
+        ro.observe(canvas);
+      } else {
+        window.addEventListener('resize', function(){ fit(); state.dirty = true; });
+      }
+    }catch(e){ /* ignore */ }
+    return state;
+  }
+
+  var C = {
+    ink2:'#0E1B2A', goal:'#19E3C1', error:'#FF7849',
+    rest:'#9EF01A', struct:'#E8DCC0', paper:'#F4F6F5', dim:'rgba(244,246,245,.46)'
+  };
+  function withAlpha(hex, a){
+    var n = parseInt(hex.slice(1),16);
+    return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+  }
+  var TAU = Math.PI*2;
+
+  // =================================================================
+  // BEAT 1 — autoregressive generation: output becomes next input
+  // =================================================================
+  (function(){
+    var s = setup(document.getElementById('c1'), 300);
+    if(!s) return;
+    var ctx = s.ctx;
+    var words = ['the','loop','comes','back','as','input','again','—'];
+    var cellW = 96, cellH = 46, gap = 16, yRow = 150;
+    // phase in [0,1] per emit cycle; index = which token is "new"
+    var idx = 1, phase = 0, last = 0;
+
+    function layoutStart(count){
+      var total = count*cellW + (count-1)*gap;
+      return (s.w - total)/2;
+    }
+
+    function draw(t){
+      var w = s.w, h = s.h;
+      ctx.clearRect(0,0,w,h);
+      var shown = idx+1;
+      var x0 = layoutStart(shown);
+      // baseline tape
+      for(var i=0;i<shown;i++){
+        var x = x0 + i*(cellW+gap);
+        var isNew = (i===idx);
+        var appear = isNew ? Math.min(1, phase*2.2) : 1;
+        ctx.globalAlpha = isNew ? appear : .85;
+        ctx.lineWidth = 1.4;
+        if(isNew){
+          ctx.fillStyle = withAlpha(C.goal,.16*appear);
+          ctx.strokeStyle = C.goal;
+        } else {
+          ctx.fillStyle = 'rgba(0,0,0,0)';
+          ctx.strokeStyle = withAlpha(C.struct,.5);
+        }
+        roundRect(ctx, x, yRow + (isNew?(1-appear)*14:0), cellW, cellH, 8);
+        ctx.fill(); ctx.stroke();
+        ctx.globalAlpha = isNew ? appear : .8;
+        ctx.fillStyle = isNew ? C.goal : withAlpha(C.struct,.75);
+        ctx.font = '18px ui-monospace,monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(words[i % words.length], x+cellW/2, yRow+cellH/2 + (isNew?(1-appear)*14:0));
+      }
+      ctx.globalAlpha = 1;
+      // feedback arc: from the NEW token back to the model input (front)
+      var newX = x0 + idx*(cellW+gap) + cellW/2;
+      var headX = x0 - 6;
+      var arcP = Math.max(0, Math.min(1, (phase-0.35)/0.6));
+      if(arcP>0){
+        var topY = 64;
+        ctx.strokeStyle = C.error;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        // sample a quadratic-ish path up over the top and back to the head
+        var steps = 48, lastPt=null;
+        for(var k=0;k<=steps*arcP;k++){
+          var u = k/steps;
+          var px = bez(newX, (newX+headX)/2, headX, u);
+          var py = bez(yRow, topY, yRow+4, u);
+          if(k===0){ ctx.moveTo(px,py); } else { ctx.lineTo(px,py); }
+          lastPt = {x:px,y:py};
+        }
+        ctx.stroke();
+        if(arcP>0.96 && lastPt){
+          // arrowhead into the head/input
+          ctx.fillStyle = C.error;
+          ctx.beginPath();
+          ctx.moveTo(lastPt.x-2,lastPt.y);
+          ctx.lineTo(lastPt.x+12,lastPt.y-6);
+          ctx.lineTo(lastPt.x+12,lastPt.y+6);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.fillStyle = C.error;
+        ctx.font = '12px ui-monospace,monospace';
+        ctx.textAlign='center';
+        ctx.globalAlpha = Math.min(1,arcP*1.4);
+        ctx.fillText('fed back as next input', (newX+headX)/2, topY-12);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function bez(a,b,c,u){ var m=1-u; return m*m*a + 2*m*u*b + u*u*c; }
+    function roundRect(c,x,y,w,h,r){
+      c.beginPath();
+      c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r);
+      c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath();
+    }
+
+    if(reduce){ idx = 3; phase = 1; draw(0); return; }
+    function loop(t){
+      var dt = (t-last)/1000; last = t;
+      if(dt>0 && dt<0.2){ phase += dt*0.7; }
+      else { last = t; }
+      if(phase>=1){ phase = 0; idx++; if(idx>=words.length){ idx = 1; } }
+      draw(t);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // =================================================================
+  // BEAT 2 — the agent loop = the cybernetic loop (Era 01 bookend)
+  // =================================================================
+  (function(){
+    var s = setup(document.getElementById('c2'), 460);
+    if(!s) return;
+    var ctx = s.ctx;
+    var nodes = [
+      {a:-Math.PI/2, label:'MODEL'},
+      {a:0,          label:'ACTION'},
+      {a:Math.PI/2,  label:'WORLD'},
+      {a:Math.PI,    label:'OBSERVE'}
+    ];
+    var ang = -Math.PI/2;   // signal token angle (clockwise)
+    var rewardPulse = 0;    // 0..1 travels into MODEL node
+    var last = 0;
+
+    function center(){ return {x:s.w/2, y:s.h/2}; }
+    function radius(){ return Math.min(s.w*0.30, s.h*0.46, 160); }
+
+    function draw(t){
+      var w=s.w,h=s.h, cx=center().x, cy=center().y, R=radius();
+      ctx.clearRect(0,0,w,h);
+
+      // closed loop ring (the structure)
+      ctx.strokeStyle = withAlpha(C.struct,.42);
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.stroke();
+
+      // direction ticks around ring
+      ctx.strokeStyle = withAlpha(C.struct,.28);
+      ctx.lineWidth = 2;
+      for(var d=0; d<TAU; d+=TAU/36){
+        var c1=Math.cos(d),s1=Math.sin(d);
+        ctx.beginPath();
+        ctx.moveTo(cx+c1*(R-4), cy+s1*(R-4));
+        ctx.lineTo(cx+c1*(R+4), cy+s1*(R+4));
+        ctx.stroke();
+      }
+
+      // central goal
+      ctx.fillStyle = C.goal;
+      ctx.beginPath(); ctx.arc(cx,cy,9,0,TAU); ctx.fill();
+      ctx.fillStyle = withAlpha(C.goal,.18);
+      ctx.beginPath(); ctx.arc(cx,cy,9+5+3*Math.sin(t/400),0,TAU); ctx.fill();
+      ctx.fillStyle = C.goal;
+      ctx.font='12px ui-monospace,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('GOAL', cx, cy+26);
+
+      // nodes
+      var nr = Math.max(28, Math.min(36, R*0.23));
+      for(var i=0;i<nodes.length;i++){
+        var nx = cx + Math.cos(nodes[i].a)*R;
+        var ny = cy + Math.sin(nodes[i].a)*R;
+        var isModel = (i===0);
+        var glow = isModel ? rewardPulse : 0;
+        ctx.fillStyle = C.ink2;
+        ctx.strokeStyle = isModel ? mix(C.struct, C.rest, glow) : withAlpha(C.struct,.85);
+        ctx.lineWidth = isModel ? (2+2*glow) : 1.6;
+        ctx.beginPath(); ctx.arc(nx,ny,nr,0,TAU); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = C.paper;
+        ctx.font = '12px ui-monospace,monospace';
+        ctx.fillText(nodes[i].label, nx, ny);
+      }
+
+      // signal token traveling clockwise (the feedback in motion)
+      var tx = cx + Math.cos(ang)*R;
+      var ty = cy + Math.sin(ang)*R;
+      // short trailing comet
+      for(var k=1;k<=10;k++){
+        var aa = ang - k*0.05;
+        ctx.globalAlpha = (1 - k/10)*0.5;
+        ctx.fillStyle = C.error;
+        ctx.beginPath(); ctx.arc(cx+Math.cos(aa)*R, cy+Math.sin(aa)*R, 8-(k*0.5), 0, TAU); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = C.error;
+      ctx.beginPath(); ctx.arc(tx,ty,9,0,TAU); ctx.fill();
+
+      // reward tuning arrow (RLHF/RLVR) into MODEL
+      var mnx = cx + Math.cos(nodes[0].a)*R;
+      var mny = cy + Math.sin(nodes[0].a)*R;
+      var rx0 = cx - R*1.15, ry0 = cy - R*1.0;
+      ctx.strokeStyle = withAlpha(C.rest, .55 + .45*rewardPulse);
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6,6]);
+      ctx.beginPath(); ctx.moveTo(rx0, ry0); ctx.lineTo(mnx-nr*0.7, mny-nr*0.7); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = C.rest;
+      ctx.font='12px ui-monospace,monospace'; ctx.textAlign='left';
+      ctx.fillText('reward tunes policy', Math.max(8,rx0-4), ry0-8);
+      ctx.textAlign='center';
+    }
+
+    function mix(h1,h2,t){
+      var a=parseInt(h1.slice(1),16), b=parseInt(h2.slice(1),16);
+      var r=Math.round(((a>>16&255))*(1-t)+((b>>16&255))*t);
+      var g=Math.round(((a>>8&255))*(1-t)+((b>>8&255))*t);
+      var bl=Math.round(((a&255))*(1-t)+((b&255))*t);
+      return 'rgb('+r+','+g+','+bl+')';
+    }
+
+    if(reduce){ ang = -Math.PI/2 + 0.9; rewardPulse = .6; draw(0); return; }
+    function loop(t){
+      var dt=(t-last)/1000; last=t;
+      if(dt>0 && dt<0.2){
+        ang += dt*0.9;
+        if(ang>TAU) ang-=TAU;
+        rewardPulse = (Math.sin(t/650)*0.5+0.5);
+      }
+      draw(t);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // =================================================================
+  // BEAT 3 — interactive: step/run the loop, nudge reward, settle
+  // =================================================================
+  (function(){
+    var canvas = document.getElementById('c3');
+    var s = setup(canvas, 300);
+    if(!s) return;
+    var ctx = s.ctx;
+    var stepBtn = document.getElementById('step');
+    var runBtn  = document.getElementById('run');
+    var gainEl  = document.getElementById('gain');
+    var errEl   = document.getElementById('err');
+    var stepsEl = document.getElementById('steps');
+    var stateEl = document.getElementById('state');
+
+    var goal = 0.78;     // normalized 0..1 along track
+    var pos  = 0.18;     // agent position
+    var vis  = 0.18;     // smoothed display position
+    var trail = [];
+    var steps = 0;
+    var running = !reduce;
+    var settled = false;
+    var last = 0, acc = 0;
+
+    function trackGeom(){
+      var w=s.w;
+      var x0 = w*0.10, x1 = w*0.90, y = s.h*0.52;
+      return {x0:x0, x1:x1, y:y, span:x1-x0};
+    }
+    function toX(p){ var g=trackGeom(); return g.x0 + p*g.span; }
+    function error(){ return goal - pos; }
+
+    function doStep(){
+      var gain = (parseInt(gainEl && gainEl.value || '22',10))/100;
+      var e = error();
+      pos += gain*e;
+      steps++;
+      trail.push(pos);
+      if(trail.length>60) trail.shift();
+      if(Math.abs(error())<0.004){
+        settled = true; running = false; updateUI();
+      }
+    }
+
+    function updateUI(){
+      if(errEl) errEl.textContent = Math.abs(error()).toFixed(3);
+      if(stepsEl) stepsEl.textContent = String(steps);
+      if(stateEl){
+        if(settled){ stateEl.textContent='at rest'; stateEl.className='atrest'; }
+        else { stateEl.textContent = running ? 'running' : 'paused'; stateEl.className=''; }
+      }
+      if(runBtn) runBtn.textContent = running ? 'Pause' : 'Run';
+    }
+
+    function draw(){
+      var g=trackGeom(), w=s.w, h=s.h;
+      ctx.clearRect(0,0,w,h);
+      vis += (pos - vis)*0.25;
+
+      // track
+      ctx.strokeStyle = withAlpha(C.struct,.42);
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(g.x0,g.y); ctx.lineTo(g.x1,g.y); ctx.stroke();
+
+      // goal marker
+      var gx = toX(goal);
+      ctx.strokeStyle = C.goal; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(gx,g.y-26); ctx.lineTo(gx,g.y+26); ctx.stroke();
+      ctx.fillStyle=C.goal; ctx.font='12px ui-monospace,monospace';
+      ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+      ctx.fillText('GOAL', gx, g.y-34);
+
+      // trail (past iterations = the loop's history)
+      for(var i=0;i<trail.length;i++){
+        var a=(i+1)/trail.length;
+        ctx.fillStyle = withAlpha(C.error, a*0.4);
+        ctx.beginPath(); ctx.arc(toX(trail[i]), g.y, 5, 0, TAU); ctx.fill();
+      }
+
+      // agent dot: coral far -> chartreuse at rest
+      var e = Math.min(1, Math.abs(error())/0.6);
+      var col = settled ? C.rest : lerpCol(C.rest, C.error, e);
+      var ax = toX(vis);
+      ctx.fillStyle = withAlpha(col,.18);
+      ctx.beginPath(); ctx.arc(ax,g.y, 22, 0, TAU); ctx.fill();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(ax,g.y, 11, 0, TAU); ctx.fill();
+
+      // error connector
+      if(!settled){
+        ctx.strokeStyle = withAlpha(C.error,.55);
+        ctx.lineWidth=2; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(ax,g.y); ctx.lineTo(gx,g.y); ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        ctx.fillStyle=C.rest; ctx.font='12px ui-monospace,monospace'; ctx.textAlign='center';
+        ctx.fillText('at rest', ax, g.y+40);
+      }
+    }
+
+    function lerpCol(h1,h2,t){
+      var a=parseInt(h1.slice(1),16), b=parseInt(h2.slice(1),16);
+      var r=Math.round(((a>>16&255))*(1-t)+((b>>16&255))*t);
+      var g=Math.round(((a>>8&255))*(1-t)+((b>>8&255))*t);
+      var bl=Math.round(((a&255))*(1-t)+((b&255))*t);
+      return 'rgb('+r+','+g+','+bl+')';
+    }
+
+    // interaction: drag inside the stage moves the goal (inject error)
+    function setGoalFromEvent(ev){
+      var rect = canvas.getBoundingClientRect();
+      var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+      var g = trackGeom();
+      var p = (cx - g.x0)/g.span;
+      goal = Math.max(0, Math.min(1, p));
+      settled = false;
+      if(!reduce) running = true;
+      updateUI();
+    }
+    var dragging=false;
+    canvas.addEventListener('pointerdown', function(ev){ dragging=true; setGoalFromEvent(ev); });
+    window.addEventListener('pointermove', function(ev){ if(dragging) setGoalFromEvent(ev); });
+    window.addEventListener('pointerup', function(){ dragging=false; });
+
+    if(stepBtn) stepBtn.addEventListener('click', function(){ running=false; settled=false; doStep(); updateUI(); });
+    if(runBtn) runBtn.addEventListener('click', function(){
+      if(settled){ settled=false; }
+      running=!running; updateUI();
+    });
+    if(gainEl) gainEl.addEventListener('input', function(){ settled=false; updateUI(); });
+
+    updateUI();
+
+    if(reduce){
+      // freeze near settled, representative
+      pos = goal - 0.02; vis = pos; settled=false;
+      for(var z=0;z<8;z++) trail.push(0.18 + z*(goal-0.18)/8);
+      draw(); updateUI();
+      return;
+    }
+
+    function loop(t){
+      var dt=(t-last); last=t;
+      if(dt>0 && dt<300 && running && !settled){
+        acc += dt;
+        while(acc>=420 && running && !settled){ doStep(); acc-=420; }
+        updateUI();
+      } else if(dt>=300){ acc=0; }
+      draw();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+})();
+</script>
+</body>
+</html>

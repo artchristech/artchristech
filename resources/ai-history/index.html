@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A History of AI — Timeline</title>
+<meta name="description" content="Eight decades of artificial intelligence as one continuous timeline: fifteen turning points, two long winters between the booms.">
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accents (shared with the 15 era pages) */
+    --dawn:#F2C14E;           /* early optimism (eras 1–5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(120% 80% at 50% -10%,rgba(25,227,193,.05),transparent 55%),
+      var(--ink);
+    color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:clamp(22px,4vw,46px) clamp(16px,4vw,48px) 72px;}
+
+  /* ---- masthead (index has its OWN layout — no era masthead/rail/eranav) ---- */
+  header.top{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:clamp(20px,4vw,40px);}
+  header.top .kicker{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--dim);margin:0 0 12px;}
+  header.top h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,9vw,86px);line-height:.96;letter-spacing:-.015em;margin:0;}
+  header.top .lede{margin:14px 0 0;font-size:clamp(12.5px,2.4vw,15px);color:var(--paper);max-width:48ch;letter-spacing:.02em;}
+  header.top .lede b{color:var(--winter);font-weight:400;}
+  .legend{margin:16px 0 0;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:11px;letter-spacing:.06em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:7px;}
+  .legend .sw{width:22px;height:8px;border-radius:5px;display:inline-block;}
+  .legend .warm{background:linear-gradient(90deg,var(--dawn),var(--boom));height:10px;}
+  .legend .cold{background:var(--winter);height:5px;opacity:.8;}
+
+  /* ---- JS vs no-JS contract (GUIDELINE §f) ---- */
+  .live{display:none;}
+  .js .live{display:block;}
+  .js .static{display:none;}
+
+  /* ===== LIVE RIVER ===== */
+  .river{position:relative;width:100%;}
+  .river svg{position:absolute;inset:0;display:block;overflow:visible;}
+  .river svg .band{stroke:rgba(244,246,245,.14);stroke-width:1;}
+  .flow{opacity:.9;}
+  .river.h .flow{animation:flowH 7s linear infinite;}
+  .river.v .flow{animation:flowV 9s linear infinite;}
+  @keyframes flowH{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+  @keyframes flowV{from{transform:translateY(-100%);}to{transform:translateY(100%);}}
+
+  .nodes{position:absolute;inset:0;}
+  .node{position:absolute;text-decoration:none;color:var(--paper);
+    transition:transform .16s ease, filter .16s ease;will-change:transform;}
+  .node .dot{position:absolute;left:0;top:0;border-radius:50%;
+    transform:translate(-50%,-50%);box-shadow:0 0 0 4px var(--ink);}
+  .node .lab{position:absolute;display:flex;flex-direction:column;gap:1px;}
+  .river.h .node .lab{left:0;transform:translateX(-50%);text-align:center;align-items:center;}
+  .river.v .node .lab{top:0;transform:translateY(-50%);text-align:left;}
+  .node .num{font-size:9.5px;letter-spacing:.24em;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .node .nm{font-family:var(--serif);font-size:clamp(13px,1.5vw,15.5px);line-height:1.08;}
+  .node .yr{font-size:9.5px;letter-spacing:.1em;color:var(--dim);}
+  .node .hook{font-size:10px;color:var(--dim);line-height:1.25;max-height:0;opacity:0;overflow:hidden;
+    transition:max-height .18s ease,opacity .18s ease;}
+  .node:hover,.node:focus-visible{transform:translateY(-5px);filter:brightness(1.18);z-index:5;outline:none;}
+  .node:hover .nm,.node:focus-visible .nm{color:var(--accent,var(--paper));}
+  .node:hover .hook,.node:focus-visible .hook{max-height:40px;opacity:1;}
+  .node:focus-visible .dot{box-shadow:0 0 0 4px var(--ink),0 0 0 6px var(--accent);}
+  .node.winter .nm{font-style:italic;}
+  .node .wtag{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--winter);}
+
+  /* ===== STATIC / NO-JS FALLBACK (also the reduced-motion-friendly index) ===== */
+  ol.static{list-style:none;margin:0;padding:0;display:grid;gap:6px;}
+  ol.static li{margin:0;}
+  ol.static a{display:grid;grid-template-columns:auto 96px 1fr;align-items:center;gap:14px;
+    text-decoration:none;color:var(--paper);padding:9px 12px;border:1px solid var(--line);border-radius:8px;
+    background:var(--ink-2);transition:border-color .15s, transform .15s;}
+  ol.static a:hover,ol.static a:focus-visible{transform:translateX(4px);outline:none;}
+  ol.static .fnum{font-size:11px;letter-spacing:.18em;color:var(--dim);font-variant-numeric:tabular-nums;}
+  ol.static .fbar{height:14px;border-radius:7px;min-width:8px;}
+  ol.static .fmeta{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;}
+  ol.static .fnm{font-family:var(--serif);font-size:16px;}
+  ol.static .fyr{font-size:11px;color:var(--dim);letter-spacing:.08em;}
+  ol.static .fhook{font-size:11px;color:var(--dim);}
+  ol.static .fwtag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--winter);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}
+  }
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <header class="top">
+    <p class="kicker">An interactive history · 15 eras</p>
+    <h1>A History of AI</h1>
+    <p class="lede">Eight decades, fifteen turning points — two long <b>winters</b> between the booms.</p>
+    <p class="legend">
+      <i><span class="sw warm"></span> wide &amp; warm = momentum</i>
+      <i><span class="sw cold"></span> narrow &amp; cold = winter</i>
+    </p>
+  </header>
+
+  <main>
+    <!-- LIVE: the river (JS-drawn). Decorative geometry is in SVG; the links live in .nodes. -->
+    <section class="river live" aria-label="Timeline of AI eras">
+      <svg aria-hidden="true" focusable="false"></svg>
+      <div class="nodes"></div>
+    </section>
+
+    <!-- STATIC / NO-JS: a real, usable index. Carries the same boom/winter rhythm via bar width. -->
+    <ol class="static" aria-label="Timeline of AI eras"></ol>
+  </main>
+
+</div>
+
+<!-- build the static list inline so it exists even with JS off (links are plain <a>) -->
+<script>
+"use strict";
+(function(){
+  var DAWN="#F2C14E", WINTER="#6E8CA0", BOOM="#19E3C1";
+  var STOPS=[
+    {n:"01",name:"Cybernetics",yrs:"1943–48",hook:"machines that steer themselves",file:"01-cybernetics.html",mom:.55,kind:"dawn"},
+    {n:"02",name:"The Turing Era",yrs:"1936–50",hook:"a definition of thinking",file:"02-turing.html",mom:.60,kind:"dawn"},
+    {n:"03",name:"Dartmouth",yrs:"1956",hook:"the field is named",file:"03-dartmouth.html",mom:.70,kind:"dawn"},
+    {n:"04",name:"Symbolic AI",yrs:"1956–74",hook:"intelligence as symbol search",file:"04-symbolic-ai.html",mom:.78,kind:"dawn"},
+    {n:"05",name:"The Perceptron",yrs:"1957–69",hook:"a learned line — and a wall",file:"05-perceptron.html",mom:.60,kind:"dawn"},
+    {n:"06",name:"First AI Winter",yrs:"1974–80",hook:"promises outran results",file:"06-first-winter.html",mom:.16,kind:"winter"},
+    {n:"07",name:"Expert Systems",yrs:"1980–87",hook:"expertise bottled as rules",file:"07-expert-systems.html",mom:.72,kind:"boom"},
+    {n:"08",name:"Second AI Winter",yrs:"1987–93",hook:"the brittle boom breaks",file:"08-second-winter.html",mom:.15,kind:"winter"},
+    {n:"09",name:"Backprop Returns",yrs:"1986",hook:"error flows backward",file:"09-backprop.html",mom:.55,kind:"boom"},
+    {n:"10",name:"Statistical AI",yrs:"1990s–2000s",hook:"let the data decide",file:"10-statistical-ai.html",mom:.66,kind:"boom"},
+    {n:"11",name:"Game-Playing",yrs:"1997 & 2016",hook:"beating the best humans",file:"11-game-playing.html",mom:.76,kind:"boom"},
+    {n:"12",name:"Deep Learning",yrs:"2012",hook:"error off a cliff",file:"12-alexnet.html",mom:.86,kind:"boom"},
+    {n:"13",name:"The Transformer",yrs:"2017",hook:"attention is all",file:"13-transformer.html",mom:.93,kind:"boom"},
+    {n:"14",name:"Scaling Laws",yrs:"2018–22",hook:"just add scale",file:"14-scaling-laws.html",mom:.97,kind:"boom"},
+    {n:"15",name:"Generative & Agentic",yrs:"2022–now",hook:"generate, act, loop",file:"15-generative-agentic.html",mom:1,kind:"boom"}
+  ];
+  var SVGNS="http://www.w3.org/2000/svg";
+  function colorOf(s){return s.kind==="winter"?WINTER:(s.kind==="dawn"?DAWN:BOOM);}
+  function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  /* ---------- static fallback (always built; visible with JS off) ---------- */
+  try{
+    var ol=document.querySelector("ol.static");
+    if(ol){
+      var html="";
+      for(var i=0;i<STOPS.length;i++){
+        var s=STOPS[i], c=colorOf(s), w=Math.round(8+s.mom*84);
+        var tag=s.kind==="winter"?'<span class="fwtag">winter</span>':'';
+        html+='<li><a href="'+s.file+'">'+
+          '<span class="fnum">'+s.n+'</span>'+
+          '<span class="fbar" style="width:'+w+'px;background:'+c+(s.kind==="winter"?";opacity:.85":"")+'"></span>'+
+          '<span class="fmeta"><span class="fnm">'+esc(s.name)+'</span> '+tag+
+          '<span class="fyr">'+esc(s.yrs)+'</span><span class="fhook">'+esc(s.hook)+'</span></span>'+
+          '</a></li>';
+      }
+      ol.innerHTML=html;
+    }
+  }catch(e){/* fallback list is best-effort; links remain in DOM regardless */}
+
+  /* ---------- catmull-rom -> smooth path through points ---------- */
+  function smooth(pts){
+    if(pts.length<2) return "";
+    var d="M"+pts[0].x.toFixed(1)+","+pts[0].y.toFixed(1);
+    for(var i=0;i<pts.length-1;i++){
+      var p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||p2;
+      var c1x=p1.x+(p2.x-p0.x)/6, c1y=p1.y+(p2.y-p0.y)/6;
+      var c2x=p2.x-(p3.x-p1.x)/6, c2y=p2.y-(p3.y-p1.y)/6;
+      d+="C"+c1x.toFixed(1)+","+c1y.toFixed(1)+" "+c2x.toFixed(1)+","+c2y.toFixed(1)+" "+p2.x.toFixed(1)+","+p2.y.toFixed(1);
+    }
+    return d;
+  }
+
+  /* ---------- live river ---------- */
+  var river=document.querySelector(".river.live");
+  var svg=river&&river.querySelector("svg");
+  var nodesEl=river&&river.querySelector(".nodes");
+  if(!river||!svg||!nodesEl) return;
+
+  function build(){
+    var W=Math.max(280,river.clientWidth);
+    var vertical = W < 680;
+    var N=STOPS.length, last=N-1;
+    var centers=[], halfs=[], W2=W, H;
+
+    if(!vertical){
+      H=380;
+      var cy=176, padX=Math.max(46,W*0.045), innerW=W-2*padX;
+      for(var i=0;i<N;i++){
+        centers.push({x:padX+innerW*(i/last), y:cy});
+        halfs.push(7+STOPS[i].mom*70);
+      }
+    }else{
+      var cx=50, padY=44, rowH=Math.max(74,Math.min(96,(W*0.0+86)));
+      H=padY*2+rowH*last;
+      for(var j=0;j<N;j++){
+        centers.push({x:cx, y:padY+rowH*j});
+        halfs.push(5+STOPS[j].mom*34);
+      }
+    }
+
+    /* build river outline: forward along + side, back along - side */
+    var topE=[], botE=[];
+    for(var k=0;k<N;k++){
+      if(!vertical){ topE.push({x:centers[k].x,y:centers[k].y-halfs[k]}); botE.push({x:centers[k].x,y:centers[k].y+halfs[k]}); }
+      else{ topE.push({x:centers[k].x-halfs[k],y:centers[k].y}); botE.push({x:centers[k].x+halfs[k],y:centers[k].y}); }
+    }
+    var rev=botE.slice().reverse();
+    var dPath=smooth(topE)+smooth(rev).replace(/^M/,"L")+" Z";
+
+    /* gradient: warm -> cold(winter) -> warm, mirroring momentum/era colors */
+    var gx2=vertical?"0":"1", gy2=vertical?"1":"0";
+    var gstops="";
+    for(var g=0;g<N;g++){
+      var off=(g/last*100).toFixed(2);
+      gstops+='<stop offset="'+off+'%" stop-color="'+colorOf(STOPS[g])+'" stop-opacity="'+(STOPS[g].kind==="winter"?.55:.92)+'"/>';
+    }
+    var fx2=vertical?"0":"1", fy2=vertical?"1":"0";
+
+    svg.setAttribute("width",W); svg.setAttribute("height",H);
+    svg.setAttribute("viewBox","0 0 "+W+" "+H);
+    svg.innerHTML=
+      '<defs>'+
+        '<linearGradient id="riverGrad" x1="0" y1="0" x2="'+gx2+'" y2="'+gy2+'">'+gstops+'</linearGradient>'+
+        '<linearGradient id="flowGrad" x1="0" y1="0" x2="'+fx2+'" y2="'+fy2+'">'+
+          '<stop offset="0%" stop-color="#F4F6F5" stop-opacity="0"/>'+
+          '<stop offset="14%" stop-color="#F4F6F5" stop-opacity="0"/>'+
+          '<stop offset="19%" stop-color="#F4F6F5" stop-opacity="0.45"/>'+
+          '<stop offset="24%" stop-color="#F4F6F5" stop-opacity="0"/>'+
+          '<stop offset="100%" stop-color="#F4F6F5" stop-opacity="0"/>'+
+        '</linearGradient>'+
+        '<clipPath id="riverClip"><path d="'+dPath+'"/></clipPath>'+
+      '</defs>'+
+      '<path class="band" d="'+dPath+'" fill="url(#riverGrad)"/>'+
+      '<g clip-path="url(#riverClip)"><rect class="flow" x="0" y="0" width="'+W+'" height="'+H+'" fill="url(#flowGrad)"/></g>';
+
+    river.classList.toggle("v",vertical);
+    river.classList.toggle("h",!vertical);
+    river.style.height=H+"px";
+
+    /* nodes (HTML links, positioned at river centerline) */
+    nodesEl.innerHTML="";
+    var maxHalf=0; for(var m=0;m<N;m++){ if(halfs[m]>maxHalf) maxHalf=halfs[m]; }
+    for(var a=0;a<N;a++){
+      var s=STOPS[a], c=colorOf(s);
+      var node=document.createElement("a");
+      node.href=s.file; node.className="node"+(s.kind==="winter"?" winter":"");
+      node.style.setProperty("--accent",c);
+      node.style.left=centers[a].x+"px"; node.style.top=centers[a].y+"px";
+      var dotR=(vertical?4:5)+s.mom*(vertical?5:6);
+      var dot='<span class="dot" style="width:'+(dotR*2).toFixed(0)+'px;height:'+(dotR*2).toFixed(0)+'px;background:'+c+
+              ';box-shadow:0 0 0 4px var(--ink),0 0 14px '+c+'"></span>';
+      var labStyle, labW;
+      if(!vertical){
+        labW=Math.max(72,Math.min(124,(W-2*46)/last*1.35));
+        var above=(a%2===0);
+        var off2=(halfs[a]+14).toFixed(0);
+        labStyle='width:'+labW.toFixed(0)+'px;'+(above?'bottom:'+off2+'px;':'top:'+off2+'px;');
+      }else{
+        var lx=(halfs[a]>0?maxHalf:maxHalf)+18;
+        labW=W-(centers[a].x+lx)-8;
+        labStyle='left:'+lx.toFixed(0)+'px;width:'+Math.max(120,labW).toFixed(0)+'px;';
+      }
+      var wtag=s.kind==="winter"?'<span class="wtag">winter</span>':'';
+      var lab='<span class="lab" style="'+labStyle+'">'+
+                '<span class="num">'+s.n+'</span>'+
+                '<span class="nm">'+esc(s.name)+'</span>'+wtag+
+                '<span class="yr">'+esc(s.yrs)+'</span>'+
+                '<span class="hook">'+esc(s.hook)+'</span>'+
+              '</span>';
+      node.innerHTML=dot+lab;
+      node.setAttribute("aria-label",s.name+", "+s.yrs+(s.kind==="winter"?", AI winter":"")+" — "+s.hook);
+      nodesEl.appendChild(node);
+    }
+  }
+
+  /* enable live version, draw, and keep it responsive */
+  try{
+    document.documentElement.classList.remove("no-js");
+    document.documentElement.classList.add("js");
+    document.body.classList.remove("no-js");
+    document.body.classList.add("js");
+    build();
+    var t=null;
+    window.addEventListener("resize",function(){ if(t)clearTimeout(t); t=setTimeout(build,140); });
+  }catch(err){
+    /* if anything fails, fall back to the static list */
+    document.documentElement.classList.add("no-js");
+    document.documentElement.classList.remove("js");
+    document.body.classList.add("no-js");
+    document.body.classList.remove("js");
+  }
+})();
+</script>
+</body>
+</html>

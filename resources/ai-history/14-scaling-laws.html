@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundation Models & Scaling Laws — A History of AI (14/15)</title>
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+    --era:var(--boom);
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .stage svg text{font-family:var(--mono);}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+
+  /* ---- page-local: interactive control + js/no-js contract ---- */
+  .control{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:14px clamp(14px,3vw,20px);
+    border-top:1px solid var(--line);background:rgba(255,255,255,.015);}
+  .control label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);}
+  .control input[type=range]{flex:1;min-width:150px;accent-color:var(--era);height:22px;cursor:pointer;}
+  .control .readout{font-variant-numeric:tabular-nums;font-size:12px;color:var(--paper);letter-spacing:.04em;min-width:12ch;}
+  .control .readout b{color:var(--goal);font-weight:400;}
+  .no-js .live-only{display:none;}
+  .static-note{display:none;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:12px clamp(14px,3vw,20px);border-top:1px solid var(--line);}
+  .no-js .static-note{display:block;}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+<nav class="rail" aria-label="Timeline position">
+  <a href="01-cybernetics.html" data-on><span class="n">01</span><span class="tick"></span></a>
+  <a href="02-turing.html" data-on><span class="n">02</span><span class="tick"></span></a>
+  <a href="03-dartmouth.html" data-on><span class="n">03</span><span class="tick"></span></a>
+  <a href="04-symbolic-ai.html" data-on><span class="n">04</span><span class="tick"></span></a>
+  <a href="05-perceptron.html" data-on><span class="n">05</span><span class="tick"></span></a>
+  <a href="06-first-winter.html" class="winter" data-on><span class="n">06</span><span class="tick"></span></a>
+  <a href="07-expert-systems.html" data-on><span class="n">07</span><span class="tick"></span></a>
+  <a href="08-second-winter.html" class="winter" data-on><span class="n">08</span><span class="tick"></span></a>
+  <a href="09-backprop.html" data-on><span class="n">09</span><span class="tick"></span></a>
+  <a href="10-statistical-ai.html" data-on><span class="n">10</span><span class="tick"></span></a>
+  <a href="11-game-playing.html" data-on><span class="n">11</span><span class="tick"></span></a>
+  <a href="12-alexnet.html" data-on><span class="n">12</span><span class="tick"></span></a>
+  <a href="13-transformer.html" data-on><span class="n">13</span><span class="tick"></span></a>
+  <a href="14-scaling-laws.html" class="cur" aria-current="page"><span class="n">14</span><span class="tick"></span></a>
+  <a href="15-generative-agentic.html"><span class="n">15</span><span class="tick"></span></a>
+</nav>
+
+<header class="mast">
+  <p class="kicker"><span class="eranum">Era 14 / 15</span> · Foundation Models &amp; Scaling Laws <span class="yrs">2018–2022</span></p>
+  <h1>Foundation Models &amp; Scaling Laws</h1>
+  <p class="changed">Just <b>add scale</b> — bigger models, predictable gains, surprising emergence.</p>
+</header>
+
+<main>
+
+  <!-- ============ BEAT 1 · CONCRETE ============ -->
+  <section class="beat" aria-labelledby="b1h">
+    <p class="badge"><b>Beat 1</b> · Concrete</p>
+    <h2 id="b1h">Same question, three sizes</h2>
+    <p class="cap">One prompt. The small model fails, the medium fumbles, the large one nails it.</p>
+    <div class="stage">
+      <svg viewBox="0 0 800 360" role="img" aria-labelledby="b1t b1d" preserveAspectRatio="xMidYMid meet">
+        <title id="b1t">Three language models of growing size answering the same arithmetic prompt</title>
+        <desc id="b1d">A size dial grows from small to large. The small model answers wrongly in coral, the medium gets close in sand, and the large model answers correctly in teal. Bigger scale buys the right answer.</desc>
+
+        <!-- prompt -->
+        <text x="40" y="42" style="fill:var(--struct)" font-size="15" letter-spacing="1">prompt:</text>
+        <text x="116" y="42" style="fill:var(--paper)" font-size="17">“what is 47 × 6 ?”</text>
+        <line x1="40" y1="60" x2="760" y2="60" style="stroke:var(--line)"/>
+
+        <!-- size dial (left) -->
+        <text x="40" y="92" style="fill:var(--dim)" font-size="10" letter-spacing="2">SCALE ▸</text>
+        <rect x="40" y="104" width="22" height="216" rx="6" style="fill:none;stroke:var(--line)"/>
+        <rect id="b1dial" x="40" y="104" width="22" height="216" rx="6" style="fill:var(--era);opacity:.28"/>
+
+        <!-- model S -->
+        <g id="b1s">
+          <rect x="96" y="106" width="86" height="40" rx="8" style="fill:none;stroke:var(--struct);stroke-opacity:.55"/>
+          <text x="139" y="131" style="fill:var(--struct)" font-size="13" text-anchor="middle">0.1B</text>
+          <line x1="182" y1="126" x2="430" y2="126" style="stroke:var(--line)"/>
+          <rect x="438" y="106" width="180" height="40" rx="8" style="fill:none;stroke:var(--error);stroke-opacity:.85"/>
+          <text x="528" y="131" style="fill:var(--error)" font-size="16" text-anchor="middle">“about 90”</text>
+          <text x="648" y="131" style="fill:var(--error)" font-size="14">✗ wrong</text>
+        </g>
+
+        <!-- model M -->
+        <g id="b1m">
+          <rect x="90" y="190" width="98" height="52" rx="8" style="fill:none;stroke:var(--struct);stroke-opacity:.75"/>
+          <text x="139" y="221" style="fill:var(--struct)" font-size="14" text-anchor="middle">1.3B</text>
+          <line x1="188" y1="216" x2="430" y2="216" style="stroke:var(--line)"/>
+          <rect x="438" y="190" width="180" height="52" rx="8" style="fill:none;stroke:var(--struct);stroke-opacity:.9"/>
+          <text x="528" y="222" style="fill:var(--struct)" font-size="18" text-anchor="middle">“272”</text>
+          <text x="648" y="222" style="fill:var(--struct)" font-size="14">~ close</text>
+        </g>
+
+        <!-- model L -->
+        <g id="b1l">
+          <rect x="82" y="280" width="114" height="68" rx="9" style="fill:none;stroke:var(--goal);stroke-opacity:.95"/>
+          <text x="139" y="320" style="fill:var(--goal)" font-size="16" text-anchor="middle">175B</text>
+          <line x1="196" y1="314" x2="430" y2="314" style="stroke:var(--line)"/>
+          <rect x="438" y="280" width="180" height="68" rx="9" style="fill:none;stroke:var(--goal)"/>
+          <text x="528" y="322" style="fill:var(--goal);font-weight:bold" font-size="24" text-anchor="middle">282</text>
+          <text x="648" y="322" style="fill:var(--goal)" font-size="14">✓ correct</text>
+        </g>
+      </svg>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <i><span class="sw" style="background:var(--error)"></span>wrong — too small</i>
+      <i><span class="sw" style="background:var(--struct)"></span>close — fumbling</i>
+      <i><span class="sw" style="background:var(--goal)"></span>correct — capability unlocked</i>
+    </div>
+  </section>
+
+  <!-- ============ BEAT 2 · ABSTRACT ============ -->
+  <section class="beat" aria-labelledby="b2h">
+    <p class="badge"><b>Beat 2</b> · Abstract</p>
+    <h2 id="b2h">The scaling law</h2>
+    <p class="cap">Loss versus compute on log–log axes: a straight descending line. Gains are predictable.</p>
+    <div class="stage">
+      <svg viewBox="0 0 800 420" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+        <title id="b2t">Test loss falling as a straight line against compute on log–log axes</title>
+        <desc id="b2d">On log compute, horizontal, versus log loss, vertical, measured runs land on a single straight descending line — a power law. As compute grows ten-fold, loss drops predictably along the line.</desc>
+
+        <!-- frame -->
+        <line x1="96" y1="40" x2="96" y2="356" style="stroke:var(--struct);stroke-opacity:.55"/>
+        <line x1="96" y1="356" x2="744" y2="356" style="stroke:var(--struct);stroke-opacity:.55"/>
+        <text x="86" y="46" style="fill:var(--dim)" font-size="10" text-anchor="end">loss ▲</text>
+        <text x="744" y="384" style="fill:var(--dim)" font-size="10" text-anchor="end">compute (log) ▸</text>
+
+        <!-- log gridlines -->
+        <g style="stroke:var(--line)">
+          <line x1="96" y1="100" x2="744" y2="100"/>
+          <line x1="96" y1="164" x2="744" y2="164"/>
+          <line x1="96" y1="228" x2="744" y2="228"/>
+          <line x1="96" y1="292" x2="744" y2="292"/>
+          <line x1="226" y1="40" x2="226" y2="356"/>
+          <line x1="356" y1="40" x2="356" y2="356"/>
+          <line x1="486" y1="40" x2="486" y2="356"/>
+          <line x1="616" y1="40" x2="616" y2="356"/>
+        </g>
+
+        <!-- the power law (ideal line) -->
+        <line x1="130" y1="92" x2="712" y2="320" style="stroke:var(--struct);stroke-width:2" stroke-dasharray="6 6"/>
+
+        <!-- measured runs landing on the line -->
+        <g id="b2dots" style="fill:var(--rest)">
+          <circle class="b2dot" cx="170" cy="108" r="6"/>
+          <circle class="b2dot" cx="266" cy="146" r="6"/>
+          <circle class="b2dot" cx="362" cy="184" r="6"/>
+          <circle class="b2dot" cx="458" cy="222" r="6"/>
+          <circle class="b2dot" cx="554" cy="260" r="6"/>
+          <circle class="b2dot" cx="650" cy="297" r="6"/>
+        </g>
+        <text x="700" y="300" style="fill:var(--rest)" font-size="12" text-anchor="end">on the line</text>
+      </svg>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <i><span class="sw" style="background:var(--struct)"></span>power law — the predictable line</i>
+      <i><span class="sw" style="background:var(--rest)"></span>a real run — lands on it</i>
+    </div>
+  </section>
+
+  <!-- ============ BEAT 3 · INTERACTIVE ============ -->
+  <section class="beat" aria-labelledby="b3h">
+    <p class="badge"><b>Beat 3</b> · Interactive</p>
+    <h2 id="b3h">Slide the scale</h2>
+    <p class="cap">Drag the dial: loss slides down the line, and capabilities switch on as thresholds are crossed.</p>
+    <div class="stage">
+      <svg viewBox="0 0 800 420" role="img" aria-labelledby="b3t b3d" preserveAspectRatio="xMidYMid meet">
+        <title id="b3t">A scale dial that slides loss down the power law and lights up emergent capabilities</title>
+        <desc id="b3d">As you increase scale, a coral loss dot slides down the descending power-law line. Three capability thresholds — arithmetic, translation, reasoning — light up teal as the growing scale crosses each one. Capabilities emerge with scale.</desc>
+
+        <!-- frame -->
+        <line x1="96" y1="40" x2="96" y2="356" style="stroke:var(--struct);stroke-opacity:.55"/>
+        <line x1="96" y1="356" x2="560" y2="356" style="stroke:var(--struct);stroke-opacity:.55"/>
+        <text x="86" y="46" style="fill:var(--dim)" font-size="10" text-anchor="end">loss ▲</text>
+        <text x="560" y="384" style="fill:var(--dim)" font-size="10" text-anchor="end">scale (log) ▸</text>
+
+        <!-- threshold guides (struct) -->
+        <g style="stroke:var(--struct);stroke-opacity:.22" stroke-dasharray="3 5">
+          <line x1="232" y1="40" x2="232" y2="356"/>
+          <line x1="350" y1="40" x2="350" y2="356"/>
+          <line x1="468" y1="40" x2="468" y2="356"/>
+        </g>
+
+        <!-- the power law line (same as beat 2 — continuity) -->
+        <line x1="120" y1="92" x2="540" y2="320" style="stroke:var(--struct);stroke-width:2" stroke-dasharray="6 6"/>
+
+        <!-- current-scale vertical sweep -->
+        <line id="b3sweep" x1="232" y1="40" x2="232" y2="356" style="stroke:var(--era);stroke-width:1.5;opacity:.5"/>
+        <!-- moving loss dot (error) -->
+        <circle id="b3dot" cx="232" cy="154" r="9" style="fill:var(--error)"/>
+
+        <!-- capability lamps (right column) -->
+        <g font-size="14">
+          <g id="cap-arith">
+            <circle class="lamp" cx="600" cy="120" r="9" style="fill:none;stroke:var(--error);stroke-opacity:.6"/>
+            <text class="caplabel" x="622" y="125" style="fill:var(--dim)">arithmetic</text>
+          </g>
+          <g id="cap-trans">
+            <circle class="lamp" cx="600" cy="180" r="9" style="fill:none;stroke:var(--error);stroke-opacity:.6"/>
+            <text class="caplabel" x="622" y="185" style="fill:var(--dim)">translation</text>
+          </g>
+          <g id="cap-reason">
+            <circle class="lamp" cx="600" cy="240" r="9" style="fill:none;stroke:var(--error);stroke-opacity:.6"/>
+            <text class="caplabel" x="622" y="245" style="fill:var(--dim)">reasoning</text>
+          </g>
+          <text x="591" y="300" style="fill:var(--dim)" font-size="10" letter-spacing="2">EMERGENT ABILITIES</text>
+        </g>
+      </svg>
+      <div class="control live-only">
+        <label for="b3slider">Scale</label>
+        <input id="b3slider" type="range" min="0" max="1000" value="340" step="1"
+               aria-describedby="b3readout">
+        <span id="b3readout" class="readout" role="status" aria-live="polite">loss <b>2.6</b> · 1 unlocked</span>
+      </div>
+      <p class="static-note">Drag the scale dial with JavaScript enabled to watch capabilities emerge.</p>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <i><span class="sw" style="background:var(--error)"></span>loss — below threshold, locked</i>
+      <i><span class="sw" style="background:var(--goal)"></span>capability unlocked</i>
+      <i><span class="sw" style="background:var(--struct)"></span>the power law</i>
+    </div>
+  </section>
+
+  <!-- ============ NODS ============ -->
+  <details class="nods">
+    <summary>Footnotes &amp; further reading</summary>
+    <div class="nodgrid">
+      <div class="nod">
+        <p class="ny">2020 · 2022</p>
+        <p class="nm">Scaling laws</p>
+        <p class="nd">Kaplan et al. fit loss as a power law in compute, data, and parameters. Chinchilla later rebalanced the recipe — train smaller models on far more tokens.</p>
+      </div>
+      <div class="nod">
+        <p class="ny">2020</p>
+        <p class="nm">GPT-3, few-shot</p>
+        <p class="nd">175B parameters. With no fine-tuning, it learned tasks from a handful of examples in the prompt — scale alone bought in-context learning.</p>
+      </div>
+      <div class="nod">
+        <p class="ny">2021 · 2022</p>
+        <p class="nm">Emergence &amp; “foundation models”</p>
+        <p class="nd">Stanford coined “foundation models” for one pretrained base adapted to many tasks; researchers catalogued “emergent abilities” that appear abruptly past a scale threshold.</p>
+      </div>
+    </div>
+  </details>
+
+</main>
+</div>
+
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="13-transformer.html"><span class="lab">◄ Prev</span><span class="ttl">The Transformer</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="15-generative-agentic.html"><span class="lab">Next ►</span><span class="ttl">Generative &amp; Agentic</span></a>
+</nav>
+
+<script>
+"use strict";
+(function(){
+  document.documentElement.classList.remove('no-js');
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){ reduce = false; }
+
+  /* ---------- BEAT 1: looping size sweep ---------- */
+  (function beat1(){
+    var dial = document.getElementById('b1dial');
+    var s = document.getElementById('b1s'), m = document.getElementById('b1m'), l = document.getElementById('b1l');
+    if(!dial || !s || !m || !l) return;
+    var BOTTOM = 320, MAXH = 216;
+    function setDial(p){ /* p: 0..1 */
+      var h = Math.max(8, MAXH * p);
+      dial.setAttribute('height', h);
+      dial.setAttribute('y', BOTTOM - h);
+      s.style.opacity = p >= 0.12 ? 1 : 0.18;
+      m.style.opacity = p >= 0.50 ? 1 : 0.18;
+      l.style.opacity = p >= 0.86 ? 1 : 0.18;
+    }
+    if(reduce){ setDial(1); return; }
+    var t0 = null;
+    function frame(ts){
+      if(t0 === null) t0 = ts;
+      var period = 4200;
+      var phase = ((ts - t0) % period) / period;
+      var p = phase < 0.85 ? (phase / 0.85) : 1;
+      setDial(p);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------- BEAT 2: dots land on the line in sequence ---------- */
+  (function beat2(){
+    var dots = document.querySelectorAll('#b2dots .b2dot');
+    if(!dots.length) return;
+    var arr = Array.prototype.slice.call(dots);
+    if(reduce){ arr.forEach(function(d){ d.style.opacity = 1; }); return; }
+    var t0 = null;
+    function frame(ts){
+      if(t0 === null) t0 = ts;
+      var period = 5200;
+      var phase = ((ts - t0) % period) / period;
+      var lit = Math.floor(phase * (arr.length + 1.4));
+      arr.forEach(function(d, i){
+        var on = i < lit;
+        d.style.opacity = on ? 1 : 0.06;
+        d.setAttribute('r', on ? 6 : 4);
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------- BEAT 3: interactive scale → loss + emergence ---------- */
+  (function beat3(){
+    var slider = document.getElementById('b3slider');
+    var dot = document.getElementById('b3dot');
+    var sweep = document.getElementById('b3sweep');
+    var readout = document.getElementById('b3readout');
+    if(!slider || !dot || !sweep || !readout) return;
+
+    var X0 = 120, Y0 = 92, X1 = 540, Y1 = 320;  /* power-law line endpoints */
+    var SX0 = 150, SX1 = 510;                    /* dot's visible travel */
+
+    var caps = [
+      { g: document.getElementById('cap-arith'),  thr: 0.30 },
+      { g: document.getElementById('cap-trans'),  thr: 0.52 },
+      { g: document.getElementById('cap-reason'), thr: 0.74 }
+    ];
+
+    function update(){
+      var v = (+slider.value) / 1000;
+      var x = SX0 + (SX1 - SX0) * v;
+      var y = Y0 + (Y1 - Y0) * ((x - X0) / (X1 - X0));
+      dot.setAttribute('cx', x);
+      dot.setAttribute('cy', y);
+      sweep.setAttribute('x1', x);
+      sweep.setAttribute('x2', x);
+
+      var unlocked = 0;
+      caps.forEach(function(c){
+        if(!c.g) return;
+        var lamp = c.g.querySelector('.lamp');
+        var label = c.g.querySelector('.caplabel');
+        var on = v >= c.thr;
+        if(on) unlocked++;
+        if(lamp){
+          lamp.style.fill = on ? 'var(--goal)' : 'none';
+          lamp.style.stroke = on ? 'var(--goal)' : 'var(--error)';
+          lamp.style.strokeOpacity = on ? '1' : '.6';
+        }
+        if(label){ label.style.fill = on ? 'var(--paper)' : 'var(--dim)'; }
+      });
+
+      var loss = (3.6 * Math.pow(0.18 + v, -0.42)).toFixed(1);
+      readout.innerHTML = 'loss <b>' + loss + '</b> · ' + unlocked + ' unlocked';
+    }
+    slider.addEventListener('input', update);
+    update();
+  })();
+})();
+</script>
+</body>
+</html>

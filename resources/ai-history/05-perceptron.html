@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Perceptron · 1957–1969 — A History of AI</title>
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{--era:var(--dawn);
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .legend .ln{width:14px;height:0;border-top:2px solid var(--struct);display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  /* ---- page-specific: controls, fallbacks ---- */
+  .controls{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  button.toggle{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#0c1c12;background:var(--rest);border:0;border-radius:6px;padding:10px 16px;cursor:pointer;}
+  button.toggle[aria-pressed="true"]{background:var(--error);color:#1a0a04;}
+  button.toggle:focus-visible{outline:2px solid var(--paper);outline-offset:2px;}
+  .readout{font-size:11px;letter-spacing:.08em;color:var(--dim);}
+  .readout b{color:var(--error);font-weight:600;font-variant-numeric:tabular-nums;}
+  .readout .ok{color:var(--rest);}
+  #b2 text{font-family:var(--mono);}
+  .static-fallback{padding:18px 20px;}
+  .static-fallback p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.6;}
+
+  /* JS-off / static contract (GUIDELINE §f) */
+  .static{display:none;}
+  .no-js .live{display:none;}
+  .no-js .static{display:block;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+</head>
+<body class="no-js">
+<div class="wrap">
+
+  <!-- progress rail: 15 eras; current=05, 01–04 data-on, 06 & 08 winter -->
+  <nav class="rail" aria-label="Timeline position: era 5 of 15">
+    <a href="01-cybernetics.html" data-on aria-label="Era 1: Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on aria-label="Era 2: Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on aria-label="Era 3: Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on aria-label="Era 4: Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" class="cur" aria-current="page" aria-label="Era 5: The Perceptron (current)"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" class="winter" aria-label="Era 6: First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" aria-label="Era 7: Expert Systems"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="winter" aria-label="Era 8: Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" aria-label="Era 9: Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" aria-label="Era 10: Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" aria-label="Era 11: Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" aria-label="Era 12: AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" aria-label="Era 13: Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" aria-label="Era 14: Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" aria-label="Era 15: Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 05 / 15</span> · The Perceptron <span class="yrs">1957–1969</span></p>
+    <h1>The Perceptron</h1>
+    <p class="changed">A machine that <b>learns a boundary</b> from examples — then hits a wall.</p>
+  </header>
+
+  <main>
+
+    <!-- ============ BEAT 1 — CONCRETE ============ -->
+    <section class="beat" aria-labelledby="b1h">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1h">A line learns to divide</h2>
+      <p class="cap">Two groups of dots. A straight line nudges itself until it cleanly splits them.</p>
+      <div class="stage">
+        <canvas id="b1" class="live" width="820" height="480"
+          aria-label="Two interleaved groups of dots — circles and squares. A straight line repeatedly nudges its angle and position; misclassified dots glow coral, and as the line moves they turn green until the line settles, cleanly separating the two groups, and glows teal."></canvas>
+        <div class="static static-fallback">
+          <p>Two groups of dots — circles and squares — sit in the plane. The perceptron’s learning rule
+          tilts and shifts a single straight line, one mistake at a time, until every circle is on one
+          side and every square on the other: a clean dividing boundary, found from examples alone.</p>
+        </div>
+      </div>
+      <p class="legend">
+        <i><span class="sw" style="background:var(--error)"></span>misclassified dot</i>
+        <i><span class="sw" style="background:var(--rest)"></span>correctly placed</i>
+        <i><span class="ln" style="border-color:var(--goal)"></span>clean boundary found</i>
+        <i>○ group A · □ group B</i>
+      </p>
+    </section>
+
+    <!-- ============ BEAT 2 — ABSTRACT ============ -->
+    <section class="beat" aria-labelledby="b2h">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2h">The unit, stripped bare</h2>
+      <p class="cap">Inputs times weights, summed, then a threshold fires. The weights <i>are</i> the boundary.</p>
+      <div class="stage">
+        <svg id="b2" class="live" viewBox="0 0 820 460" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+          <title id="b2t">A perceptron unit driving a decision boundary</title>
+          <desc id="b2d">Two inputs flow through weights w1 and w2 into a summing node, then a threshold step that fires the output. As the weights adjust, the dividing line in the plane below tilts in exact lockstep — the weights and the boundary are the same thing.</desc>
+          <!-- wires -->
+          <g fill="none">
+            <path id="a1" d="M120,90 L360,150" stroke="#E8DCC0" stroke-width="2"/>
+            <path id="a2" d="M120,210 L360,150" stroke="#E8DCC0" stroke-width="2"/>
+            <path d="M205,40 L360,150" stroke="#E8DCC0" stroke-width="1.4" opacity=".7"/>
+            <path d="M412,150 L470,150" stroke="#E8DCC0" stroke-width="2"/>
+            <path d="M540,150 L600,150" stroke="#E8DCC0" stroke-width="2"/>
+          </g>
+          <!-- inputs -->
+          <g font-size="15" fill="#F4F6F5" text-anchor="middle">
+            <circle cx="100" cy="90" r="22" fill="none" stroke="#E8DCC0" stroke-width="1.5"/>
+            <text x="100" y="95">x₁</text>
+            <circle cx="100" cy="210" r="22" fill="none" stroke="#E8DCC0" stroke-width="1.5"/>
+            <text x="100" y="215">x₂</text>
+            <text x="195" y="30" font-size="12" fill="rgba(244,246,245,.46)">bias</text>
+          </g>
+          <!-- weight labels -->
+          <g font-size="13" fill="#F2C14E" text-anchor="middle">
+            <text id="w1v" x="232" y="104">w₁ +0.00</text>
+            <text id="w2v" x="232" y="196">w₂ +0.00</text>
+          </g>
+          <!-- sum node -->
+          <circle cx="386" cy="150" r="30" fill="none" stroke="#E8DCC0" stroke-width="1.8"/>
+          <text x="386" y="158" font-size="22" fill="#F4F6F5" text-anchor="middle">Σ</text>
+          <!-- step box -->
+          <rect x="470" y="118" width="70" height="64" rx="6" fill="none" stroke="#E8DCC0" stroke-width="1.8"/>
+          <path d="M482,168 L505,168 L505,132 L528,132" fill="none" stroke="#E8DCC0" stroke-width="2"/>
+          <text x="505" y="200" font-size="11" fill="rgba(244,246,245,.46)" text-anchor="middle">step</text>
+          <!-- output -->
+          <circle id="out" cx="630" cy="150" r="26" fill="#0E1B2A" stroke="#E8DCC0" stroke-width="1.8"/>
+          <text id="outt" x="630" y="155" font-size="13" fill="rgba(244,246,245,.46)" text-anchor="middle">ŷ</text>
+          <text x="630" y="100" font-size="11" fill="rgba(244,246,245,.46)" text-anchor="middle">fire?</text>
+
+          <!-- inset plane: the SAME boundary, driven by the SAME weights -->
+          <text x="410" y="262" font-size="11" letter-spacing="2" fill="rgba(244,246,245,.46)" text-anchor="middle">— same boundary, same weights —</text>
+          <rect x="300" y="272" width="220" height="160" rx="6" fill="rgba(255,255,255,.02)" stroke="rgba(244,246,245,.12)"/>
+          <line id="bound" x1="300" y1="432" x2="520" y2="272" stroke="#19E3C1" stroke-width="2.4"/>
+          <g id="dots2"></g>
+        </svg>
+        <div class="static static-fallback">
+          <p>A perceptron unit: each input x is multiplied by a weight w, the products are summed with a
+          bias, and a threshold (step) decides whether the unit “fires”. Adjusting the weights is exactly
+          the same act as tilting the dividing line from Beat 1 — the weights <i>are</i> the boundary.</p>
+        </div>
+      </div>
+      <p class="legend">
+        <i><span class="sw" style="background:var(--era)"></span>weights w₁, w₂ (adjusting)</i>
+        <i><span class="ln" style="border-color:var(--goal)"></span>boundary they define</i>
+        <i><span class="sw" style="background:var(--rest)"></span>output fires</i>
+      </p>
+    </section>
+
+    <!-- ============ BEAT 3 — INTERACTIVE ============ -->
+    <section class="beat" aria-labelledby="b3h">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3h">Then it hits a wall</h2>
+      <p class="cap">Switch the dots to XOR — diagonal pairs. One straight line can never split them.</p>
+      <div class="stage">
+        <canvas id="b3" class="live" width="820" height="480"
+          aria-label="The same learning line over the dots. A button rearranges the dots into an XOR pattern — matching pairs sit on opposite diagonal corners. The line keeps trying angles but can never get every dot right; a counter of misclassified dots never reaches zero."></canvas>
+        <div class="static static-fallback">
+          <p>The same line, but now the dots form an XOR pattern: each group occupies two opposite
+          corners. No single straight line can place all four corners correctly — at least two dots stay
+          misclassified, forever. This is the wall Minsky &amp; Papert proved in 1969, and it set up the
+          first AI winter.</p>
+        </div>
+      </div>
+      <div class="controls live">
+        <button id="b3btn" class="toggle" type="button" aria-pressed="false">Switch to XOR</button>
+        <span class="readout" id="b3read" role="status" aria-live="polite">Separable — misclassified: <b class="ok">0</b></span>
+      </div>
+      <p class="legend">
+        <i><span class="sw" style="background:var(--error)"></span>still wrong (the wall)</i>
+        <i><span class="sw" style="background:var(--rest)"></span>correctly placed</i>
+        <i><span class="ln" style="border-color:var(--struct)"></span>line, still trying</i>
+      </p>
+
+      <details class="nods">
+        <summary>Footnotes &amp; further reading</summary>
+        <div class="nodgrid">
+          <div class="nod">
+            <div class="ny">1958</div>
+            <div class="nm">The Mark I Perceptron</div>
+            <div class="nd">Frank Rosenblatt’s machine learned to classify images by adjusting motor-driven weights — hardware that learned a boundary from examples, igniting the first wave of optimism.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">1969</div>
+            <div class="nm">Perceptrons</div>
+            <div class="nd">Minsky &amp; Papert proved a single-layer perceptron cannot compute XOR. The result chilled neural-net funding for over a decade.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">concept</div>
+            <div class="nm">Linear separability</div>
+            <div class="nd">A perceptron can only separate classes a single straight line (hyperplane) can divide. XOR isn’t linearly separable — hence the wall.</div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="04-symbolic-ai.html"><span class="lab">◄ Prev</span><span class="ttl">Symbolic AI</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="06-first-winter.html"><span class="lab">Next ►</span><span class="ttl">First AI Winter</span></a>
+</nav>
+
+<script>
+'use strict';
+(function(){
+  var B = document.body;
+  B.classList.remove('no-js'); B.classList.add('js');
+
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+  var rootCS = getComputedStyle(document.documentElement);
+  var bodyCS = getComputedStyle(B);
+  function C(name, fromBody){ return ((fromBody?bodyCS:rootCS).getPropertyValue(name) || '').trim(); }
+  var COL = {
+    goal:  C('--goal'),
+    error: C('--error'),
+    rest:  C('--rest'),
+    struct:C('--struct'),
+    era:   C('--era', true) || C('--dawn'),
+    line:  'rgba(244,246,245,.10)'
+  };
+
+  // deterministic pseudo-random so layouts are stable across loads
+  function lcg(seed){ var s = seed>>>0; return function(){ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+  function makePoints(kind){
+    var pts=[], r=lcg(kind==='xor'?7:42), i;
+    function cloud(cx,cy,label,n,spread){
+      for(i=0;i<n;i++){ pts.push({x:cx+(r()-0.5)*spread, y:cy+(r()-0.5)*spread, label:label}); }
+    }
+    if(kind==='xor'){
+      cloud(0.27,0.27,1,5,0.13); cloud(0.73,0.73,1,5,0.13);
+      cloud(0.27,0.73,-1,5,0.13); cloud(0.73,0.27,-1,5,0.13);
+    } else {
+      cloud(0.33,0.64,1,9,0.19); cloud(0.69,0.36,-1,9,0.19);
+    }
+    return pts;
+  }
+
+  function predict(w,p){ return (w.w1*p.x + w.w2*p.y + w.b) >= 0 ? 1 : -1; }
+
+  // one perceptron update on the first misclassified point; returns count misclassified BEFORE update
+  function trainStep(w, pts, lr){
+    var miss=0, target=null, i;
+    for(i=0;i<pts.length;i++){ if(predict(w,pts[i])!==pts[i].label){ miss++; if(!target) target=pts[i]; } }
+    if(target){
+      w.w1 += lr*target.label*target.x;
+      w.w2 += lr*target.label*target.y;
+      w.b  += lr*target.label;
+    }
+    return miss;
+  }
+  function countMiss(w,pts){ var m=0,i; for(i=0;i<pts.length;i++){ if(predict(w,pts[i])!==pts[i].label) m++; } return m; }
+
+  // ---- shared canvas renderer ----
+  function drawPlane(ctx, W, H, pts, w, miss, settled){
+    var pad=48;
+    function MX(x){ return pad + x*(W-2*pad); }
+    function MY(y){ return pad + (1-y)*(H-2*pad); }
+    ctx.clearRect(0,0,W,H);
+    // frame
+    ctx.strokeStyle=COL.line; ctx.lineWidth=1;
+    ctx.strokeRect(pad,pad,W-2*pad,H-2*pad);
+    // boundary line: w1*x + w2*y + b = 0
+    var x0=-0.3, x1=1.3, y0, y1, vertical=false, xv=0;
+    if(Math.abs(w.w2) > 1e-4){ y0 = -(w.w1*x0 + w.b)/w.w2; y1 = -(w.w1*x1 + w.b)/w.w2; }
+    else { vertical=true; xv = -w.b/(w.w1||1e-4); }
+    ctx.lineWidth = settled?3.2:2.2;
+    ctx.strokeStyle = settled ? COL.goal : COL.struct;
+    if(settled){ ctx.shadowColor=COL.goal; ctx.shadowBlur=14; } else { ctx.shadowBlur=0; }
+    ctx.beginPath();
+    if(vertical){ ctx.moveTo(MX(xv),MY(-0.3)); ctx.lineTo(MX(xv),MY(1.3)); }
+    else { ctx.moveTo(MX(x0),MY(y0)); ctx.lineTo(MX(x1),MY(y1)); }
+    ctx.stroke();
+    ctx.shadowBlur=0;
+    // dots
+    var i,p,px,py,wrong,sz=7;
+    for(i=0;i<pts.length;i++){
+      p=pts[i]; px=MX(p.x); py=MY(p.y);
+      wrong = predict(w,p)!==p.label;
+      ctx.fillStyle = wrong ? COL.error : COL.rest;
+      ctx.strokeStyle = wrong ? COL.error : COL.rest;
+      ctx.lineWidth=2;
+      if(p.label===1){ // circle = group A
+        ctx.beginPath(); ctx.arc(px,py,sz,0,Math.PI*2); ctx.fill();
+      } else {          // square = group B
+        ctx.fillRect(px-sz,py-sz,sz*2,sz*2);
+      }
+    }
+  }
+
+  // ============ BEAT 1 ============
+  (function(){
+    var cv=document.getElementById('b1'); if(!cv) return;
+    var ctx; try{ ctx=cv.getContext('2d'); }catch(e){ return; }
+    if(!ctx) return;
+    var W=cv.width, H=cv.height;
+    var pts=makePoints('sep');
+    var w={w1:1.1, w2:0.9, b:-0.35}; // deliberately wrong start
+    var lr=0.06;
+
+    if(reduce){
+      var k=0; while(countMiss(w,pts)>0 && k<2000){ trainStep(w,pts,lr); k++; }
+      drawPlane(ctx,W,H,pts,w,0,true);
+      return;
+    }
+    var frame=0, done=false, holdAfter=0, raf;
+    function loop(){
+      frame++;
+      if(!done && frame%3===0){
+        var miss=trainStep(w,pts,lr);
+        if(miss===0){ done=true; holdAfter=frame; }
+      }
+      drawPlane(ctx,W,H,pts,w,countMiss(w,pts),done);
+      // hold the settled frame ~2.4s, then restart the demonstration
+      if(done && frame-holdAfter>140){
+        w={w1:1.1, w2:0.9, b:-0.35}; done=false; frame=0;
+      }
+      raf=requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  // ============ BEAT 2 ============ (SVG unit + lockstep boundary)
+  (function(){
+    var svg=document.getElementById('b2'); if(!svg) return;
+    var w1v=document.getElementById('w1v'), w2v=document.getElementById('w2v');
+    var bound=document.getElementById('bound'), out=document.getElementById('out'), outt=document.getElementById('outt');
+    var a1=document.getElementById('a1'), a2=document.getElementById('a2'), dots2=document.getElementById('dots2');
+    if(!w1v||!w2v||!bound||!out||!dots2) return;
+
+    // inset plane box: x 300..520, y 272..432
+    var bx=300, by=272, bw=220, bh=160;
+    function IX(x){ return bx + x*bw; }
+    function IY(y){ return by + (1-y)*bh; }
+
+    var mini=[ {x:0.32,y:0.70,label:1},{x:0.44,y:0.58,label:1},
+               {x:0.68,y:0.34,label:-1},{x:0.58,y:0.28,label:-1} ];
+    // render mini dots once
+    var ns='http://www.w3.org/2000/svg', i;
+    for(i=0;i<mini.length;i++){
+      var p=mini[i], el;
+      if(p.label===1){ el=document.createElementNS(ns,'circle'); el.setAttribute('cx',IX(p.x)); el.setAttribute('cy',IY(p.y)); el.setAttribute('r',5); }
+      else { el=document.createElementNS(ns,'rect'); el.setAttribute('x',IX(p.x)-5); el.setAttribute('y',IY(p.y)-5); el.setAttribute('width',10); el.setAttribute('height',10); }
+      el.setAttribute('data-i',i); dots2.appendChild(el);
+    }
+    var sample=mini[0];
+
+    function applyWeights(w){
+      w1v.textContent='w₁ '+(w.w1>=0?'+':'')+w.w1.toFixed(2);
+      w2v.textContent='w₂ '+(w.w2>=0?'+':'')+w.w2.toFixed(2);
+      if(a1) a1.setAttribute('stroke-width', (1+Math.min(4.5,Math.abs(w.w1)*1.6)).toFixed(2));
+      if(a2) a2.setAttribute('stroke-width', (1+Math.min(4.5,Math.abs(w.w2)*1.6)).toFixed(2));
+      // boundary inside inset
+      var x0=0,x1=1,y0,y1;
+      if(Math.abs(w.w2)>1e-4){ y0=-(w.w1*x0+w.b)/w.w2; y1=-(w.w1*x1+w.b)/w.w2; }
+      else { y0=2; y1=-1; }
+      // clamp drawn endpoints to box vertical range for tidiness
+      bound.setAttribute('x1',IX(x0)); bound.setAttribute('y1',IY(Math.max(-0.2,Math.min(1.2,y0))));
+      bound.setAttribute('x2',IX(x1)); bound.setAttribute('y2',IY(Math.max(-0.2,Math.min(1.2,y1))));
+      // dot colors
+      var kids=dots2.childNodes, j;
+      for(j=0;j<kids.length;j++){
+        var idx=+kids[j].getAttribute('data-i');
+        var wrong=predict(w,mini[idx])!==mini[idx].label;
+        kids[j].setAttribute('fill', wrong?COL.error:COL.rest);
+      }
+      // output fires when sample is on its (positive) side
+      var fire=predict(w,sample)>0;
+      out.setAttribute('fill', fire?COL.rest:'#0E1B2A');
+      out.setAttribute('stroke', fire?COL.rest:COL.struct);
+      outt.setAttribute('fill', fire?'#0c1c12':COL.struct);
+      outt.textContent = fire? '+1' : '0';
+    }
+
+    function freshW(){ return {w1:-0.6, w2:-0.2, b:0.5}; } // wrong start
+    var w=freshW(), lr=0.05;
+
+    if(reduce){
+      var k=0; while(countMiss(w,mini)>0 && k<2000){ trainStep(w,mini,lr); k++; }
+      applyWeights(w); return;
+    }
+    var frame=0, done=false, holdAfter=0;
+    function loop(){
+      frame++;
+      if(!done && frame%4===0){
+        var miss=trainStep(w,mini,lr);
+        if(miss===0){ done=true; holdAfter=frame; }
+      }
+      applyWeights(w);
+      if(done && frame-holdAfter>150){ w=freshW(); done=false; frame=0; }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  // ============ BEAT 3 ============ (interactive XOR wall)
+  (function(){
+    var cv=document.getElementById('b3'); if(!cv) return;
+    var ctx; try{ ctx=cv.getContext('2d'); }catch(e){ return; }
+    if(!ctx) return;
+    var btn=document.getElementById('b3btn'), read=document.getElementById('b3read');
+    var W=cv.width, H=cv.height;
+
+    var kind='sep';
+    var pts=makePoints(kind);
+    var w={w1:1.0,w2:0.8,b:-0.3};
+    var lr=0.06, bestMiss=999;
+
+    function freshW(){ return {w1:1.0,w2:0.8,b:-0.3}; }
+    // keep weights bounded so the line stays drawable while it thrashes on XOR
+    function normalize(){
+      var n=Math.sqrt(w.w1*w.w1+w.w2*w.w2);
+      if(n>3){ w.w1/=n; w.w2/=n; w.b/=n; }
+    }
+    function setReadout(miss){
+      if(!read) return;
+      if(kind==='sep'){
+        read.innerHTML='Separable — misclassified: <b class="ok">'+miss+'</b>';
+      } else {
+        read.innerHTML='XOR — misclassified: <b>'+miss+'</b> · never reaches 0';
+      }
+    }
+    function rebuild(){
+      pts=makePoints(kind); w=freshW(); bestMiss=999;
+    }
+    function frameStep(){
+      var miss=trainStep(w,pts,lr); normalize();
+      var now=countMiss(w,pts);
+      if(now<bestMiss) bestMiss=now;
+      return now;
+    }
+
+    if(btn){
+      btn.addEventListener('click', function(){
+        kind = (kind==='sep')?'xor':'sep';
+        btn.setAttribute('aria-pressed', kind==='xor'?'true':'false');
+        btn.textContent = kind==='xor' ? 'Switch to separable' : 'Switch to XOR';
+        rebuild();
+        if(reduce){ renderStatic(); }
+      });
+    }
+
+    function renderStatic(){
+      // run to a representative state, draw one frame (no animation)
+      var k=0, settled=false;
+      if(kind==='sep'){ while(countMiss(w,pts)>0 && k<2000){ trainStep(w,pts,lr); k++; } settled=true; }
+      else { for(k=0;k<400;k++){ trainStep(w,pts,lr); normalize(); } }
+      var miss=countMiss(w,pts);
+      drawPlane(ctx,W,H,pts,w,miss, kind==='sep'&&miss===0);
+      setReadout(miss);
+    }
+
+    if(reduce){ renderStatic(); return; }
+
+    var frame=0, sepDone=false, holdAfter=0;
+    function loop(){
+      frame++;
+      var miss;
+      if(kind==='sep'){
+        if(!sepDone && frame%3===0){ miss=frameStep(); if(countMiss(w,pts)===0){ sepDone=true; holdAfter=frame; } }
+        drawPlane(ctx,W,H,pts,w,countMiss(w,pts), sepDone);
+        if(sepDone && frame-holdAfter>140){ rebuild(); sepDone=false; frame=0; }
+      } else {
+        if(frame%3===0){ frameStep(); } // never settles
+        drawPlane(ctx,W,H,pts,w,countMiss(w,pts), false);
+        sepDone=false;
+      }
+      setReadout(countMiss(w,pts));
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+})();
+</script>
+</body>
+</html>

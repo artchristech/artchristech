@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expert Systems — A History of AI (07 / 15)</title>
+<!--
+  ============================================================
+  ERA 07 / 15 — EXPERT SYSTEMS (1980–1987)
+  An instance of ../GUIDELINE.md ("HTML 3b1b"), built on history/_shell.html.
+  Subject shape: a PROCESS / CHAIN → metaphor = IF–THEN rules firing down a chain.
+  Three beats, concrete → abstract → interactive:
+    BEAT 1  CONCRETE     a MYCIN-style consult: symptoms in, rules fire down a chain, diagnosis out.
+    BEAT 2  ABSTRACT     the rule base as a firing graph — conditions lighting a path to a conclusion.
+    BEAT 3  INTERACTIVE  toggle symptoms → rules fire live to a verdict (--rest); feed a novel case → no
+                         rule matches → the system STALLS (--error) — the brittleness that ends the boom.
+  Semantic tokens (fixed meaning):
+    --era   #F2C14E dawn       = the commercial-boom mood / a rule actively firing
+    --rest  #9EF01A chartreuse = a confident, resolved diagnosis
+    --error #FF7849 coral      = the unhandled / novel case — brittleness
+    --struct#E8DCC0 sand       = inert mechanism (rule cards, wires, frames)
+    --ink   #0A1622 deep ink   = ground
+  No network. Everything inline. Vanilla JS, strict mode. SVG + Canvas only.
+  Honors prefers-reduced-motion (SMIL frozen at a representative frame). Meaningful with JS off.
+  ============================================================
+-->
+<!-- ====== SHARED SHELL STYLE (verbatim from _shell.html) ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC STYLE (era mood + beat-3 controls + fallbacks) ====== -->
+<style>
+  /* Era 07 mood: a brief, warmer commercial boom between two winters */
+  body{--era:var(--dawn);}
+
+  /* beat-3 symptom toggles */
+  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .sw{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--paper);
+      background:var(--ink-2);border:1px solid var(--line);border-radius:999px;
+      padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .15s,background .15s,color .15s;}
+  .sw::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--struct);opacity:.35;transition:background .15s,opacity .15s;}
+  .sw:hover{border-color:var(--struct);}
+  .sw[aria-pressed="true"]{border-color:var(--era);color:var(--era);}
+  .sw[aria-pressed="true"]::before{background:var(--era);opacity:1;}
+  .sw.novel[aria-pressed="true"]{border-color:var(--error);color:var(--error);}
+  .sw.novel[aria-pressed="true"]::before{background:var(--error);opacity:1;}
+  .preset{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--error);background:transparent;border:1px dashed rgba(255,120,73,.5);border-radius:999px;
+      padding:8px 14px;cursor:pointer;margin-left:auto;transition:background .15s;}
+  .preset:hover{background:rgba(255,120,73,.1);}
+  .b3-hint{min-height:1.4em;}
+  .b3-hint b{font-weight:400;color:var(--rest);}
+  .b3-hint.stall b{color:var(--error);}
+
+  /* JS-off / static fallback contract */
+  .b3-static{display:none;}
+  .no-js .b3-live{display:none;}
+  .no-js .b3-static{display:block;}
+  .no-js .controls,.no-js .preset{opacity:.4;pointer-events:none;}
+
+  .reduced-note{display:none;}
+  @media (prefers-reduced-motion: reduce){.reduced-note{display:inline;color:var(--rest);}}
+</style>
+</head>
+
+<body class="no-js">
+<div class="wrap">
+
+  <!-- ====== PROGRESS RAIL ====== -->
+  <nav class="rail" aria-label="Timeline position">
+    <a href="01-cybernetics.html" data-on aria-label="Era 01, Cybernetics"><span class="n">01</span><span class="tick"></span></a>
+    <a href="02-turing.html" data-on aria-label="Era 02, Turing"><span class="n">02</span><span class="tick"></span></a>
+    <a href="03-dartmouth.html" data-on aria-label="Era 03, Dartmouth"><span class="n">03</span><span class="tick"></span></a>
+    <a href="04-symbolic-ai.html" data-on aria-label="Era 04, Symbolic AI"><span class="n">04</span><span class="tick"></span></a>
+    <a href="05-perceptron.html" data-on aria-label="Era 05, Perceptron"><span class="n">05</span><span class="tick"></span></a>
+    <a href="06-first-winter.html" data-on class="winter" aria-label="Era 06, First AI Winter"><span class="n">06</span><span class="tick"></span></a>
+    <a href="07-expert-systems.html" class="cur" aria-current="page" aria-label="Era 07, Expert Systems, current"><span class="n">07</span><span class="tick"></span></a>
+    <a href="08-second-winter.html" class="winter" aria-label="Era 08, Second AI Winter"><span class="n">08</span><span class="tick"></span></a>
+    <a href="09-backprop.html" aria-label="Era 09, Backpropagation"><span class="n">09</span><span class="tick"></span></a>
+    <a href="10-statistical-ai.html" aria-label="Era 10, Statistical AI"><span class="n">10</span><span class="tick"></span></a>
+    <a href="11-game-playing.html" aria-label="Era 11, Game Playing"><span class="n">11</span><span class="tick"></span></a>
+    <a href="12-alexnet.html" aria-label="Era 12, AlexNet"><span class="n">12</span><span class="tick"></span></a>
+    <a href="13-transformer.html" aria-label="Era 13, Transformer"><span class="n">13</span><span class="tick"></span></a>
+    <a href="14-scaling-laws.html" aria-label="Era 14, Scaling Laws"><span class="n">14</span><span class="tick"></span></a>
+    <a href="15-generative-agentic.html" aria-label="Era 15, Generative & Agentic"><span class="n">15</span><span class="tick"></span></a>
+  </nav>
+
+  <!-- ====== MASTHEAD ====== -->
+  <header class="mast">
+    <p class="kicker"><span class="eranum">Era 07 / 15</span> · Expert Systems <span class="yrs">1980–1987</span></p>
+    <h1>Expert Systems</h1>
+    <p class="changed">Bottle <b>human expertise</b> as IF–THEN rules — a brief boom.</p>
+  </header>
+
+  <!-- ====== BEATS ====== -->
+  <main>
+
+    <!-- ============================ BEAT 1 — CONCRETE ============================ -->
+    <section class="beat" aria-labelledby="b1">
+      <p class="badge"><b>Beat 1</b> · Concrete</p>
+      <h2 id="b1">A consult, rule by rule</h2>
+      <p class="cap">Symptoms enter on the left; rules <b>fire down a chain</b> — IF this AND that, THEN — until a diagnosis emerges.</p>
+      <div class="stage">
+        <svg class="smil" viewBox="0 0 1000 440" role="img" aria-labelledby="b1t b1d" preserveAspectRatio="xMidYMid meet">
+          <title id="b1t">A MYCIN-style consultation firing down a rule chain</title>
+          <desc id="b1d">Four patient symptoms on the left feed into a vertical chain of three IF–THEN rule cards in the centre. A glowing pulse travels down the chain: each rule lights amber as it fires, deriving a new fact that feeds the next rule, until a diagnosis card on the right lands in chartreuse — bacterial meningitis, treat. The cascade of firing rules is the whole mechanism.</desc>
+          <defs>
+            <marker id="ar1" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#E8DCC0" opacity="0.5"/>
+            </marker>
+          </defs>
+
+          <!-- wires: symptoms -> rules (inert sand) -->
+          <g stroke="#E8DCC0" stroke-opacity="0.28" stroke-width="1.5" fill="none">
+            <path d="M210,64 H260 Q280,64 280,80 L300,80" marker-end="url(#ar1)"/>
+            <path d="M210,116 H262 Q280,116 280,92 L300,92" marker-end="url(#ar1)"/>
+            <path d="M210,218 H300" marker-end="url(#ar1)"/>
+            <path d="M210,320 H262 Q280,320 280,350 L300,350" marker-end="url(#ar1)"/>
+          </g>
+
+          <!-- symptom chips (inputs) -->
+          <g font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">
+            <g>
+              <rect x="24" y="42" width="186" height="44" rx="8" fill="#0E1B2A" stroke="#E8DCC0" stroke-opacity="0.5"/>
+              <text x="117" y="69" fill="#E8DCC0">fever</text>
+            </g>
+            <g>
+              <rect x="24" y="94" width="186" height="44" rx="8" fill="#0E1B2A" stroke="#E8DCC0" stroke-opacity="0.5"/>
+              <text x="117" y="121" fill="#E8DCC0">stiff neck</text>
+            </g>
+            <g>
+              <rect x="24" y="196" width="186" height="44" rx="8" fill="#0E1B2A" stroke="#E8DCC0" stroke-opacity="0.5"/>
+              <text x="117" y="223" fill="#E8DCC0">headache</text>
+            </g>
+            <g>
+              <rect x="24" y="298" width="186" height="44" rx="8" fill="#0E1B2A" stroke="#E8DCC0" stroke-opacity="0.5"/>
+              <text x="117" y="325" fill="#E8DCC0">photophobia</text>
+            </g>
+            <text x="117" y="372" fill="#E8DCC0" fill-opacity="0.45" font-size="11" letter-spacing="3">SYMPTOMS IN</text>
+          </g>
+
+          <!-- spine the pulse travels -->
+          <path id="spine1" d="M490,80 V356 H740" fill="none" stroke="#E8DCC0" stroke-opacity="0.12" stroke-width="2"/>
+
+          <!-- rule chain (centre) -->
+          <g font-family="ui-monospace,monospace" text-anchor="middle">
+            <!-- R1 -->
+            <rect x="300" y="40" width="380" height="80" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+              <animate attributeName="stroke" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.01;0.04;0.97;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/>
+            </rect>
+            <text x="490" y="74" fill="#E8DCC0" font-size="13">IF fever ∧ stiff neck</text>
+            <text x="490" y="98" fill="#F2C14E" font-size="12">THEN CNS infection</text>
+
+            <!-- R2 -->
+            <rect x="300" y="178" width="380" height="80" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+              <animate attributeName="stroke" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.13;0.17;0.97;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/>
+            </rect>
+            <text x="490" y="212" fill="#E8DCC0" font-size="13">IF CNS infection ∧ headache</text>
+            <text x="490" y="236" fill="#F2C14E" font-size="12">THEN meningitis</text>
+
+            <!-- R3 -->
+            <rect x="300" y="316" width="380" height="80" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+              <animate attributeName="stroke" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.29;0.33;0.97;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/>
+            </rect>
+            <text x="490" y="350" fill="#E8DCC0" font-size="13">IF meningitis ∧ photophobia</text>
+            <text x="490" y="374" fill="#F2C14E" font-size="12">THEN bacterial</text>
+          </g>
+
+          <!-- diagnosis (output, lands at rest) -->
+          <g font-family="ui-monospace,monospace" text-anchor="middle">
+            <rect x="740" y="316" width="236" height="80" rx="9" fill="#0E1B2A" stroke="#3A4A2A" stroke-width="2.5">
+              <animate attributeName="stroke" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.60;0.65;0.97;1" values="#3A4A2A;#3A4A2A;#9EF01A;#9EF01A;#3A4A2A"/>
+            </rect>
+            <circle cx="858" cy="356" r="52" fill="none" stroke="#9EF01A" stroke-width="2" opacity="0">
+              <animate attributeName="opacity" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.60;0.66;0.9;1" values="0;0;0.5;0.18;0"/>
+              <animate attributeName="r" dur="7s" repeatCount="indefinite"
+                keyTimes="0;0.60;0.72;1" values="40;40;60;40"/>
+            </circle>
+            <text x="858" y="350" fill="#9EF01A" font-size="14" font-weight="600">BACTERIAL</text>
+            <text x="858" y="370" fill="#9EF01A" font-size="14" font-weight="600">MENINGITIS</text>
+            <text x="858" y="300" fill="#9EF01A" fill-opacity="0.55" font-size="11" letter-spacing="3">DIAGNOSIS</text>
+          </g>
+
+          <!-- travelling pulse = the inference firing -->
+          <g>
+            <circle r="14" fill="#F2C14E" opacity="0.18">
+              <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.62;1" calcMode="linear">
+                <mpath href="#spine1"/>
+              </animateMotion>
+            </circle>
+            <circle r="6" fill="#F2C14E">
+              <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.62;1" calcMode="linear">
+                <mpath href="#spine1"/>
+              </animateMotion>
+            </circle>
+          </g>
+        </svg>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#E8DCC0"></i> symptoms &amp; rule mechanism</span>
+        <span><i class="sw" style="background:#F2C14E"></i> a rule firing</span>
+        <span><i class="sw" style="background:#9EF01A"></i> diagnosis reached</span>
+        <span class="reduced-note">motion reduced — chain frozen at the diagnosis</span>
+      </div>
+    </section>
+
+    <!-- ============================ BEAT 2 — ABSTRACT ============================ -->
+    <section class="beat" aria-labelledby="b2">
+      <p class="badge"><b>Beat 2</b> · Abstract</p>
+      <h2 id="b2">The rule base, as a graph</h2>
+      <p class="cap">Strip the consult away: it is just <b>conditions lighting a path</b> to one conclusion. Same firing, no patient.</p>
+      <div class="stage">
+        <svg class="smil" viewBox="0 0 1000 420" role="img" aria-labelledby="b2t b2d" preserveAspectRatio="xMidYMid meet">
+          <title id="b2t">The rule base as a firing graph</title>
+          <desc id="b2d">Condition nodes across the top connect through two AND-rule gates to two conclusion leaves at the bottom. One path lights amber — fever, stiff neck and headache feed the meningitis rule — and its leaf turns chartreuse, while the unfired measles path stays grey. The same IF–THEN mechanism as the consult, stripped to nodes and edges.</desc>
+
+          <!-- inactive edges (measles path) -->
+          <g stroke="#5A5446" stroke-width="2" fill="none" stroke-opacity="0.7">
+            <path d="M200,96 Q500,150 740,176"/>     <!-- fever -> RuleB -->
+            <path d="M820,96 L772,176"/>               <!-- rash  -> RuleB -->
+            <path d="M760,244 L760,316"/>              <!-- RuleB -> MEASLES -->
+          </g>
+
+          <!-- active edges (meningitis path) -->
+          <g fill="none" stroke-width="2.5">
+            <path id="e_fa" d="M200,96 L376,176" stroke="#5A5446">
+              <animate attributeName="stroke" dur="6s" repeatCount="indefinite"
+                keyTimes="0;0.05;0.10;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></path>
+            <path id="e_sa" d="M400,96 L400,176" stroke="#5A5446">
+              <animate attributeName="stroke" dur="6s" repeatCount="indefinite"
+                keyTimes="0;0.08;0.13;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></path>
+            <path id="e_ha" d="M600,96 L424,176" stroke="#5A5446">
+              <animate attributeName="stroke" dur="6s" repeatCount="indefinite"
+                keyTimes="0;0.11;0.16;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></path>
+            <path id="e_am" d="M400,244 L400,316" stroke="#5A5446">
+              <animate attributeName="stroke" dur="6s" repeatCount="indefinite"
+                keyTimes="0;0.26;0.31;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></path>
+          </g>
+
+          <!-- condition nodes -->
+          <g font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">
+            <g>
+              <circle cx="200" cy="72" r="34" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+                <animate attributeName="stroke" dur="6s" repeatCount="indefinite" keyTimes="0;0.04;0.09;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></circle>
+              <text x="200" y="76" fill="#E8DCC0">fever</text>
+            </g>
+            <g>
+              <circle cx="400" cy="72" r="34" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+                <animate attributeName="stroke" dur="6s" repeatCount="indefinite" keyTimes="0;0.07;0.12;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></circle>
+              <text x="400" y="69" fill="#E8DCC0">stiff</text>
+              <text x="400" y="84" fill="#E8DCC0">neck</text>
+            </g>
+            <g>
+              <circle cx="600" cy="72" r="34" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+                <animate attributeName="stroke" dur="6s" repeatCount="indefinite" keyTimes="0;0.10;0.15;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></circle>
+              <text x="600" y="69" fill="#E8DCC0">head-</text>
+              <text x="600" y="84" fill="#E8DCC0">ache</text>
+            </g>
+            <g>
+              <circle cx="820" cy="72" r="34" fill="#0E1B2A" stroke="#5A5446" stroke-width="2" stroke-opacity="0.7"/>
+              <text x="820" y="76" fill="#E8DCC0" fill-opacity="0.7">rash</text>
+            </g>
+          </g>
+
+          <!-- rule gates (AND) -->
+          <g font-family="ui-monospace,monospace" font-size="11" text-anchor="middle">
+            <g>
+              <rect x="352" y="186" width="96" height="58" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2">
+                <animate attributeName="stroke" dur="6s" repeatCount="indefinite" keyTimes="0;0.20;0.25;0.92;1" values="#5A5446;#5A5446;#F2C14E;#F2C14E;#5A5446"/></rect>
+              <text x="400" y="211" fill="#E8DCC0" letter-spacing="2">RULE</text>
+              <text x="400" y="228" fill="#F2C14E">∧ AND</text>
+            </g>
+            <g>
+              <rect x="712" y="186" width="96" height="58" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2" stroke-opacity="0.7"/>
+              <text x="760" y="211" fill="#E8DCC0" fill-opacity="0.7" letter-spacing="2">RULE</text>
+              <text x="760" y="228" fill="#E8DCC0" fill-opacity="0.5">∧ AND</text>
+            </g>
+          </g>
+
+          <!-- conclusion leaves -->
+          <g font-family="ui-monospace,monospace" font-size="12" text-anchor="middle">
+            <g>
+              <rect x="306" y="316" width="188" height="56" rx="9" fill="#0E1B2A" stroke="#3A4A2A" stroke-width="2.5">
+                <animate attributeName="stroke" dur="6s" repeatCount="indefinite" keyTimes="0;0.34;0.40;0.92;1" values="#3A4A2A;#3A4A2A;#9EF01A;#9EF01A;#3A4A2A"/></rect>
+              <text x="400" y="350" fill="#9EF01A" font-weight="600">MENINGITIS</text>
+            </g>
+            <g>
+              <rect x="666" y="316" width="188" height="56" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2" stroke-opacity="0.7"/>
+              <text x="760" y="350" fill="#E8DCC0" fill-opacity="0.55" font-weight="600">measles</text>
+            </g>
+          </g>
+
+          <!-- pulse along the fired conclusion edge -->
+          <circle r="5" fill="#F2C14E" opacity="0">
+            <animate attributeName="opacity" dur="6s" repeatCount="indefinite" keyTimes="0;0.26;0.27;0.4;0.41;1" values="0;0;1;1;0;0"/>
+            <animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.27;0.4;1" calcMode="linear">
+              <mpath href="#e_am"/>
+            </animateMotion>
+          </circle>
+        </svg>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#F2C14E"></i> the path that fires</span>
+        <span><i class="sw" style="background:#9EF01A"></i> the conclusion it reaches</span>
+        <span><i class="sw" style="background:#5A5446"></i> rules left unfired</span>
+        <span class="reduced-note">motion reduced — frozen with the meningitis path lit</span>
+      </div>
+    </section>
+
+    <!-- ============================ BEAT 3 — INTERACTIVE ============================ -->
+    <section class="beat" aria-labelledby="b3">
+      <p class="badge"><b>Beat 3</b> · Interactive</p>
+      <h2 id="b3">Run the consult — then break it</h2>
+      <p class="cap">Toggle symptoms; watch rules fire to a verdict. Then feed an <b>unseen sign</b> — no rule matches, and it stalls.</p>
+
+      <div class="controls" role="group" aria-label="Toggle patient symptoms">
+        <button class="sw" type="button" data-sym="fever" aria-pressed="false">Fever</button>
+        <button class="sw" type="button" data-sym="stiff" aria-pressed="false">Stiff neck</button>
+        <button class="sw" type="button" data-sym="headache" aria-pressed="false">Headache</button>
+        <button class="sw" type="button" data-sym="rash" aria-pressed="false">Rash</button>
+        <button class="sw novel" type="button" data-sym="novel" aria-pressed="false">Unseen sign</button>
+        <button class="preset" type="button" id="novelCase">Feed a novel case ▸</button>
+      </div>
+
+      <div class="stage">
+        <!-- LIVE (JS on) -->
+        <div class="b3-live">
+          <svg id="svg3" viewBox="0 0 1000 460" role="img" aria-label="A live rule engine. Buttons above toggle the patient's symptoms. Selected symptoms light amber on the left and feed three IF–THEN rule cards in the centre; a rule that fires turns chartreuse and chains to the verdict node on the right. When the selected symptoms satisfy a rule, the verdict is a confident chartreuse diagnosis. When you select an unseen sign that no rule references, no rule fires and the verdict turns coral — an unhandled, stalled case.">
+            <!-- wires symptom -> rules -->
+            <g id="wires" stroke="#5A5446" stroke-width="2" fill="none" stroke-opacity="0.55">
+              <path data-w="fever-r1" d="M212,64 H300"/>
+              <path data-w="stiff-r1" d="M212,178 Q260,178 260,120 L300,90"/>
+              <path data-w="fever-r3" d="M212,64 Q250,64 250,300 L300,350"/>
+              <path data-w="rash-r3"  d="M212,292 Q270,292 270,360 L300,366"/>
+              <path data-w="headache-r2" d="M212,235 H300"/>
+            </g>
+            <!-- rule -> verdict wires -->
+            <g id="vwires" stroke="#5A5446" stroke-width="2.5" fill="none" stroke-opacity="0.55">
+              <path data-w="r2-v" d="M660,216 H720"/>
+              <path data-w="r3-v" d="M660,350 Q700,350 700,250 L720,236"/>
+            </g>
+
+            <!-- symptom chips -->
+            <g font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">
+              <g id="sym-fever">
+                <rect x="24" y="40" width="188" height="48" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="118" y="69" fill="#E8DCC0">fever</text>
+              </g>
+              <g id="sym-stiff">
+                <rect x="24" y="154" width="188" height="48" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="118" y="183" fill="#E8DCC0">stiff neck</text>
+              </g>
+              <g id="sym-headache">
+                <rect x="24" y="211" width="188" height="48" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="118" y="240" fill="#E8DCC0">headache</text>
+              </g>
+              <g id="sym-rash">
+                <rect x="24" y="268" width="188" height="48" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="118" y="297" fill="#E8DCC0">rash</text>
+              </g>
+              <g id="sym-novel">
+                <rect x="24" y="368" width="188" height="48" rx="8" fill="#0E1B2A" stroke="#5A5446" stroke-width="2" stroke-dasharray="5 5"/>
+                <text x="118" y="397" fill="#E8DCC0">unseen sign</text>
+              </g>
+            </g>
+
+            <!-- rule cards -->
+            <g font-family="ui-monospace,monospace" text-anchor="middle">
+              <g id="rule-r1">
+                <rect x="300" y="40" width="360" height="74" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="480" y="72" fill="#E8DCC0" font-size="12.5">IF fever ∧ stiff neck</text>
+                <text x="480" y="94" fill="#9EF01A" font-size="11.5">THEN CNS infection</text>
+              </g>
+              <g id="rule-r2">
+                <rect x="300" y="180" width="360" height="74" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="480" y="212" fill="#E8DCC0" font-size="12.5">IF CNS infection ∧ headache</text>
+                <text x="480" y="234" fill="#9EF01A" font-size="11.5">THEN meningitis</text>
+              </g>
+              <g id="rule-r3">
+                <rect x="300" y="316" width="360" height="74" rx="9" fill="#0E1B2A" stroke="#5A5446" stroke-width="2"/>
+                <text x="480" y="348" fill="#E8DCC0" font-size="12.5">IF fever ∧ rash</text>
+                <text x="480" y="370" fill="#9EF01A" font-size="11.5">THEN measles</text>
+              </g>
+            </g>
+
+            <!-- verdict node -->
+            <g id="verdict" font-family="ui-monospace,monospace" text-anchor="middle">
+              <rect x="720" y="150" width="256" height="160" rx="12" fill="#0E1B2A" stroke="#5A5446" stroke-width="2.5"/>
+              <text x="848" y="186" fill="#E8DCC0" fill-opacity="0.5" font-size="11" letter-spacing="3">VERDICT</text>
+              <text id="vLine1" x="848" y="232" fill="#E8DCC0" font-size="17" font-weight="600">awaiting</text>
+              <text id="vLine2" x="848" y="258" fill="#E8DCC0" font-size="17" font-weight="600">input</text>
+              <text id="vSub" x="848" y="290" fill="#E8DCC0" fill-opacity="0.5" font-size="11">select symptoms above</text>
+            </g>
+          </svg>
+          <p class="b3-hint hint" id="b3hint" aria-live="polite">Toggle symptoms to run the consult</p>
+        </div>
+
+        <!-- STATIC fallback (JS off) -->
+        <div class="b3-static" aria-label="Static example of the rule engine">
+          <svg viewBox="0 0 1000 200" role="img" aria-labelledby="b3st b3sd" preserveAspectRatio="xMidYMid meet">
+            <title id="b3st">Static example of a fired rule chain</title>
+            <desc id="b3sd">With JavaScript enabled this becomes interactive. Shown statically: fever, stiff neck and headache fire two rules to a confident chartreuse verdict of bacterial meningitis; an unseen sign would instead stall in coral.</desc>
+            <g font-family="ui-monospace,monospace" font-size="13" text-anchor="middle">
+              <rect x="30" y="76" width="200" height="48" rx="8" fill="#0E1B2A" stroke="#F2C14E" stroke-width="2"/>
+              <text x="130" y="105" fill="#F2C14E">3 symptoms on</text>
+              <text x="300" y="105" fill="#E8DCC0" fill-opacity="0.6" font-size="20">→</text>
+              <rect x="340" y="76" width="280" height="48" rx="8" fill="#0E1B2A" stroke="#9EF01A" stroke-width="2"/>
+              <text x="480" y="105" fill="#9EF01A">2 rules fire</text>
+              <text x="650" y="105" fill="#E8DCC0" fill-opacity="0.6" font-size="20">→</text>
+              <rect x="690" y="68" width="280" height="64" rx="9" fill="#0E1B2A" stroke="#9EF01A" stroke-width="2.5"/>
+              <text x="830" y="95" fill="#9EF01A" font-weight="600">BACTERIAL</text>
+              <text x="830" y="115" fill="#9EF01A" font-weight="600">MENINGITIS</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#F2C14E"></i> symptom active</span>
+        <span><i class="sw" style="background:#9EF01A"></i> rule fired / confident diagnosis</span>
+        <span><i class="sw" style="background:#FF7849"></i> no rule matches — stalled</span>
+      </div>
+
+      <!-- ====== NODS (progressive disclosure) ====== -->
+      <details class="nods">
+        <summary>The boom, in three names</summary>
+        <div class="nodgrid">
+          <div class="nod">
+            <div class="ny">MYCIN · DENDRAL</div>
+            <div class="nm">The first experts</div>
+            <div class="nd">Stanford's DENDRAL (chemistry) and MYCIN (~600 rules for blood infections) proved rules could rival specialists — yet were never deployed clinically.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">XCON / R1 · DEC</div>
+            <div class="nm">The money case</div>
+            <div class="nd">Digital's XCON configured VAX orders from thousands of rules, reportedly saving ~$25M a year — the proof that expert systems paid.</div>
+          </div>
+          <div class="nod">
+            <div class="ny">The bottleneck</div>
+            <div class="nm">Knowledge acquisition</div>
+            <div class="nd">Every rule had to be hand-extracted from an expert. Rule bases grew brittle and unmaintainable — the wall the Second Winter ran into.</div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="06-first-winter.html"><span class="lab">◄ Prev</span><span class="ttl">First AI Winter</span></a>
+  <a class="idx" href="index.html"><span class="lab">◇ Timeline</span></a>
+  <a class="next" href="08-second-winter.html"><span class="lab">Next ►</span><span class="ttl">Second AI Winter</span></a>
+</nav>
+
+<!-- ====== JS ====== -->
+<script>
+(function(){
+  "use strict";
+  document.body.classList.remove("no-js");
+  document.body.classList.add("js");
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- reduced-motion: freeze SMIL beats at a representative, diagnosis-lit frame ---- */
+  if(reduce){
+    try{
+      var smils = document.querySelectorAll("svg.smil");
+      for(var i=0;i<smils.length;i++){
+        var s = smils[i];
+        if(s.setCurrentTime && s.pauseAnimations){
+          s.setCurrentTime(4.6);   /* both cycles have the conclusion lit at ~4.6s */
+          s.pauseAnimations();
+        }
+      }
+    }catch(e){/* SMIL just keeps playing — still meaningful */}
+  }
+
+  /* ---- BEAT 3: live rule engine ---- */
+  var svg = document.getElementById("svg3");
+  if(!svg){ return; }
+
+  var ERA="#F2C14E", REST="#9EF01A", ERROR="#FF7849", DIM="#5A5446", STRUCT="#E8DCC0";
+
+  var state = {fever:false, stiff:false, headache:false, rash:false, novel:false};
+
+  function chip(id){ var g=document.getElementById(id); return g?g.querySelector("rect"):null; }
+  function card(id){ var g=document.getElementById(id); return g?g.querySelector("rect"):null; }
+
+  function setStroke(el,color,w){ if(!el) return; el.setAttribute("stroke",color); if(w) el.setAttribute("stroke-width",w); el.setAttribute("stroke-opacity","1"); }
+  function setWire(sel,color,op){
+    var p=svg.querySelector('[data-w="'+sel+'"]');
+    if(!p) return; p.setAttribute("stroke",color); p.setAttribute("stroke-opacity",op);
+  }
+
+  var vL1=document.getElementById("vLine1");
+  var vL2=document.getElementById("vLine2");
+  var vSub=document.getElementById("vSub");
+  var vRect=document.getElementById("verdict")?document.getElementById("verdict").querySelector("rect"):null;
+  var hint=document.getElementById("b3hint");
+
+  function evaluate(){
+    /* forward chain over the rule base */
+    var f = {
+      fever:state.fever, stiff:state.stiff, headache:state.headache, rash:state.rash,
+      cns:false, meningitis:false, measles:false
+    };
+    var fired={r1:false,r2:false,r3:false};
+    var changed=true, guard=0;
+    while(changed && guard<10){
+      changed=false; guard++;
+      if(f.fever && f.stiff && !f.cns){ f.cns=true; fired.r1=true; changed=true; }
+      if(f.cns && f.headache && !f.meningitis){ f.meningitis=true; fired.r2=true; changed=true; }
+      if(f.fever && f.rash && !f.measles){ f.measles=true; fired.r3=true; changed=true; }
+    }
+    var anyInput = state.fever||state.stiff||state.headache||state.rash||state.novel;
+    var verdict; /* 'rest' | 'error' | 'idle' */
+    if(f.meningitis){ verdict={kind:"rest", a:"BACTERIAL", b:"MENINGITIS", sub:"→ treat · confident"}; }
+    else if(f.measles){ verdict={kind:"rest", a:"MEASLES", b:"", sub:"→ confident diagnosis"}; }
+    else if(anyInput){ verdict={kind:"error", a:"NO RULE", b:"MATCHES", sub:"unhandled case — stalled"}; }
+    else { verdict={kind:"idle", a:"awaiting", b:"input", sub:"select symptoms above"}; }
+    return {f:f, fired:fired, verdict:verdict};
+  }
+
+  function render(){
+    var r=evaluate();
+    /* symptom chips */
+    setStroke(chip("sym-fever"),    state.fever?ERA:DIM, 2);
+    setStroke(chip("sym-stiff"),    state.stiff?ERA:DIM, 2);
+    setStroke(chip("sym-headache"), state.headache?ERA:DIM, 2);
+    setStroke(chip("sym-rash"),     state.rash?ERA:DIM, 2);
+    setStroke(chip("sym-novel"),    state.novel?ERROR:DIM, 2);
+
+    /* input wires light when their source symptom is on */
+    setWire("fever-r1",   state.fever?ERA:DIM,    state.fever?1:0.45);
+    setWire("stiff-r1",   state.stiff?ERA:DIM,    state.stiff?1:0.45);
+    setWire("headache-r2",state.headache?ERA:DIM, state.headache?1:0.45);
+    setWire("fever-r3",   state.fever?ERA:DIM,    state.fever?1:0.45);
+    setWire("rash-r3",    state.rash?ERA:DIM,     state.rash?1:0.45);
+
+    /* rule cards: fired -> rest */
+    setStroke(card("rule-r1"), r.fired.r1?REST:DIM, r.fired.r1?2.5:2);
+    setStroke(card("rule-r2"), r.fired.r2?REST:DIM, r.fired.r2?2.5:2);
+    setStroke(card("rule-r3"), r.fired.r3?REST:DIM, r.fired.r3?2.5:2);
+
+    /* rule -> verdict wires */
+    setWire("r2-v", r.fired.r2?REST:DIM, r.fired.r2?1:0.45);
+    setWire("r3-v", r.fired.r3?REST:DIM, r.fired.r3?1:0.45);
+
+    /* verdict node */
+    var v=r.verdict, col = v.kind==="rest"?REST : v.kind==="error"?ERROR : STRUCT;
+    if(vRect){ vRect.setAttribute("stroke",col); vRect.setAttribute("stroke-width", v.kind==="idle"?"2":"2.5"); }
+    if(vL1){ vL1.textContent=v.a; vL1.setAttribute("fill",col); }
+    if(vL2){ vL2.textContent=v.b; vL2.setAttribute("fill",col); }
+    if(vSub){ vSub.textContent=v.sub; }
+
+    if(hint){
+      if(v.kind==="rest"){ hint.className="b3-hint hint"; hint.innerHTML="A rule chain fired — <b>confident diagnosis</b>"; }
+      else if(v.kind==="error"){ hint.className="b3-hint hint stall"; hint.innerHTML="No rule covers this — <b>the system stalls</b>"; }
+      else { hint.className="b3-hint hint"; hint.textContent="Toggle symptoms to run the consult"; }
+    }
+  }
+
+  /* wire up toggle buttons */
+  var btns=document.querySelectorAll(".sw[data-sym]");
+  for(var b=0;b<btns.length;b++){
+    btns[b].addEventListener("click", function(){
+      var key=this.getAttribute("data-sym");
+      if(!(key in state)) return;
+      state[key]=!state[key];
+      this.setAttribute("aria-pressed", state[key]?"true":"false");
+      render();
+    });
+  }
+
+  /* "feed a novel case" — one click straight to the stall */
+  var novelBtn=document.getElementById("novelCase");
+  if(novelBtn){
+    novelBtn.addEventListener("click", function(){
+      state={fever:false,stiff:false,headache:false,rash:false,novel:true};
+      for(var i=0;i<btns.length;i++){
+        var k=btns[i].getAttribute("data-sym");
+        btns[i].setAttribute("aria-pressed", k==="novel"?"true":"false");
+      }
+      render();
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

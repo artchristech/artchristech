@@ -5,5 +5,6 @@ node_modules/
 
 # dev scratch — kept locally, not part of the published site
 prototypes/
+prompts/
 PROMPT.md
 CONTEXT.md

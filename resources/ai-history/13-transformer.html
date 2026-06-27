@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Transformer · 2017 — A History of AI (13/15)</title>
+
+<!-- ====== SHARED SHELL (inlined verbatim) ====== -->
+<style>
+  :root{
+    /* semantic tokens — GUIDELINE.md §c (fixed meanings, do not redefine) */
+    --ink:#0A1622;            /* ground */
+    --ink-2:#0E1B2A;          /* raised panel */
+    --goal:#19E3C1;           /* the goal / answer being sought */
+    --error:#FF7849;          /* error / disturbance / the thing fought */
+    --rest:#9EF01A;           /* achieved equilibrium / resolved */
+    --struct:#E8DCC0;         /* inert structure: frames, ideal lines, mechanism */
+    --paper:#F4F6F5;          /* text */
+    --dim:rgba(244,246,245,.46);
+    --line:rgba(244,246,245,.12);
+    /* era-mood accent: each page sets ONE of these on <body> via --era */
+    --dawn:#F2C14E;           /* early optimism (eras 1-5) */
+    --winter:#6E8CA0;         /* cold, desaturated — the two AI winters */
+    --boom:#19E3C1;           /* breakthrough warmth (uses --goal) */
+    --era:var(--boom);        /* overridden per page */
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);color:var(--paper);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,48px) 96px;}
+
+  /* ---- progress rail (you-are-here across 15 eras) ---- */
+  .rail{display:flex;align-items:center;gap:0;margin:0 0 clamp(28px,5vw,52px);padding-top:8px;}
+  .rail a{flex:1;height:34px;display:flex;align-items:flex-end;justify-content:center;text-decoration:none;position:relative;}
+  .rail .tick{width:100%;height:3px;background:var(--line);border-radius:2px;transition:background .2s;}
+  .rail a[data-on] .tick{background:var(--era);height:5px;}
+  .rail a.cur .tick{background:var(--era);height:9px;box-shadow:0 0 14px var(--era);}
+  .rail a.winter .tick{background:repeating-linear-gradient(90deg,var(--winter),var(--winter) 3px,transparent 3px,transparent 6px);}
+  .rail a .n{position:absolute;top:-2px;font-size:8px;color:var(--dim);font-variant-numeric:tabular-nums;}
+  .rail a.cur .n{color:var(--era);}
+
+  /* ---- masthead ---- */
+  header.mast{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:clamp(28px,5vw,52px);}
+  .mast .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--era);margin:0 0 12px;display:flex;gap:14px;align-items:baseline;}
+  .mast .kicker .yrs{color:var(--dim);letter-spacing:.18em;}
+  .mast .eranum{font-family:var(--serif);font-style:italic;font-size:clamp(13px,3vw,16px);color:var(--dim);}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,8.5vw,80px);line-height:.98;letter-spacing:-.01em;margin:0;}
+  .mast .changed{margin:16px 0 0;font-size:clamp(12px,2.4vw,14px);color:var(--paper);max-width:46ch;letter-spacing:.02em;}
+  .mast .changed b{color:var(--era);font-weight:400;}
+
+  /* ---- beats ---- */
+  main{display:grid;gap:clamp(40px,7vw,84px);}
+  .beat{display:grid;gap:16px;}
+  .beat .badge{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);}
+  .beat .badge b{color:var(--era);font-weight:400;}
+  .beat h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,4.4vw,34px);margin:0;line-height:1.05;}
+  .beat .cap{font-size:clamp(12px,2.3vw,14.5px);color:var(--dim);max-width:52ch;margin:0;letter-spacing:.02em;}
+  .stage{position:relative;width:100%;border:1px solid var(--line);border-radius:10px;background:
+      radial-gradient(120% 120% at 50% 0%,rgba(255,255,255,.02),transparent 60%),var(--ink-2);
+      overflow:hidden;}
+  .stage svg,.stage canvas{display:block;width:100%;height:auto;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;letter-spacing:.08em;color:var(--dim);}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px;}
+  .legend .sw{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .hint{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--era);opacity:.85;}
+
+  /* progressive-disclosure nods */
+  details.nods{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;}
+  details.nods > summary{cursor:pointer;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--era);}
+  details.nods > summary::-webkit-details-marker{display:none;}
+  .nodgrid{display:grid;gap:14px;margin-top:18px;grid-template-columns:1fr;}
+  @media(min-width:620px){.nodgrid{grid-template-columns:1fr 1fr 1fr;}}
+  .nod{border:1px solid var(--line);border-radius:8px;padding:14px;}
+  .nod .ny{font-size:10px;letter-spacing:.2em;color:var(--era);text-transform:uppercase;}
+  .nod .nm{font-family:var(--serif);font-style:italic;font-size:18px;margin:5px 0 6px;}
+  .nod .nd{font-size:11px;color:var(--dim);line-height:1.5;}
+
+  /* ---- bottom nav ---- */
+  nav.eranav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;
+    gap:10px;padding:12px clamp(16px,4vw,48px);background:linear-gradient(0deg,var(--ink),rgba(10,22,34,.86));
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.1em;z-index:20;}
+  nav.eranav a{color:var(--paper);text-decoration:none;display:inline-flex;align-items:center;gap:8px;opacity:.8;transition:opacity .15s;}
+  nav.eranav a:hover{opacity:1;}
+  nav.eranav a.idx{color:var(--era);}
+  nav.eranav .lab{color:var(--dim);text-transform:uppercase;letter-spacing:.2em;font-size:9px;}
+  nav.eranav .ttl{font-family:var(--serif);font-style:italic;}
+  nav.eranav a.dis{opacity:.25;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;}}
+</style>
+
+<!-- ====== PAGE-SPECIFIC STYLE (era 13) ====== -->
+<style>
+  body{--era:var(--boom);}
+
+  /* no-js / live swap (GUIDELINE §f) */
+  .static{display:none;padding:clamp(18px,4vw,30px);}
+  .static p{font-family:var(--serif);font-size:clamp(15px,3.4vw,20px);line-height:1.6;margin:0;color:var(--paper);}
+  .static .g{color:var(--goal);} .static .e{color:var(--error);} .static .q{color:var(--paper);font-weight:600;border-bottom:2px solid var(--era);}
+  .no-js .static{display:block;}
+  .no-js .live{display:none;}
+
+  .stage svg{padding:6px 0;}
+  text.tk{font-family:var(--mono);fill:var(--struct);transition:fill .3s ease,font-weight .2s;}
+  text.tk.q{fill:var(--paper);font-weight:700;}
+  text.tk3{cursor:pointer;}
+  text.tk3:focus{outline:none;}
+  text.tk3:focus-visible{outline:none;}
+  path.arc{fill:none;stroke-linecap:round;transition:stroke-width .25s,opacity .25s,stroke .25s;}
+
+  .b3live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+</style>
+</head>
+
+<body class="no-js">
+<div class="wrap">
+
+<!-- ====== PROGRESS RAIL ====== -->
+<nav class="rail" aria-label="Timeline position">
+  <a href="01-cybernetics.html" data-on><span class="n">01</span><span class="tick"></span></a>
+  <a href="02-turing.html" data-on><span class="n">02</span><span class="tick"></span></a>
+  <a href="03-dartmouth.html" data-on><span class="n">03</span><span class="tick"></span></a>
+  <a href="04-symbolic-ai.html" data-on><span class="n">04</span><span class="tick"></span></a>
+  <a href="05-perceptron.html" data-on><span class="n">05</span><span class="tick"></span></a>
+  <a href="06-first-winter.html" data-on class="winter"><span class="n">06</span><span class="tick"></span></a>
+  <a href="07-expert-systems.html" data-on><span class="n">07</span><span class="tick"></span></a>
+  <a href="08-second-winter.html" data-on class="winter"><span class="n">08</span><span class="tick"></span></a>
+  <a href="09-backprop.html" data-on><span class="n">09</span><span class="tick"></span></a>
+  <a href="10-statistical-ai.html" data-on><span class="n">10</span><span class="tick"></span></a>
+  <a href="11-game-playing.html" data-on><span class="n">11</span><span class="tick"></span></a>
+  <a href="12-alexnet.html" data-on><span class="n">12</span><span class="tick"></span></a>
+  <a href="13-transformer.html" class="cur" aria-current="page"><span class="n">13</span><span class="tick"></span></a>
+  <a href="14-scaling-laws.html"><span class="n">14</span><span class="tick"></span></a>
+  <a href="15-generative-agentic.html"><span class="n">15</span><span class="tick"></span></a>
+</nav>
+
+<!-- ====== MASTHEAD ====== -->
+<header class="mast">
+  <p class="kicker"><span class="eranum">Era 13 / 15</span> · The Transformer <span class="yrs">2017</span></p>
+  <h1>The Transformer</h1>
+  <p class="changed"><b>Attention</b> let every word look at every other — in parallel.</p>
+</header>
+
+<!-- ====== BEATS ====== -->
+<main>
+
+  <!-- BEAT 1 · CONCRETE -->
+  <section class="beat" aria-labelledby="b1h">
+    <p class="badge"><b>Beat 1</b> · Concrete</p>
+    <h2 id="b1h">Which noun is &ldquo;it&rdquo;?</h2>
+    <p class="cap">To resolve the pronoun, &ldquo;it&rdquo; weighs both candidates — the stronger link wins.</p>
+    <div class="stage">
+      <div class="static">
+        <p>The <span class="g">trophy</span> didn&rsquo;t fit in the <span class="e">suitcase</span> because <span class="q">it</span> was too big. &mdash; &ldquo;it&rdquo; attends most to <span class="g">trophy</span>.</p>
+      </div>
+      <svg class="live" id="svg1" viewBox="0 0 840 240" role="img" aria-labelledby="b1t b1d" font-size="15">
+        <title id="b1t">Resolving a pronoun by attention</title>
+        <desc id="b1d">The word &ldquo;it&rdquo; sends links to the two candidate nouns; the link to &ldquo;trophy&rdquo; grows strongest, the link to &ldquo;suitcase&rdquo; stays weak.</desc>
+      </svg>
+    </div>
+    <p class="legend">
+      <i><span class="sw" style="background:var(--goal)"></span> winning link</i>
+      <i><span class="sw" style="background:var(--error)"></span> competing link</i>
+      <i><span class="sw" style="background:var(--struct)"></span> the sentence</i>
+    </p>
+  </section>
+
+  <!-- BEAT 2 · ABSTRACT -->
+  <section class="beat" aria-labelledby="b2h">
+    <p class="badge"><b>Beat 2</b> · Abstract</p>
+    <h2 id="b2h">Every token attends to every token</h2>
+    <p class="cap">Self-attention: each token links to all the others, weighted — brighter means heavier.</p>
+    <div class="stage">
+      <div class="static">
+        <p>Each word sends a weighted link to every other word at once. <span class="g">trophy</span> &harr; <span class="g">big</span> is the heaviest pair.</p>
+      </div>
+      <svg class="live" id="svg2" viewBox="0 0 620 230" role="img" aria-labelledby="b2t b2d" font-size="16">
+        <title id="b2t">Self-attention weights as links</title>
+        <desc id="b2d">Five tokens are joined by a faint all-to-all mesh; in turn each token becomes the query and its outgoing links brighten in proportion to their attention weight.</desc>
+      </svg>
+    </div>
+    <p class="legend">
+      <i><span class="sw" style="background:var(--struct);opacity:.4"></span> all pairs (faint)</i>
+      <i><span class="sw" style="background:var(--goal)"></span> heaviest link</i>
+    </p>
+  </section>
+
+  <!-- BEAT 3 · INTERACTIVE -->
+  <section class="beat" aria-labelledby="b3h">
+    <p class="badge"><b>Beat 3</b> · Interactive</p>
+    <h2 id="b3h">Pick a word, watch it look</h2>
+    <p class="cap">Hover, tap, or focus any token — its attention lights up to the words it depends on.</p>
+    <div class="stage">
+      <div class="static">
+        <p>The <span class="g">trophy</span> didn&rsquo;t fit in the <span class="e">suitcase</span> because <span class="q">it</span> was too big. With scripting on, choose any word to see its links.</p>
+      </div>
+      <svg class="live" id="svg3" viewBox="0 0 840 240" role="group" aria-label="Interactive sentence: choose a token to reveal its attention links to the words it depends on." font-size="15"></svg>
+      <p class="b3live" id="b3live" aria-live="polite"></p>
+    </div>
+    <p class="legend">
+      <i><span class="sw" style="background:var(--goal)"></span> strong dependency</i>
+      <i><span class="sw" style="background:var(--error)"></span> competing link</i>
+      <span class="hint live">click / focus a token</span>
+    </p>
+  </section>
+
+</main>
+
+<!-- ====== NODS ====== -->
+<details class="nods">
+  <summary>The deeper cut</summary>
+  <div class="nodgrid">
+    <div class="nod">
+      <div class="ny">2017</div>
+      <div class="nm">Attention Is All You Need</div>
+      <div class="nd">Vaswani et&nbsp;al. threw out recurrence entirely — the model is just stacked self-attention.</div>
+    </div>
+    <div class="nod">
+      <div class="ny">Q · K · V</div>
+      <div class="nm">Queries, keys, values</div>
+      <div class="nd">Each token emits a query, matches every key, and pulls back a weighted blend of values.</div>
+    </div>
+    <div class="nod">
+      <div class="ny">parallel</div>
+      <div class="nm">No left-to-right wait</div>
+      <div class="nd">All tokens compute at once — parallelism replaces recurrence; BERT &amp; GPT follow.</div>
+    </div>
+  </div>
+</details>
+
+</div>
+
+<!-- ====== BOTTOM NAV ====== -->
+<nav class="eranav" aria-label="Era navigation">
+  <a class="prev" href="12-alexnet.html"><span class="lab">&#9668; Prev</span><span class="ttl">Deep Learning</span></a>
+  <a class="idx" href="index.html"><span class="lab">&#9671; Timeline</span></a>
+  <a class="next" href="14-scaling-laws.html"><span class="lab">Next &#9658;</span><span class="ttl">Scaling Laws</span></a>
+</nav>
+
+<!-- ====== SHELL ENABLE SCRIPT ====== -->
+<script>
+  document.documentElement.classList.remove('no-js');
+  document.body.classList.remove('no-js');
+  document.body.classList.add('js');
+</script>
+
+<!-- ====== PAGE JS (beats) ====== -->
+<script>
+"use strict";
+(function(){
+  var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var NS = 'http://www.w3.org/2000/svg';
+  function E(tag, attrs, txt){
+    var n = document.createElementNS(NS, tag), k;
+    if (attrs) for (k in attrs) n.setAttribute(k, attrs[k]);
+    if (txt != null) n.textContent = txt;
+    return n;
+  }
+  function arcD(x1, x2, topY){
+    var d = Math.abs(x2 - x1), h = Math.min(135, 32 + d * 0.30), mx = (x1 + x2) / 2;
+    return 'M' + x1 + ' ' + topY + 'Q' + mx + ' ' + (topY - h) + ' ' + x2 + ' ' + topY;
+  }
+
+  /* shared sentence (beats 1 & 3) */
+  var S  = ["The","trophy","didn't","fit","in","the","suitcase","because","it","was","too","big"];
+  var X  = S.map(function(_, i){ return 38 + i * 66; });
+  var BASE = 192, TOP = 162;
+  var IT = 8, TROPHY = 1, SUITCASE = 6;
+
+  function laySentence(svg, cls){
+    var g = E('g');
+    var nodes = S.map(function(w, i){
+      var t = E('text', { x: X[i], y: BASE, 'text-anchor':'middle', 'class': 'tk' + (cls ? ' ' + cls : '') }, w);
+      g.appendChild(t); return t;
+    });
+    return { g: g, nodes: nodes };
+  }
+
+  /* ---------- BEAT 1 ---------- */
+  (function beat1(){
+    var svg = document.getElementById('svg1');
+    if (!svg) return;
+    var arcs = E('g');
+    var aSuit = E('path', { 'class':'arc', stroke:'var(--error)' });
+    var aTrop = E('path', { 'class':'arc', stroke:'var(--goal)' });
+    aSuit.setAttribute('d', arcD(X[IT], X[SUITCASE], TOP));
+    aTrop.setAttribute('d', arcD(X[IT], X[TROPHY], TOP));
+    arcs.appendChild(aSuit); arcs.appendChild(aTrop);
+    svg.appendChild(arcs);
+    var sent = laySentence(svg, '');
+    svg.appendChild(sent.g);
+    sent.nodes[IT].classList.add('q');
+
+    function draw(w){            /* w = trophy's share, 0.5 .. 0.84 */
+      var ws = 1 - w;
+      aTrop.setAttribute('stroke-width', (1 + w * 9).toFixed(2));
+      aTrop.setAttribute('opacity', (0.25 + w * 0.72).toFixed(2));
+      aSuit.setAttribute('stroke-width', (1 + ws * 9).toFixed(2));
+      aSuit.setAttribute('opacity', (0.2 + ws * 0.7).toFixed(2));
+      sent.nodes[TROPHY].setAttribute('fill', w > 0.62 ? 'var(--goal)' : 'var(--struct)');
+      sent.nodes[SUITCASE].setAttribute('fill', ws > 0.42 ? 'var(--error)' : 'var(--struct)');
+    }
+
+    if (RM){ draw(0.82); return; }
+    var t0 = null, DUR = 2200, HOLD = 1100, CYC = DUR + HOLD;
+    function frame(ts){
+      if (t0 == null) t0 = ts;
+      var p = (ts - t0) % CYC;
+      var k = p < DUR ? p / DUR : 1;
+      var ease = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      draw(0.5 + ease * 0.34);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------- BEAT 2 ---------- */
+  (function beat2(){
+    var svg = document.getElementById('svg2');
+    if (!svg) return;
+    var S2 = ["The","trophy","was","too","big"];
+    var X2 = [70, 190, 310, 430, 550], B2 = 185, T2 = 156;
+    var W2 = {
+      0: {1:.45, 2:.15, 3:.10, 4:.30},
+      1: {0:.10, 2:.18, 3:.15, 4:.57},
+      2: {0:.12, 1:.40, 3:.18, 4:.30},
+      3: {0:.05, 1:.20, 2:.10, 4:.65},
+      4: {0:.05, 1:.62, 2:.13, 3:.20}
+    };
+    var arcs = E('g'); svg.appendChild(arcs);
+    var g = E('g');
+    var nodes = S2.map(function(w, i){
+      var t = E('text', { x: X2[i], y: B2, 'text-anchor':'middle', 'class':'tk' }, w);
+      g.appendChild(t); return t;
+    });
+    svg.appendChild(g);
+
+    function maxKey(o){ var mk = -1, mv = -1, k; for (k in o){ if (o[k] > mv){ mv = o[k]; mk = +k; } } return mk; }
+
+    function draw(q){
+      while (arcs.firstChild) arcs.removeChild(arcs.firstChild);
+      /* faint all-pairs mesh — "every token to every token" */
+      for (var i = 0; i < 5; i++) for (var j = i + 1; j < 5; j++){
+        arcs.appendChild(E('path', { 'class':'arc', stroke:'var(--struct)', 'stroke-width':'1', opacity:'0.10', d: arcD(X2[i], X2[j], T2) }));
+      }
+      var row = W2[q], mk = maxKey(row), k;
+      for (k in row){
+        var w = row[k];
+        arcs.appendChild(E('path', {
+          'class':'arc',
+          stroke: (+k === mk ? 'var(--goal)' : 'var(--struct)'),
+          'stroke-width': (1 + w * 8).toFixed(2),
+          opacity: (0.22 + w * 0.72).toFixed(2),
+          d: arcD(X2[q], X2[+k], T2)
+        }));
+      }
+      nodes.forEach(function(n, i){ if (i === q) n.classList.add('q'); else n.classList.remove('q'); });
+    }
+
+    if (RM){ draw(4); return; }   /* representative: "big" → "trophy" */
+    var q = 0, STEP = 1500;
+    draw(0);
+    function tick(ts){
+      var nq = Math.floor(ts / STEP) % 5;
+      if (nq !== q){ q = nq; draw(q); }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  /* ---------- BEAT 3 ---------- */
+  (function beat3(){
+    var svg = document.getElementById('svg3');
+    if (!svg) return;
+    var live = document.getElementById('b3live');
+    /* handcrafted attention rows for salient tokens; others get a generic fan */
+    var ATT = {
+      8:  {1:.78, 6:.17, 11:.03, 3:.02},   /* it -> trophy (strong), suitcase (competing) */
+      3:  {1:.50, 6:.34, 8:.08, 0:.08},    /* fit -> trophy / suitcase */
+      11: {8:.42, 1:.38, 6:.12, 9:.08},    /* big -> it / trophy */
+      1:  {6:.30, 3:.25, 8:.22, 11:.23},   /* trophy */
+      6:  {1:.32, 3:.30, 8:.20, 11:.18}    /* suitcase */
+    };
+    function fan(i){
+      if (ATT[i]) return ATT[i];
+      var o = {}, content = [1, 6, 8], total = 0, k;
+      content.forEach(function(c){ if (c !== i){ o[c] = 0.22; total += 0.22; } });
+      if (i - 1 >= 0 && o[i - 1] == null){ o[i - 1] = 0.12; }
+      if (i + 1 < S.length && o[i + 1] == null){ o[i + 1] = 0.12; }
+      return o;
+    }
+
+    var arcs = E('g'); svg.appendChild(arcs);
+    var sent = laySentence(svg, 'tk3');
+    svg.appendChild(sent.g);
+
+    function clearTokens(){ sent.nodes.forEach(function(n){ n.setAttribute('fill', 'var(--struct)'); n.classList.remove('q'); }); }
+
+    function select(i){
+      while (arcs.firstChild) arcs.removeChild(arcs.firstChild);
+      clearTokens();
+      sent.nodes[i].classList.add('q');
+      var row = fan(i);
+      var entries = Object.keys(row).map(function(k){ return [+k, row[k]]; }).sort(function(a, b){ return b[1] - a[1]; });
+      entries.forEach(function(e, rank){
+        var k = e[0], w = e[1];
+        var col = rank === 0 ? 'var(--goal)' : (rank === 1 ? 'var(--error)' : 'var(--struct)');
+        arcs.appendChild(E('path', {
+          'class':'arc', stroke: col,
+          'stroke-width': (1 + w * 9).toFixed(2),
+          opacity: (0.2 + w * 0.72).toFixed(2),
+          d: arcD(X[i], X[k], TOP)
+        }));
+        if (rank === 0) sent.nodes[k].setAttribute('fill', 'var(--goal)');
+        else if (rank === 1) sent.nodes[k].setAttribute('fill', 'var(--error)');
+      });
+      if (live && entries.length){
+        var msg = '“' + S[i] + '” attends most to “' + S[entries[0][0]] + '”';
+        if (entries[1]) msg += ', competing with “' + S[entries[1][0]] + '”';
+        msg += '.';
+        live.textContent = msg;
+      }
+    }
+
+    var DEFAULT = IT;
+    sent.nodes.forEach(function(n, i){
+      n.setAttribute('tabindex', '0');
+      n.setAttribute('role', 'button');
+      n.setAttribute('aria-label', S[i] + ', word ' + (i + 1) + ' of ' + S.length);
+      n.addEventListener('mouseenter', function(){ select(i); });
+      n.addEventListener('focus', function(){ select(i); });
+      n.addEventListener('click', function(){ select(i); });
+      n.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar'){ ev.preventDefault(); select(i); }
+      });
+    });
+    svg.addEventListener('mouseleave', function(){ select(DEFAULT); });
+
+    select(DEFAULT);
+  })();
+
+})();
+</script>
+
+</body>
+</html>
