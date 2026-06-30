@@ -951,6 +951,24 @@ a {
     transform: scale(1.05);
 }
 
+/* Product mockups are now keyed out to transparent (tools/cutout_merch.py),
+   so let them float frameless on the dark page: no card fill or border, whole
+   product shown (contain, not cropped), grounded by a product-shaped shadow. */
+.art-card:has(img[src*="/merch/"]) {
+    background: transparent;
+    border-color: transparent;
+}
+
+.art-card:has(img[src*="/merch/"]):hover {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.art-card img[src*="/merch/"] {
+    object-fit: contain;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.55));
+}
+
 /* Editorial index number, top-left; difference blend keeps it legible on
    both the white product shots and the dark patterns. */
 .art-card-num {
