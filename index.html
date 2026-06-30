@@ -27,6 +27,7 @@
         <div class="nav-links">
             <a href="#showcase">Ventures</a>
             <a href="#gallery">Gallery</a>
+            <a href="#remix">Remix</a>
             <a href="#about">About</a>
         </div>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -39,6 +40,7 @@
     <div class="mobile-menu" id="mobile-menu">
         <a href="#showcase">Ventures</a>
         <a href="#gallery">Gallery</a>
+        <a href="#remix">Remix</a>
         <a href="#about">About</a>
     </div>
 
@@ -126,41 +128,36 @@
             <p>Original patterns, surface design, and applied art</p>
         </div>
 
-        <!-- Originals — one-off fine-art works, shown uncropped -->
+        <!-- Originals — one-off fine-art works, now an auto-scrolling band like the rest -->
         <div class="art-row">
             <div class="art-row-header fade-in">
                 <h3>Originals</h3>
             </div>
-            <div class="art-featured" id="originals">
-                <div class="art-card" data-name="Undertow" data-type="Layered wood" data-full-src="assets/optimized/originals/current-full.webp" data-pswp-width="1600" data-pswp-height="1403">
+            <div class="art-row-scroll splide" id="originals" role="group" aria-label="Originals"><div class="splide__track"><div class="splide__list"><div class="splide__slide"><div class="art-card" data-name="Undertow" data-type="Layered wood" data-full-src="assets/optimized/originals/current-full.webp" data-pswp-width="1600" data-pswp-height="1403">
                     <img src="assets/optimized/originals/current-900.webp" alt="Undertow — layered wood sculpture" loading="lazy">
                     <div class="art-card-info">
                         <span class="art-card-name">Undertow</span>
                         <span class="art-card-type">Layered wood</span>
                     </div>
-                </div>
-                <div class="art-card" data-name="Aperture" data-type="Mixed media on panel" data-full-src="assets/optimized/originals/torus-full.webp" data-pswp-width="1600" data-pswp-height="1564">
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Aperture" data-type="Mixed media on panel" data-full-src="assets/optimized/originals/torus-full.webp" data-pswp-width="1600" data-pswp-height="1564">
                     <img src="assets/optimized/originals/torus-900.webp" alt="Aperture — op-art torus on gradient panel" loading="lazy">
                     <div class="art-card-info">
                         <span class="art-card-name">Aperture</span>
                         <span class="art-card-type">Mixed media on panel</span>
                     </div>
-                </div>
-                <div class="art-card" data-name="Interlocution" data-type="Acrylic on panel" data-full-src="assets/optimized/originals/figures-full.webp" data-pswp-width="1235" data-pswp-height="1600">
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Interlocution" data-type="Acrylic on panel" data-full-src="assets/optimized/originals/figures-full.webp" data-pswp-width="1235" data-pswp-height="1600">
                     <img src="assets/optimized/originals/figures-900.webp" alt="Interlocution — biomorphic abstraction" loading="lazy">
                     <div class="art-card-info">
                         <span class="art-card-name">Interlocution</span>
                         <span class="art-card-type">Acrylic on panel</span>
                     </div>
-                </div>
-                <div class="art-card" data-name="Rhetoric" data-type="Acrylic on canvas" data-full-src="assets/optimized/originals/question-full.webp" data-pswp-width="1345" data-pswp-height="1600">
+                </div></div><div class="splide__slide"><div class="art-card" data-name="Rhetoric" data-type="Acrylic on canvas" data-full-src="assets/optimized/originals/question-full.webp" data-pswp-width="1345" data-pswp-height="1600">
                     <img src="assets/optimized/originals/question-900.webp" alt="Rhetoric — question mark over color-field landscape" loading="lazy">
                     <div class="art-card-info">
                         <span class="art-card-name">Rhetoric</span>
                         <span class="art-card-type">Acrylic on canvas</span>
                     </div>
-                </div>
-            </div>
+                </div></div></div></div></div>
         </div>
 
         <!-- Patterns Row -->
@@ -1376,6 +1373,96 @@
                 </div></div></div></div></div>
         </div>
 
+    </section>
+
+    <!-- Remixed — handmade originals paired with their AI reinterpretation -->
+    <section class="remix" id="remix">
+        <div class="section-header fade-in">
+            <span class="section-label">Hand &times; Machine</span>
+            <h2>Remixed</h2>
+            <p>Each piece made by hand, then handed to a model to reimagine. Swipe through the pairs — original on the left, the machine's take on the right.</p>
+        </div>
+
+        <div class="remix-carousel fade-in">
+            <button class="remix-nav remix-prev" id="remix-prev" type="button" aria-label="Previous pair">&#8249;</button>
+            <div class="remix-viewport" id="remix-viewport">
+                <div class="remix-track" id="remix-track">
+
+                    <figure class="remix-slide">
+                        <figcaption class="remix-title">Range</figcaption>
+                        <div class="remix-pair">
+                            <a class="remix-pane" href="assets/optimized/remix/pair1-orig-full.webp" data-pswp-width="2000" data-pswp-height="1500" data-caption="Range — by hand">
+                                <img src="assets/optimized/remix/pair1-orig-1100.webp" alt="Range — original, painted by hand" loading="lazy">
+                                <span class="remix-tag">By hand</span>
+                            </a>
+                            <a class="remix-pane" href="assets/optimized/remix/pair1-ai-full.webp" data-pswp-width="960" data-pswp-height="960" data-caption="Range — AI remix">
+                                <img src="assets/optimized/remix/pair1-ai-1100.webp" alt="Range — AI reinterpretation" loading="lazy">
+                                <span class="remix-tag remix-tag-ai">AI remix</span>
+                            </a>
+                        </div>
+                    </figure>
+
+                    <figure class="remix-slide">
+                        <figcaption class="remix-title">Rhetoric</figcaption>
+                        <div class="remix-pair">
+                            <a class="remix-pane" href="assets/optimized/remix/pair2-orig-full.webp" data-pswp-width="2000" data-pswp-height="1500" data-caption="Rhetoric — by hand">
+                                <img src="assets/optimized/remix/pair2-orig-1100.webp" alt="Rhetoric — original, painted by hand" loading="lazy">
+                                <span class="remix-tag">By hand</span>
+                            </a>
+                            <a class="remix-pane" href="assets/optimized/remix/pair2-ai-full.webp" data-pswp-width="960" data-pswp-height="960" data-caption="Rhetoric — AI remix">
+                                <img src="assets/optimized/remix/pair2-ai-1100.webp" alt="Rhetoric — AI reinterpretation" loading="lazy">
+                                <span class="remix-tag remix-tag-ai">AI remix</span>
+                            </a>
+                        </div>
+                    </figure>
+
+                    <figure class="remix-slide">
+                        <figcaption class="remix-title">Effigy</figcaption>
+                        <div class="remix-pair">
+                            <a class="remix-pane" href="assets/optimized/remix/pair3-orig-full.webp" data-pswp-width="2000" data-pswp-height="1500" data-caption="Effigy — by hand">
+                                <img src="assets/optimized/remix/pair3-orig-1100.webp" alt="Effigy — original, painted by hand" loading="lazy">
+                                <span class="remix-tag">By hand</span>
+                            </a>
+                            <a class="remix-pane" href="assets/optimized/remix/pair3-ai-full.webp" data-pswp-width="960" data-pswp-height="960" data-caption="Effigy — AI remix">
+                                <img src="assets/optimized/remix/pair3-ai-1100.webp" alt="Effigy — AI reinterpretation" loading="lazy">
+                                <span class="remix-tag remix-tag-ai">AI remix</span>
+                            </a>
+                        </div>
+                    </figure>
+
+                    <figure class="remix-slide">
+                        <figcaption class="remix-title">Bloom</figcaption>
+                        <div class="remix-pair">
+                            <a class="remix-pane" href="assets/optimized/remix/pair4-orig-full.webp" data-pswp-width="2000" data-pswp-height="1500" data-caption="Bloom — by hand">
+                                <img src="assets/optimized/remix/pair4-orig-1100.webp" alt="Bloom — original, painted by hand" loading="lazy">
+                                <span class="remix-tag">By hand</span>
+                            </a>
+                            <a class="remix-pane" href="assets/optimized/remix/pair4-ai-full.webp" data-pswp-width="960" data-pswp-height="960" data-caption="Bloom — AI remix">
+                                <img src="assets/optimized/remix/pair4-ai-1100.webp" alt="Bloom — AI reinterpretation" loading="lazy">
+                                <span class="remix-tag remix-tag-ai">AI remix</span>
+                            </a>
+                        </div>
+                    </figure>
+
+                    <figure class="remix-slide">
+                        <figcaption class="remix-title">Vector</figcaption>
+                        <div class="remix-pair">
+                            <a class="remix-pane" href="assets/optimized/remix/pair5-orig-full.webp" data-pswp-width="2000" data-pswp-height="1500" data-caption="Vector — by hand">
+                                <img src="assets/optimized/remix/pair5-orig-1100.webp" alt="Vector — original, painted by hand" loading="lazy">
+                                <span class="remix-tag">By hand</span>
+                            </a>
+                            <a class="remix-pane" href="assets/optimized/remix/pair5-ai-full.webp" data-pswp-width="960" data-pswp-height="960" data-caption="Vector — AI remix">
+                                <img src="assets/optimized/remix/pair5-ai-1100.webp" alt="Vector — AI reinterpretation" loading="lazy">
+                                <span class="remix-tag remix-tag-ai">AI remix</span>
+                            </a>
+                        </div>
+                    </figure>
+
+                </div>
+            </div>
+            <button class="remix-nav remix-next" id="remix-next" type="button" aria-label="Next pair">&#8250;</button>
+            <div class="remix-dots" id="remix-dots" aria-hidden="true"></div>
+        </div>
     </section>
 
     <!-- Arcade — DK SKI, lazy-loaded on scroll -->

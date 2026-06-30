@@ -398,20 +398,37 @@ document.addEventListener('DOMContentLoaded', () => {
         card.appendChild(num);
     });
 
-    // Duplicate each band for a seamless loop; pace the scroll by item count
+    // Duplicate each band for a seamless loop; pace the scroll by item count.
+    // Short rows (e.g. Originals, 4 cards) need more than one extra copy so a
+    // single set always spans the viewport — otherwise a blank gap scrolls in.
+    // We add as many copies as needed and shift by exactly one set.
     document.querySelectorAll('.art-row-scroll .splide__list').forEach(list => {
+        const scroll = list.closest('.art-row-scroll');
         const slides = [...list.querySelectorAll('.splide__slide')];
-        const isHero = list.closest('.art-row-scroll').hasAttribute('data-hero');
+        const isHero = scroll.hasAttribute('data-hero');
         list.style.setProperty('--runway-dur', (slides.length * (isHero ? 6 : 4.2)) + 's');
-        slides.forEach(s => {
-            const clone = s.cloneNode(true);
-            clone.classList.add('is-clone');
-            clone.setAttribute('aria-hidden', 'true');
-            // mark the inner card too, so PhotoSwipe's :not(.is-clone) excludes it
-            const card = clone.querySelector('.art-card');
-            if (card) card.classList.add('is-clone');
-            list.appendChild(clone);
-        });
+
+        // Width of one set vs. the visible band; need (copies - 1) sets ≥ band.
+        const gap = 16;
+        const setW = slides.reduce((w, s) => w + s.getBoundingClientRect().width, 0)
+            + gap * slides.length
+            || slides.length * ((isHero ? 380 : 250) + gap);
+        const bandW = scroll.getBoundingClientRect().width || window.innerWidth;
+        const copies = Math.max(2, Math.ceil(bandW / setW) + 1);
+
+        for (let c = 1; c < copies; c++) {
+            slides.forEach(s => {
+                const clone = s.cloneNode(true);
+                clone.classList.add('is-clone');
+                clone.setAttribute('aria-hidden', 'true');
+                // mark the inner card too, so PhotoSwipe's :not(.is-clone) excludes it
+                const card = clone.querySelector('.art-card');
+                if (card) card.classList.add('is-clone');
+                list.appendChild(clone);
+            });
+        }
+        // Shift by one set so the loop is seamless regardless of copy count.
+        list.style.setProperty('--runway-shift', (-100 / copies) + '%');
     });
 
     // --- PhotoSwipe Lightbox ---
@@ -461,6 +478,71 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!Number.isNaN(i)) lightbox.loadAndOpen(i);
         });
     });
+
+    // --- Remixed: handmade × AI comparison carousel ---
+    (() => {
+        const viewport = document.getElementById('remix-viewport');
+        const track = document.getElementById('remix-track');
+        if (!viewport || !track) return;
+        const slides = [...track.children];
+        const dotsWrap = document.getElementById('remix-dots');
+        const prev = document.getElementById('remix-prev');
+        const next = document.getElementById('remix-next');
+        let idx = 0;
+
+        slides.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.type = 'button';
+            d.className = 'remix-dot' + (i === 0 ? ' active' : '');
+            d.setAttribute('aria-label', 'Go to pair ' + (i + 1));
+            d.addEventListener('click', () => go(i));
+            dotsWrap.appendChild(d);
+        });
+        const dots = [...dotsWrap.children];
+
+        function setActive(i) {
+            idx = i;
+            dots.forEach((d, j) => d.classList.toggle('active', j === i));
+        }
+        function go(i) {
+            i = (i + slides.length) % slides.length;   // wrap around
+            viewport.scrollTo({ left: viewport.clientWidth * i, behavior: 'smooth' });
+            setActive(i);
+        }
+        prev && prev.addEventListener('click', () => go(idx - 1));
+        next && next.addEventListener('click', () => go(idx + 1));
+
+        // Keep dots synced when the user swipes/scrolls the track directly.
+        let raf = 0;
+        viewport.addEventListener('scroll', () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+                raf = 0;
+                const i = Math.round(viewport.scrollLeft / viewport.clientWidth);
+                if (i !== idx) setActive(i);
+            });
+        });
+
+        // Its own PhotoSwipe instance (separate from the gallery).
+        const remixLb = new PhotoSwipeLightbox({
+            gallery: '#remix-track',
+            children: 'a.remix-pane',
+            pswpModule: PhotoSwipe,
+        });
+        remixLb.on('uiRegister', () => {
+            remixLb.pswp.ui.registerElement({
+                name: 'remix-caption', order: 9, isButton: false, appendTo: 'root',
+                onInit: (el, pswp) => {
+                    el.className = 'pswp-caption';
+                    pswp.on('change', () => {
+                        const a = pswp.currSlide.data.element;
+                        el.textContent = a ? (a.dataset.caption || '') : '';
+                    });
+                },
+            });
+        });
+        remixLb.init();
+    })();
 
     // --- Smooth scroll for nav links ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
