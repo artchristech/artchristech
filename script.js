@@ -131,11 +131,187 @@ document.addEventListener('DOMContentLoaded', () => {
     const showcaseItemName = document.getElementById('showcase-item-name');
     const showcaseItemDesc = document.getElementById('showcase-item-desc');
     const showcaseItemLink = document.getElementById('showcase-item-link');
+    const showcaseLive = document.getElementById('showcase-live');
 
     function clearPlaceholder() {
         const existing = showcaseMain.querySelector('.showcase-placeholder');
         if (existing) existing.remove();
     }
+
+    // --- Curdle live flow field ---------------------------------------------
+    // A divergence-free (incompressible) velocity field advects particles that
+    // warm from blue to gold as they cross the frame — "video in, fluid out".
+    // The field is the curl of a scalar potential, so the flow never sources or
+    // sinks: physically-plausible, exactly what Curdle returns.
+    const curdleFlow = (() => {
+        const canvas = document.getElementById('curdle-canvas');
+        if (!canvas) return { start() {}, stop() {} };
+        const ctx = canvas.getContext('2d');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let W = 0, H = 0, dpr = 1, particles = [], raf = 0, t = 0, running = false;
+
+        // Scalar potential P(x,y,t); velocity = (∂P/∂y, -∂P/∂x) via finite diff.
+        const baseFlow = 0.95; // net rightward drift
+        const waves = [
+            { amp: 26, kx: 0.0050, ky: 0.0092, sp: 0.20, ph: 0.0 },
+            { amp: 18, kx: 0.0082, ky: 0.0044, sp: -0.16, ph: 2.1 },
+            { amp: 12, kx: 0.0131, ky: 0.0152, sp: 0.30, ph: 4.0 },
+        ];
+        const P = (x, y) => {
+            let p = baseFlow * y;
+            for (const w of waves) p += w.amp * Math.sin(w.kx * x + w.ky * y + w.sp * t + w.ph);
+            return p;
+        };
+        const E = 1.0; // finite-difference step
+        const vel = (x, y) => ({
+            x: (P(x, y + E) - P(x, y - E)) / (2 * E),
+            y: -(P(x + E, y) - P(x - E, y)) / (2 * E),
+        });
+
+        const lerp = (a, b, t) => a + (b - a) * t;
+        // blue #78c8ff → gold #c4a265, keyed to horizontal progress
+        const colorAt = (nx) => {
+            const k = Math.min(1, Math.max(0, nx));
+            return `rgb(${Math.round(lerp(0x78, 0xc4, k))},${Math.round(lerp(0xc8, 0xa2, k))},${Math.round(lerp(0xff, 0x65, k))})`;
+        };
+
+        const seed = (p, atLeft) => {
+            p.x = atLeft ? -20 - Math.random() * 60 : Math.random() * W;
+            p.y = Math.random() * H;
+            p.life = 0;
+            p.max = 220 + Math.random() * 260;
+            p.trail.length = 0;
+        };
+
+        function resize() {
+            const r = canvas.getBoundingClientRect();
+            if (!r.width) return;
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            W = r.width; H = r.height;
+            canvas.width = Math.round(W * dpr);
+            canvas.height = Math.round(H * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            const target = Math.round((W * H) / 1500);
+            particles = [];
+            for (let i = 0; i < target; i++) {
+                const p = { trail: [] };
+                seed(p, false);
+                particles.push(p);
+            }
+            drawBackground();
+        }
+
+        function drawBackground() {
+            const g = ctx.createLinearGradient(0, 0, W, H);
+            g.addColorStop(0, '#0a0f14');
+            g.addColorStop(1, '#05080b');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+            const glows = [
+                [W * 0.37, H * 0.40, Math.max(W, H) * 0.55, 'rgba(120,200,255,0.20)'],
+                [W * 0.66, H * 0.63, Math.max(W, H) * 0.60, 'rgba(196,162,101,0.26)'],
+                [W * 0.88, H * 0.33, Math.max(W, H) * 0.45, 'rgba(196,162,101,0.22)'],
+            ];
+            for (const [cx, cy, rr, col] of glows) {
+                const rg = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+                rg.addColorStop(0, col);
+                rg.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+            }
+        }
+
+        function frame() {
+            if (!running) return;
+            t += 1;
+            drawBackground();
+            ctx.lineCap = 'round';
+            for (const p of particles) {
+                const v = vel(p.x, p.y);
+                p.x += v.x * 1.7;
+                p.y += v.y * 1.7;
+                p.life++;
+                p.trail.push(p.x, p.y);
+                if (p.trail.length > 80) p.trail.splice(0, 2);
+                if (p.x > W + 30 || p.life > p.max || p.y < -40 || p.y > H + 40) {
+                    seed(p, true);
+                    continue;
+                }
+                const col = colorAt(p.x / W);
+                const tr = p.trail;
+                if (tr.length >= 6) {
+                    // faint full-length filament
+                    ctx.beginPath();
+                    ctx.moveTo(tr[0], tr[1]);
+                    for (let i = 2; i < tr.length; i += 2) ctx.lineTo(tr[i], tr[i + 1]);
+                    ctx.strokeStyle = col;
+                    ctx.globalAlpha = 0.20;
+                    ctx.lineWidth = 0.9;
+                    ctx.stroke();
+                    // bright leading head segment
+                    const h = Math.max(0, tr.length - 14);
+                    ctx.beginPath();
+                    ctx.moveTo(tr[h], tr[h + 1]);
+                    for (let i = h + 2; i < tr.length; i += 2) ctx.lineTo(tr[i], tr[i + 1]);
+                    ctx.globalAlpha = 0.6;
+                    ctx.lineWidth = 1.3;
+                    ctx.stroke();
+                }
+                // bright head dot
+                ctx.globalAlpha = 0.95;
+                ctx.fillStyle = col;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 1.3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            raf = requestAnimationFrame(frame);
+        }
+
+        function start() {
+            if (running) return;
+            running = true;
+            if (!W) resize();
+            if (reduced) {
+                // Lay down a static streamline frame, no animation.
+                for (let s = 0; s < 200; s++) {
+                    for (const p of particles) {
+                        const v = vel(p.x, p.y);
+                        p.x += v.x * 1.7; p.y += v.y * 1.7;
+                        p.trail.push(p.x, p.y);
+                        if (p.trail.length > 120) p.trail.splice(0, 2);
+                    }
+                }
+                drawBackground();
+                ctx.lineCap = 'round';
+                for (const p of particles) {
+                    const tr = p.trail;
+                    if (tr.length < 4) continue;
+                    ctx.beginPath();
+                    ctx.moveTo(tr[0], tr[1]);
+                    for (let i = 2; i < tr.length; i += 2) ctx.lineTo(tr[i], tr[i + 1]);
+                    ctx.strokeStyle = colorAt(p.x / W);
+                    ctx.globalAlpha = 0.5; ctx.lineWidth = 1.1; ctx.stroke();
+                }
+                ctx.globalAlpha = 1;
+                running = false;
+                return;
+            }
+            raf = requestAnimationFrame(frame);
+        }
+
+        function stop() {
+            running = false;
+            if (raf) cancelAnimationFrame(raf);
+            raf = 0;
+        }
+
+        window.addEventListener('resize', () => { if (running || reduced) resize(); });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stop();
+            else if (showcaseLive.style.display !== 'none' && !reduced) start();
+        });
+
+        return { start, stop };
+    })();
 
     showcaseThumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
@@ -164,8 +340,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             clearPlaceholder();
+            curdleFlow.stop();
+            showcaseLive.style.display = 'none';
 
-            if (type === 'browser') {
+            if (type === 'live') {
+                showcaseBrowser.style.display = 'none';
+                showcaseProductImg.style.display = 'none';
+                showcaseLive.style.display = 'block';
+                curdleFlow.start();
+            } else if (type === 'browser') {
                 showcaseBrowser.style.display = 'block';
                 showcaseProductImg.style.display = 'none';
                 showcaseBrowser.querySelector('.browser-viewport img').src = src;
