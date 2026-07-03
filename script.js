@@ -495,22 +495,25 @@ document.addEventListener('DOMContentLoaded', () => {
             d.type = 'button';
             d.className = 'remix-dot' + (i === 0 ? ' active' : '');
             d.setAttribute('aria-label', 'Go to pair ' + (i + 1));
-            d.addEventListener('click', () => go(i));
+            d.addEventListener('click', () => { go(i); pauseThenResume(); });
             dotsWrap.appendChild(d);
         });
         const dots = [...dotsWrap.children];
+        slides[0].classList.add('is-current');
 
         function setActive(i) {
             idx = i;
             dots.forEach((d, j) => d.classList.toggle('active', j === i));
+            slides.forEach((s, j) => s.classList.toggle('is-current', j === i));
         }
         function go(i) {
             i = (i + slides.length) % slides.length;   // wrap around
-            viewport.scrollTo({ left: viewport.clientWidth * i, behavior: 'smooth' });
+            const s = slides[i];
+            viewport.scrollTo({ left: s.offsetLeft - (viewport.clientWidth - s.offsetWidth) / 2, behavior: 'smooth' });
             setActive(i);
         }
-        prev && prev.addEventListener('click', () => go(idx - 1));
-        next && next.addEventListener('click', () => go(idx + 1));
+        prev && prev.addEventListener('click', () => { go(idx - 1); pauseThenResume(); });
+        next && next.addEventListener('click', () => { go(idx + 1); pauseThenResume(); });
 
         // Keep dots synced when the user swipes/scrolls the track directly.
         let raf = 0;
@@ -518,10 +521,40 @@ document.addEventListener('DOMContentLoaded', () => {
             if (raf) return;
             raf = requestAnimationFrame(() => {
                 raf = 0;
-                const i = Math.round(viewport.scrollLeft / viewport.clientWidth);
-                if (i !== idx) setActive(i);
+                const center = viewport.scrollLeft + viewport.clientWidth / 2;
+                let best = 0, bestDist = Infinity;
+                slides.forEach((s, j) => {
+                    const d = Math.abs((s.offsetLeft + s.offsetWidth / 2) - center);
+                    if (d < bestDist) { bestDist = d; best = j; }
+                });
+                if (best !== idx) setActive(best);
             });
         });
+
+        // Autoplay — cycles through every pair, pauses on interaction.
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let timer = null;
+        let resumeT = null;
+        function startAutoplay() {
+            if (reducedMotion || timer) return;
+            timer = setInterval(() => go(idx + 1), 4200);
+        }
+        function stopAutoplay() {
+            clearInterval(timer);
+            timer = null;
+        }
+        function pauseThenResume() {
+            stopAutoplay();
+            clearTimeout(resumeT);
+            resumeT = setTimeout(startAutoplay, 5000);
+        }
+        viewport.addEventListener('mouseenter', stopAutoplay);
+        viewport.addEventListener('mouseleave', startAutoplay);
+        viewport.addEventListener('touchstart', pauseThenResume, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            document.hidden ? stopAutoplay() : startAutoplay();
+        });
+        startAutoplay();
 
         // Its own PhotoSwipe instance (separate from the gallery).
         const remixLb = new PhotoSwipeLightbox({
