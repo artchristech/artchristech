@@ -29,7 +29,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 18dbff251dff1fe2d7f05a9d34845e1d
-          command: pages deploy dist --project-name=artchristech --branch=master
+          command: pages deploy dist --project-name=artchristech --branch=main
 
       - name: Secret not set yet
         if: env.HAS_TOKEN != 'true'
