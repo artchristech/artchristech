@@ -343,6 +343,16 @@ document.addEventListener('DOMContentLoaded', () => {
             curdleFlow.stop();
             showcaseLive.style.display = 'none';
 
+            // Unload the GLYPH live hero (stops its WebGL loop) whenever we
+            // leave it; the browser branch below re-loads it when reselected.
+            const glyphFrame = document.getElementById('glyph-frame');
+            const glyphImg = showcaseBrowser.querySelector('.browser-viewport img');
+            if (glyphFrame) {
+                glyphFrame.style.display = 'none';
+                if (glyphFrame.src) glyphFrame.removeAttribute('src');
+                if (glyphImg) glyphImg.style.display = 'block';
+            }
+
             if (type === 'live') {
                 showcaseBrowser.style.display = 'none';
                 showcaseProductImg.style.display = 'none';
@@ -351,7 +361,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (type === 'browser') {
                 showcaseBrowser.style.display = 'block';
                 showcaseProductImg.style.display = 'none';
-                showcaseBrowser.querySelector('.browser-viewport img').src = src;
+                if (thumb.dataset.render === 'glyph' && glyphFrame) {
+                    // live animated hero in place of a static screenshot
+                    if (glyphImg) glyphImg.style.display = 'none';
+                    if (!glyphFrame.src) glyphFrame.src = glyphFrame.dataset.src;
+                    glyphFrame.style.display = 'block';
+                } else {
+                    showcaseBrowser.querySelector('.browser-viewport img').src = src;
+                }
                 showcaseBrowser.querySelector('.browser-url').textContent = thumb.dataset.url || 'gittimes.com';
             } else if (type === 'placeholder') {
                 showcaseBrowser.style.display = 'none';

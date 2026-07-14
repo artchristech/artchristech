@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>glyphapi.dev — compression is consonance</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%;
+               overflow: hidden; background: #06060a; }
+  #stage { position: relative; width: 100%; height: 100%; }
+  #field { display: block; width: 100%; height: 100%; will-change: filter; }
+  #wordmark { display: none; position: absolute; top: 22px; left: 26px;
+              font: 500 13px/1 ui-monospace, "SF Mono", Menlo, monospace;
+              letter-spacing: 0.42em; color: #b9b4c8; user-select: none; }
+  body.standalone #wordmark { display: block; }
+  #readout { position: absolute; left: 50%; bottom: 9%;
+             transform: translateX(-50%); text-align: center;
+             font: 400 clamp(11px, 2.6vw, 15px)/1.6 ui-monospace, "SF Mono", Menlo, monospace;
+             color: #e8e2d4; opacity: 0; transition: opacity 0.6s ease;
+             pointer-events: none; white-space: nowrap;
+             text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
+  #readout.on { opacity: 1; }
+  #bar { margin: 8px auto 0; width: min(220px, 46vw); height: 2px;
+         background: rgba(232,226,212,0.14); }
+  #barfill { height: 100%; width: 100%; background: #e8c98a;
+             transform-origin: left; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="field"></canvas>
+  <div id="wordmark">GLYPH</div>
+  <div id="readout">
+    <span id="tokens">14,208 tokens</span>
+    <div id="bar"><div id="barfill"></div></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------------------
+// glyphapi.dev hero — "compression is consonance".
+// A two-voice interference field. When the second voice drifts on an
+// irrational tritone (√2) the field is a quasiperiodic churn; when it locks
+// to a 3:2 perfect fifth the superposition becomes spatially periodic and
+// crystallizes into a bright amber lattice. Self-contained: inline WebGL,
+// no external modules, runs over file:// and when embedded in an <iframe>.
+// ---------------------------------------------------------------------------
+
+// ---- timeline constants (seconds) — one seamless 12s loop ----------------
+const LOOP     = 12.0;
+const T_CHAOS  = 4.0;                 // 0..4   field writhes, dissonant drift
+const T_COND   = 7.0;                 // 4..7   ratio glides to 3:2, lattice forms
+const T_GLYPH  = 10.0;                // 7..10  lattice holds still and bright
+                                      // 10..12 release back to chaos
+const R_LOCK    = 1.5;                // the consonant lock: a perfect fifth, 3:2
+const R_TRITONE = Math.SQRT2;         // irrational tritone — maximal churn
+const TOK_FROM  = 14208, TOK_TO = 1847;
+
+const lerp     = (a, b, k) => a + (b - a) * k;
+const easeInOut = (x) => x * x * (3 - 2 * x);           // smoothstep
+const clamp01  = (x) => Math.min(1, Math.max(0, x));
+
+// ---- phase model: loop-time -> { ratio, cryst } ---------------------------
+function phase(t) {
+  if (t < T_CHAOS) {
+    const wob = 0.055 * Math.sin(t * 1.9) + 0.034 * Math.sin(t * 3.13 + 1.2);
+    return { ratio: R_TRITONE + wob, cryst: 0 };
+  }
+  if (t < T_COND) {                                     // glide to the 3:2 lock
+    const k = easeInOut((t - T_CHAOS) / (T_COND - T_CHAOS));
+    const wobble = (1 - k) * 0.04 * Math.sin(t * 2.7);
+    return { ratio: lerp(R_TRITONE, R_LOCK, k) + wobble, cryst: k };
+  }
+  if (t < T_GLYPH) return { ratio: R_LOCK, cryst: 1 };  // hold: still, bright
+  const k = easeInOut((t - T_GLYPH) / (LOOP - T_GLYPH));// release
+  return { ratio: lerp(R_LOCK, R_TRITONE, k), cryst: 1 - k };
+}
+
+// ---- WebGL renderer -------------------------------------------------------
+const VERT = `
+attribute vec2 pos;
+void main(){ gl_Position = vec4(pos, 0.0, 1.0); }`;
+
+const FRAG = `
+precision highp float;
+uniform vec2  uRes;
+uniform float uTime;    // ever-increasing seconds (wave + orbit motion)
+uniform float uRatio;   // 2nd voice ratio (~1.414 churn .. 1.5 lock)
+uniform float uCryst;   // 0..1 crystallization
+
+// palettes (chaos -> glyph), 4 stops each, blended by uCryst.
+vec3 palC(float t){
+  vec3 a=vec3(0.010,0.010,0.022), b=vec3(0.135,0.115,0.270),
+       c=vec3(0.270,0.245,0.500), d=vec3(0.520,0.500,0.760);
+  return t<0.35 ? mix(a,b,t/0.35)
+       : t<0.70 ? mix(b,c,(t-0.35)/0.35)
+                : mix(c,d,(t-0.70)/0.30);
+}
+vec3 palG(float t){
+  vec3 a=vec3(0.020,0.014,0.008), b=vec3(0.240,0.170,0.090),
+       c=vec3(0.840,0.650,0.360), d=vec3(1.000,0.880,0.650);
+  return t<0.35 ? mix(a,b,t/0.35)
+       : t<0.70 ? mix(b,c,(t-0.35)/0.35)
+                : mix(c,d,(t-0.70)/0.30);
+}
+vec3 palette(float t){ t=clamp(t,0.0,1.0); return mix(palC(t), palG(t), uCryst); }
+
+mat2 rot(float a){ float s=sin(a), c=cos(a); return mat2(c,-s,s,c); }
+
+// one "voice": three plane waves at 120 deg -> hexagonal basis.
+// periodic when spatial freq is commensurate -> clean lattice.
+float voice(vec2 p, float f, float ph){
+  float s  = sin(dot(p, vec2( 1.0, 0.0))       * f + ph);
+        s += sin(dot(p, vec2(-0.5, 0.8660254))  * f - ph*0.9);
+        s += sin(dot(p, vec2(-0.5,-0.8660254))  * f + ph*0.8);
+  return s / 3.0;
+}
+
+float interf(vec2 p){
+  float base = 6.2;                 // spatial fundamental
+  float ph   = uTime * 0.55;
+  // domain warp: writhes in chaos, calms as it locks
+  vec2 w = vec2(voice(p*0.45 + 7.3, base*0.5,  ph*0.7),
+                voice(p*0.45 - 3.1, base*0.5, -ph*0.6));
+  p += w * (0.75 * (1.0 - uCryst));
+  float a = voice(p, base,          ph);
+  float b = voice(p, base * uRatio, ph*1.03);
+  return 0.5*a + 0.5*b;
+}
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5*uRes) / min(uRes.x, uRes.y);
+  uv *= 3.2;
+  uv  = uv * rot(uTime*0.045 + 0.2);          // slow camera orbit
+  float m = interf(uv);
+
+  // sign-sharpen -> crests flatten into bright plates when locked
+  float hard = sign(m) * pow(min(abs(m), 1.0), 0.35);
+  float ms   = mix(m, hard, 0.55 * uCryst);
+  float pos  = smoothstep(0.02, 1.0,  ms); pos *= pos;
+  float neg  = smoothstep(0.02, 1.0, -ms);
+  vec3 col = palette(1.0) * pos * 1.5
+           + palette(0.35) * (neg*0.7 + 0.045*abs(m));
+  col += palette(0.70) * pos * 0.25 * uCryst; // warm bloom on lock
+
+  // vignette
+  vec2 q = gl_FragCoord.xy / uRes;
+  float vig = smoothstep(1.15, 0.35, length(q-0.5)*1.4);
+  col *= mix(0.82, 1.0, vig);
+
+  // cheap grain to kill banding
+  float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898,78.233))) * 43758.5453);
+  col += (g - 0.5) * 0.02;
+
+  col = pow(max(col, 0.0), vec3(0.9));        // gentle lift
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+function compile(gl, type, src) {
+  const sh = gl.createShader(type);
+  gl.shaderSource(sh, src); gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS))
+    throw new Error(gl.getShaderInfoLog(sh) || "shader compile failed");
+  return sh;
+}
+
+function makeRenderer(canvas) {
+  const gl = canvas.getContext("webgl", { antialias: false, alpha: false,
+                                          powerPreference: "high-performance" })
+          || canvas.getContext("experimental-webgl");
+  if (!gl) throw new Error("no webgl");
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl, gl.VERTEX_SHADER, VERT));
+  gl.attachShader(prog, compile(gl, gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+    throw new Error(gl.getProgramInfoLog(prog) || "link failed");
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW); // fullscreen tri
+  const loc = gl.getAttribLocation(prog, "pos");
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+  const U = {
+    res:   gl.getUniformLocation(prog, "uRes"),
+    time:  gl.getUniformLocation(prog, "uTime"),
+    ratio: gl.getUniformLocation(prog, "uRatio"),
+    cryst: gl.getUniformLocation(prog, "uCryst"),
+  };
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(canvas.clientWidth  * dpr));
+    const h = Math.max(1, Math.round(canvas.clientHeight * dpr));
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h;
+    }
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+
+  function draw(time, ratio, cryst) {
+    resize();
+    gl.uniform2f(U.res, canvas.width, canvas.height);
+    gl.uniform1f(U.time, time);
+    gl.uniform1f(U.ratio, ratio);
+    gl.uniform1f(U.cryst, cryst);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  return { draw, resize };
+}
+
+// ---- boot -----------------------------------------------------------------
+if (new URLSearchParams(location.search).has("standalone"))
+  document.body.classList.add("standalone");
+
+const canvas   = document.getElementById("field");
+const readout  = document.getElementById("readout");
+const tokensEl = document.getElementById("tokens");
+const barFill  = document.getElementById("barfill");
+const fmt      = (n) => Math.round(n).toLocaleString("en-US");
+
+let renderer;
+try {
+  renderer = makeRenderer(canvas);
+} catch (e) {
+  // graceful fallback: static amber-on-black wash, no animation
+  canvas.style.background =
+    "radial-gradient(120% 90% at 50% 55%, #2a1c08 0%, #100a14 55%, #06060a 100%)";
+  console.warn("glyph-hero: WebGL unavailable —", e.message);
+}
+
+let loopT = 0;         // our own loop clock, so hiding the tab pauses it
+let animT = 0;         // ever-increasing animation clock (wave + orbit)
+let lastNow = null;    // null => resync on next visible frame
+
+function drive(now) {
+  requestAnimationFrame(drive);
+  if (document.hidden) { lastNow = null; return; }     // pause when hidden
+  if (lastNow === null) { lastNow = now; return; }
+  const dt = (now - lastNow) / 1000;
+  lastNow = now;
+  loopT = (loopT + dt) % LOOP;
+  animT += dt;
+
+  const { ratio, cryst } = phase(loopT);
+  if (renderer) renderer.draw(animT, ratio, cryst);
+
+  // extra punch on lock, layered cheaply on top of the shader
+  canvas.style.filter =
+    `contrast(${(1 + cryst * 0.28).toFixed(3)}) ` +
+    `brightness(${(1 + cryst * 0.12).toFixed(3)}) ` +
+    `saturate(${(1 - cryst * 0.10).toFixed(3)})`;
+
+  // token readout: ticks down through CONDENSE, holds through GLYPH
+  if (loopT >= T_CHAOS && loopT < T_GLYPH + 0.8) {
+    readout.classList.add("on");
+    const k = easeInOut(clamp01((loopT - T_CHAOS) / (T_COND - T_CHAOS)));
+    const tok = lerp(TOK_FROM, TOK_TO, k);
+    tokensEl.textContent = k >= 1
+      ? `${fmt(TOK_FROM)} tokens → ${fmt(TOK_TO)} tokens`
+      : `${fmt(tok)} tokens`;
+    barFill.style.transform = `scaleX(${lerp(1, TOK_TO / TOK_FROM, k).toFixed(4)})`;
+  } else {
+    readout.classList.remove("on");
+  }
+}
+requestAnimationFrame(drive);
+window.addEventListener("resize", () => { if (renderer) renderer.resize(); });
+</script>
+</body>
+</html>

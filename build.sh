@@ -11,7 +11,7 @@ rm -rf "$DIST"
 mkdir -p "$DIST/assets"
 
 # top-level pages + modules
-cp index.html script.js marble.js styles.css contact.html dkski.html "$DIST/"
+cp index.html script.js marble.js styles.css contact.html dkski.html glyph-hero.html "$DIST/"
 
 # optimized images (the only image dir the site references) + the 4 product screenshots + showcase covers
 cp -R assets/optimized "$DIST/assets/optimized"
