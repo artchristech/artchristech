@@ -93,34 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })();
 
-    // --- Navigation scroll behavior ---
-    const nav = document.getElementById('nav');
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 60) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-    }, { passive: true });
-
-    // --- Mobile menu ---
-    const navToggle = document.getElementById('nav-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (navToggle) {
-        navToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-            navToggle.classList.toggle('active');
-        });
-
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                navToggle.classList.remove('active');
-            });
-        });
-    }
 
     // --- Showcase ---
     const showcaseThumbs = document.querySelectorAll('.showcase-thumb');
