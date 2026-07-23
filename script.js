@@ -285,81 +285,132 @@ document.addEventListener('DOMContentLoaded', () => {
         return { start, stop };
     })();
 
+    function activateShowcaseThumb(thumb) {
+        showcaseThumbs.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+
+        const type = thumb.dataset.type;
+        const src = thumb.dataset.src;
+        const label = thumb.dataset.label;
+        const name = thumb.dataset.name;
+        const desc = thumb.dataset.desc;
+        const link = thumb.dataset.link || '';
+        const linkText = thumb.dataset.linkText || '';
+        const tech = thumb.dataset.tech || '';
+
+        showcaseItemLabel.textContent = label;
+        showcaseItemName.textContent = name;
+        showcaseItemDesc.textContent = desc;
+
+        if (link) {
+            showcaseItemLink.href = link;
+            showcaseItemLink.textContent = linkText;
+            showcaseItemLink.style.display = 'inline-block';
+        } else {
+            showcaseItemLink.style.display = 'none';
+        }
+
+        clearPlaceholder();
+        curdleFlow.stop();
+        showcaseLive.style.display = 'none';
+
+        // Unload the GLYPH live hero (stops its WebGL loop) whenever we
+        // leave it; the browser branch below re-loads it when reselected.
+        const glyphFrame = document.getElementById('glyph-frame');
+        const glyphImg = showcaseBrowser.querySelector('.browser-viewport img');
+        if (glyphFrame) {
+            glyphFrame.style.display = 'none';
+            if (glyphFrame.src) glyphFrame.removeAttribute('src');
+            if (glyphImg) glyphImg.style.display = 'block';
+        }
+
+        if (type === 'live') {
+            showcaseBrowser.style.display = 'none';
+            showcaseProductImg.style.display = 'none';
+            showcaseLive.style.display = 'block';
+            curdleFlow.start();
+        } else if (type === 'browser') {
+            showcaseBrowser.style.display = 'block';
+            showcaseProductImg.style.display = 'none';
+            if (thumb.dataset.render === 'glyph' && glyphFrame) {
+                // live animated hero in place of a static screenshot
+                if (glyphImg) glyphImg.style.display = 'none';
+                if (!glyphFrame.src) glyphFrame.src = glyphFrame.dataset.src;
+                glyphFrame.style.display = 'block';
+            } else {
+                showcaseBrowser.querySelector('.browser-viewport img').src = src;
+            }
+            showcaseBrowser.querySelector('.browser-url').textContent = thumb.dataset.url || 'gittimes.com';
+        } else if (type === 'placeholder') {
+            showcaseBrowser.style.display = 'none';
+            showcaseProductImg.style.display = 'none';
+            const svgHTML = thumb.querySelector('svg')
+                ? thumb.querySelector('svg').outerHTML.replace(/width="20"/g, 'width="48"').replace(/height="20"/g, 'height="48"')
+                : '';
+            const placeholder = document.createElement('div');
+            placeholder.className = 'showcase-placeholder';
+            placeholder.innerHTML = svgHTML + (tech ? '<span>' + tech + '</span>' : '<span>Coming soon</span>');
+            showcaseMain.appendChild(placeholder);
+        } else {
+            showcaseBrowser.style.display = 'none';
+            showcaseProductImg.style.display = 'block';
+            showcaseProductImg.src = src;
+            showcaseProductImg.alt = name;
+        }
+    }
+
     showcaseThumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
-            showcaseThumbs.forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
-
-            const type = thumb.dataset.type;
-            const src = thumb.dataset.src;
-            const label = thumb.dataset.label;
-            const name = thumb.dataset.name;
-            const desc = thumb.dataset.desc;
-            const link = thumb.dataset.link || '';
-            const linkText = thumb.dataset.linkText || '';
-            const tech = thumb.dataset.tech || '';
-
-            showcaseItemLabel.textContent = label;
-            showcaseItemName.textContent = name;
-            showcaseItemDesc.textContent = desc;
-
-            if (link) {
-                showcaseItemLink.href = link;
-                showcaseItemLink.textContent = linkText;
-                showcaseItemLink.style.display = 'inline-block';
-            } else {
-                showcaseItemLink.style.display = 'none';
-            }
-
-            clearPlaceholder();
-            curdleFlow.stop();
-            showcaseLive.style.display = 'none';
-
-            // Unload the GLYPH live hero (stops its WebGL loop) whenever we
-            // leave it; the browser branch below re-loads it when reselected.
-            const glyphFrame = document.getElementById('glyph-frame');
-            const glyphImg = showcaseBrowser.querySelector('.browser-viewport img');
-            if (glyphFrame) {
-                glyphFrame.style.display = 'none';
-                if (glyphFrame.src) glyphFrame.removeAttribute('src');
-                if (glyphImg) glyphImg.style.display = 'block';
-            }
-
-            if (type === 'live') {
-                showcaseBrowser.style.display = 'none';
-                showcaseProductImg.style.display = 'none';
-                showcaseLive.style.display = 'block';
-                curdleFlow.start();
-            } else if (type === 'browser') {
-                showcaseBrowser.style.display = 'block';
-                showcaseProductImg.style.display = 'none';
-                if (thumb.dataset.render === 'glyph' && glyphFrame) {
-                    // live animated hero in place of a static screenshot
-                    if (glyphImg) glyphImg.style.display = 'none';
-                    if (!glyphFrame.src) glyphFrame.src = glyphFrame.dataset.src;
-                    glyphFrame.style.display = 'block';
-                } else {
-                    showcaseBrowser.querySelector('.browser-viewport img').src = src;
-                }
-                showcaseBrowser.querySelector('.browser-url').textContent = thumb.dataset.url || 'gittimes.com';
-            } else if (type === 'placeholder') {
-                showcaseBrowser.style.display = 'none';
-                showcaseProductImg.style.display = 'none';
-                const svgHTML = thumb.querySelector('svg')
-                    ? thumb.querySelector('svg').outerHTML.replace(/width="20"/g, 'width="48"').replace(/height="20"/g, 'height="48"')
-                    : '';
-                const placeholder = document.createElement('div');
-                placeholder.className = 'showcase-placeholder';
-                placeholder.innerHTML = svgHTML + (tech ? '<span>' + tech + '</span>' : '<span>Coming soon</span>');
-                showcaseMain.appendChild(placeholder);
-            } else {
-                showcaseBrowser.style.display = 'none';
-                showcaseProductImg.style.display = 'block';
-                showcaseProductImg.src = src;
-                showcaseProductImg.alt = name;
-            }
+            activateShowcaseThumb(thumb);
+            pauseThenResumeShowcase();
         });
     });
+
+    // Autoplay — rotates through every project every 3s, gallery-style.
+    // Pauses on hover/touch/tab-hidden, resumes a moment after interaction.
+    const showcaseReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let showcaseTimer = null;
+    let showcaseResumeT = null;
+    function showcaseAdvance() {
+        const i = [...showcaseThumbs].findIndex(t => t.classList.contains('active'));
+        activateShowcaseThumb(showcaseThumbs[(i + 1) % showcaseThumbs.length]);
+    }
+    function startShowcaseAutoplay() {
+        if (showcaseReducedMotion || showcaseTimer || showcaseThumbs.length < 2) return;
+        showcaseTimer = setInterval(showcaseAdvance, 3000);
+    }
+    function stopShowcaseAutoplay() {
+        clearInterval(showcaseTimer);
+        showcaseTimer = null;
+    }
+    function pauseThenResumeShowcase() {
+        stopShowcaseAutoplay();
+        clearTimeout(showcaseResumeT);
+        showcaseResumeT = setTimeout(startShowcaseAutoplay, 5000);
+    }
+    // Hovering pauses immediately; a bounded fallback resume guards against
+    // a mouseleave that never fires (e.g. cursor exits the viewport/window
+    // rather than the element), so rotation can't get stuck paused forever.
+    function pauseForShowcaseHover() {
+        stopShowcaseAutoplay();
+        clearTimeout(showcaseResumeT);
+        showcaseResumeT = setTimeout(startShowcaseAutoplay, 15000);
+    }
+    function resumeFromShowcaseHover() {
+        clearTimeout(showcaseResumeT);
+        startShowcaseAutoplay();
+    }
+    const showcaseSection = document.getElementById('showcase');
+    if (showcaseSection) {
+        showcaseSection.addEventListener('mouseenter', pauseForShowcaseHover);
+        showcaseSection.addEventListener('mouseleave', resumeFromShowcaseHover);
+        showcaseSection.addEventListener('touchstart', pauseThenResumeShowcase, { passive: true });
+    }
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopShowcaseAutoplay();
+        else startShowcaseAutoplay();
+    });
+    startShowcaseAutoplay();
 
     // --- Runway lookbook (was Splide carousels) ---
     // Each category becomes an auto-scrolling editorial band. We curate each
