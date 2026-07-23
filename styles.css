@@ -1312,6 +1312,32 @@ body.arcade-theater .arcade-stage.is-theater {
     }
 }
 
+/* Theater mode on phones (portrait or landscape): a 16:9 frame wastes most
+   of a narrow/short screen, and iOS Safari won't reliably grant the
+   Fullscreen API to a non-video element. Go full-viewport directly instead
+   of depending on either. */
+@media (max-width: 680px), (max-height: 500px) {
+    body.arcade-theater .arcade-stage.is-theater {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        aspect-ratio: auto;
+        top: 0;
+        left: 0;
+        transform: none;
+        border-radius: 0;
+        border: 0;
+    }
+
+    /* The game's own HUD sits top-left/top-right; keep these controls out of
+       its corner by parking them at the bottom instead. */
+    .arcade-stage.is-theater .arcade-controls {
+        top: auto;
+        bottom: 10px;
+    }
+}
+
 /* --- Resources --- */
 .resources {
     padding: 6rem 2.5rem 7rem;

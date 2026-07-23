@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>DK SKI — 8-bit Mountain Run</title>
 <style>
   :root{ --ink:#ffe08a; }
-  html,body{margin:0;height:100%;background:#0b1020;overflow:hidden;
+  html,body{margin:0;height:100%;background:#0b1020;overflow:hidden;overscroll-behavior:none;
     font-family:'Courier New',monospace;color:var(--ink);user-select:none;-webkit-user-select:none;}
   #wrap{position:fixed;inset:0;display:grid;place-items:center;}
   canvas{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;
@@ -25,12 +25,14 @@
     color:#ffd23f;text-shadow:2px 2px 0 #00000088;opacity:0;transition:opacity .15s;pointer-events:none;}
   #pop{position:fixed;top:38%;left:0;right:0;text-align:center;z-index:6;font-size:38px;
     color:#fff;text-shadow:3px 3px 0 #c0231a;opacity:0;pointer-events:none;}
-  h1{font-size:54px;margin:0;color:#ffd23f;text-shadow:4px 4px 0 #b03000, 8px 8px 0 #00000055;letter-spacing:4px;}
+  h1{font-size:clamp(28px,9vw,54px);margin:0;color:#ffd23f;text-shadow:4px 4px 0 #b03000, 8px 8px 0 #00000055;letter-spacing:clamp(1px,0.8vw,4px);}
   h2{font-size:20px;margin:6px 0 0;color:#cfe3ff;text-shadow:2px 2px 0 #000;letter-spacing:2px;}
   .key{display:inline-block;border:2px solid #ffe08a;border-radius:4px;padding:2px 8px;margin:2px;font-size:15px;}
   .blink{animation:b 1s steps(2) infinite}@keyframes b{50%{opacity:0}}
   .card{background:#0b1020cc;border:3px solid #ffe08a;border-radius:10px;padding:26px 38px;
-    box-shadow:6px 6px 0 #00000066;}
+    box-shadow:6px 6px 0 #00000066;box-sizing:border-box;max-height:92vh;overflow-y:auto;
+    scrollbar-width:none;}
+  .card::-webkit-scrollbar{display:none;}
   small{font-size:13px;color:#9fb6dd}
   #tiltBtn{display:inline-block;margin-top:14px;border:2px solid #ffe08a;border-radius:6px;
     padding:8px 14px;font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;
@@ -51,7 +53,9 @@
     #hud .big{font-size:19px;}
     #combo{font-size:16px;top:38px;}
     #pop{font-size:30px;}
-    h1{font-size:40px;}
+  }
+  @media (max-width:480px){
+    .card{width:min(94vw,460px);padding:20px 22px;}
   }
   #title h1{animation:bob 2.4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-8px)}}
 </style>
@@ -83,7 +87,7 @@
     </p>
     <p><small>on phone: tilt to steer · tap to jump</small></p>
     <p><small>hit ramps for air · grab bananas · dodge the forest</small></p>
-    <p class="blink" style="font-size:22px;color:#fff;margin-top:18px">PRESS&nbsp;SPACE&nbsp;/&nbsp;TAP&nbsp;TO&nbsp;DROP&nbsp;IN</p>
+    <p class="blink" style="font-size:clamp(14px,5.2vw,22px);color:#fff;margin-top:18px">PRESS&nbsp;SPACE&nbsp;/&nbsp;TAP&nbsp;TO&nbsp;DROP&nbsp;IN</p>
     <div><button id="tiltBtn" type="button">ENABLE TILT</button></div>
   </div>
 </div>
@@ -95,7 +99,7 @@
     <p id="newbest" style="color:#ffd23f;display:none">★ NEW BEST ★</p>
     <button id="shareBtn">SHARE</button>
     <p id="shareMsg" style="margin:6px 0 0;min-height:16px;color:#7CFFb0;font-size:13px"></p>
-    <p class="blink" style="font-size:20px;margin-top:16px">PRESS&nbsp;SPACE&nbsp;/&nbsp;TAP&nbsp;TO&nbsp;RETRY</p>
+    <p class="blink" style="font-size:clamp(13px,4.8vw,20px);margin-top:16px">PRESS&nbsp;SPACE&nbsp;/&nbsp;TAP&nbsp;TO&nbsp;RETRY</p>
   </div>
 </div>
 
