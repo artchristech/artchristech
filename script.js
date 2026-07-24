@@ -525,6 +525,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const track = document.getElementById('remix-track');
         if (!viewport || !track) return;
         const slides = [...track.children];
+
+        // Native loading="lazy" is unreliable for these images: they sit in a
+        // horizontal scroll-snap viewport far down the page, and the browser's
+        // (vertically-biased) "near viewport" heuristic often never fires for
+        // the horizontally-off-screen slides — leaving them as broken-icon
+        // boxes. Kick the load explicitly as the section approaches, which
+        // keeps the initial-page deferral but sidesteps the heuristic.
+        (() => {
+            const imgs = [...track.querySelectorAll('img')];
+            if (!imgs.length) return;
+            const preload = () => imgs.forEach(img => {
+                img.loading = 'eager';
+                if (!img.complete || !img.naturalWidth) img.src = img.src; // restart a deferred lazy load
+            });
+            const section = document.getElementById('remix') || viewport;
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries, obs) => {
+                    if (entries.some(e => e.isIntersecting)) { preload(); obs.disconnect(); }
+                }, { rootMargin: '400px 0px' });
+                io.observe(section);
+            } else {
+                preload();
+            }
+        })();
         const dotsWrap = document.getElementById('remix-dots');
         const prev = document.getElementById('remix-prev');
         const next = document.getElementById('remix-next');
