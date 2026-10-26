@@ -12,10 +12,38 @@
     <meta name="twitter:title" content="artchristech — Art. Code. Design.">
     <meta name="twitter:description" content="Christopher Harris — Artist, engineer, designer. Original pattern designs, autonomous systems, and editorial AI.">
     <meta name="twitter:image" content="https://artchristech.com/assets/gittimes-screenshot.png">
+    <link rel="canonical" href="https://artchristech.com/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "name": "Christopher Harris",
+          "url": "https://artchristech.com",
+          "sameAs": [
+            "https://x.com/artchristech",
+            "https://github.com/artchristech"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "name": "artchristech",
+          "url": "https://artchristech.com",
+          "sameAs": [
+            "https://x.com/artchristech",
+            "https://github.com/artchristech"
+          ]
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=23">
+    <link rel="stylesheet" href="styles.css?v=24">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
 </head>
@@ -47,7 +75,7 @@
                         <iframe id="glyph-frame" title="glyphapi.dev — live hero" loading="lazy" data-src="glyph-hero.html" style="display:none; border:0; width:100%; aspect-ratio:16/10;"></iframe>
                     </div>
                 </div>
-                <img class="showcase-product-img" id="showcase-product-img" src="" alt="" style="display: none;">
+                <img class="showcase-product-img" id="showcase-product-img" src="" alt="Selected project" style="display: none;">
                 <!-- Live flow field (Curdle) -->
                 <div class="showcase-live" id="showcase-live" style="display: none;">
                     <canvas id="curdle-canvas"></canvas>
@@ -71,22 +99,22 @@
         <!-- Thumbnail strip — Ventures -->
         <div class="showcase-strip-wrap">
             <div class="showcase-strip" id="showcase-strip">
-                <button class="showcase-thumb active" data-index="0" data-type="browser" data-src="assets/gittimes-screenshot.png" data-url="gittimes.com" data-label="Media" data-name="The Git Times" data-desc="AI-powered daily newspaper covering open source. Autonomous editorial pipeline turns GitHub activity into seven-section broadsheets for developers." data-link="https://gittimes.com" data-link-text="Visit gittimes.com →">
+                <button class="showcase-thumb active" aria-label="Show The Git Times, Media" data-index="0" data-type="browser" data-src="assets/gittimes-screenshot.png" data-url="gittimes.com" data-label="Media" data-name="The Git Times" data-desc="AI-powered daily newspaper covering open source. Autonomous editorial pipeline turns GitHub activity into seven-section broadsheets for developers." data-link="https://gittimes.com" data-link-text="Visit gittimes.com →">
                     <img src="assets/gittimes-screenshot.png" alt="The Git Times">
                 </button>
-                <button class="showcase-thumb" data-index="1" data-type="browser" data-render="glyph" data-src="assets/glyph-screenshot.png?v=2" data-url="glyphapi.dev" data-label="Infrastructure" data-name="GLYPH" data-desc="Image API for AI agents. One prompt returns sixteen independent tiles in a single call, so an agent can generate a grid and pick the best in &quot;auto&quot; mode. Pay-per-call on Base." data-link="https://glyphapi.dev" data-link-text="Visit glyphapi.dev →">
+                <button class="showcase-thumb" aria-label="Show GLYPH, Infrastructure" data-index="1" data-type="browser" data-render="glyph" data-src="assets/glyph-screenshot.png?v=2" data-url="glyphapi.dev" data-label="Infrastructure" data-name="GLYPH" data-desc="Image API for AI agents. One prompt returns sixteen independent tiles in a single call, so an agent can generate a grid and pick the best in &quot;auto&quot; mode. Pay-per-call on Base." data-link="https://glyphapi.dev" data-link-text="Visit glyphapi.dev →">
                     <img src="assets/glyph-screenshot.png?v=2" alt="GLYPH">
                 </button>
-                <button class="showcase-thumb" data-index="2" data-type="browser" data-src="assets/passfit-screenshot.png?v=2" data-url="passfit.win" data-label="Health" data-name="PassFit" data-desc="Gamify your gains. On-device pose estimation turns any iPhone into a rep counter for pushups and squats — no calibration, and not a single camera frame leaves the device. Streaks and a social layer keep you counting." data-link="https://passfit.win" data-link-text="Visit passfit.win →">
+                <button class="showcase-thumb" aria-label="Show PassFit, Health" data-index="2" data-type="browser" data-src="assets/passfit-screenshot.png?v=2" data-url="passfit.win" data-label="Health" data-name="PassFit" data-desc="Gamify your gains. On-device pose estimation turns any iPhone into a rep counter for pushups and squats — no calibration, and not a single camera frame leaves the device. Streaks and a social layer keep you counting." data-link="https://passfit.win" data-link-text="Visit passfit.win →">
                     <img src="assets/passfit-screenshot.png?v=2" alt="PassFit">
                 </button>
-                <button class="showcase-thumb" data-index="3" data-type="browser" data-src="assets/middlefind-screenshot.png" data-url="middlefind.com" data-label="Consumer" data-name="MiddleFind" data-desc="Find a fair place to meet halfway. MiddleFind picks the optimal meetup spot for a whole group by travel time, or plans a full day-out itinerary of stops — maps, fairness, and routing in one." data-link="https://middlefind.com" data-link-text="Visit middlefind.com →">
+                <button class="showcase-thumb" aria-label="Show MiddleFind, Consumer" data-index="3" data-type="browser" data-src="assets/middlefind-screenshot.png" data-url="middlefind.com" data-label="Consumer" data-name="MiddleFind" data-desc="Find a fair place to meet halfway. MiddleFind picks the optimal meetup spot for a whole group by travel time, or plans a full day-out itinerary of stops — maps, fairness, and routing in one." data-link="https://middlefind.com" data-link-text="Visit middlefind.com →">
                     <img src="assets/middlefind-screenshot.png" alt="MiddleFind">
                 </button>
-                <button class="showcase-thumb" data-index="4" data-type="live" data-src="assets/curdle-cover.svg?v=2" data-label="Infrastructure" data-name="Curdle" data-desc="Video in, fluid dynamics out. Hand Curdle a clip and it returns a physically-plausible flow field. Live pay-per-call — $0.05 in USDC per request, settled on Base, served from a scale-to-zero Modal GPU.">
+                <button class="showcase-thumb" aria-label="Show Curdle, Infrastructure" data-index="4" data-type="live" data-src="assets/curdle-cover.svg?v=2" data-label="Infrastructure" data-name="Curdle" data-desc="Video in, fluid dynamics out. Hand Curdle a clip and it returns a physically-plausible flow field. Live pay-per-call — $0.05 in USDC per request, settled on Base, served from a scale-to-zero Modal GPU.">
                     <img src="assets/curdle-cover.svg?v=2" alt="Curdle">
                 </button>
-                <button class="showcase-thumb" data-index="5" data-type="image" data-src="assets/fleet-cover.svg?v=2" data-label="Tooling" data-name="Fleet" data-desc="Parallel Claude Code orchestrator. Fan out N agents across isolated git worktrees, test-gate every result, then judge and synthesize the winner — with a persistent cost and token meter. The build-faster substrate behind these projects.">
+                <button class="showcase-thumb" aria-label="Show Fleet, Tooling" data-index="5" data-type="image" data-src="assets/fleet-cover.svg?v=2" data-label="Tooling" data-name="Fleet" data-desc="Parallel Claude Code orchestrator. Fan out N agents across isolated git worktrees, test-gate every result, then judge and synthesize the winner — with a persistent cost and token meter. The build-faster substrate behind these projects.">
                     <img src="assets/fleet-cover.svg?v=2" alt="Fleet">
                 </button>
             </div>
@@ -143,7 +171,7 @@
         <section class="remix" id="remix">
             <div class="section-header fade-in">
                 <span class="section-label">Hand &times; Machine</span>
-                <h2>Remixed</h2>
+                <h3>Remixed</h3>
                 <p>Each piece made by hand, then handed to a model to reimagine. Swipe through the pairs — original on the left, the machine's take on the right.</p>
             </div>
 
@@ -1474,7 +1502,7 @@
             <h2>Reading</h2>
         </div>
         <div class="resource-list fade-in">
-            <a class="resource-item" href="resources/ai-history/01-cybernetics.html">
+            <a class="resource-item" href="resources/ai-history/index.html">
                 <span class="resource-name">A Brief Visual History of AI</span>
                 <span class="resource-meta">15 eras, 1943–today · start at the beginning</span>
             </a>
@@ -1486,8 +1514,11 @@
         <div class="about-content fade-in">
             <span class="section-label">About</span>
             <h2>Christopher Harris</h2>
+            <!-- BIO GOES HERE. Christopher will supply this in his own voice. -->
             <div class="about-links">
                 <a href="contact.html" class="contact-btn">Contact</a>
+                <a href="https://x.com/artchristech" target="_blank" rel="noopener">X</a>
+                <a href="https://github.com/artchristech" target="_blank" rel="noopener">GitHub</a>
             </div>
         </div>
     </section>
