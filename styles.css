@@ -486,7 +486,8 @@ a {
     border-radius: 100px;
 }
 
-.section-header h2 {
+.section-header h2,
+.remix .section-header h3 {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 600;
@@ -773,7 +774,8 @@ a {
     margin-bottom: 3rem;
 }
 
-.art-gallery .section-header h2 {
+.art-gallery .section-header h2,
+.remix .section-header h3 {
     color: var(--text-white);
 }
 
@@ -1439,6 +1441,7 @@ body.arcade-theater .arcade-stage.is-theater {
 .about-links {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 1.5rem;
 }
 
